@@ -1,8 +1,8 @@
 # [CleanUp.pictures](https://cleanup.pictures)
 
-This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a free web application that lets you quickly cleanup or remove objects in any image.
+![preview](./docs/demo.gif)
 
-![preview](./docs/preview.jpg)
+This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a free web application that lets you quickly cleanup or remove objects in any image.
 
 [CleanUp.pictures](https://cleanup.pictures) consists in 3 main blocks:
 
