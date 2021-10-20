@@ -19,7 +19,7 @@ const IS_DEV = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyAMvBh0_iWj0wnPW8YUbM6ARSouYL7Iw4M',
+  apiKey: process.env.REACT_APP_FIREBASE_KEY,
   authDomain: 'cleanup-pictures.firebaseapp.com',
   projectId: 'cleanup-pictures',
   storageBucket: 'cleanup-pictures.appspot.com',
