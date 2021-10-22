@@ -8,6 +8,12 @@ module.exports = {
       colors: {
         primary: '#BDFF01',
       },
+      keyframes: {
+        'pulse': {
+          '0%, 100%': { opacity: 0.8 },
+          '50%': { opacity: 0.7 },
+        },
+      },
     },
   },
   variants: {},
