@@ -300,8 +300,8 @@ export default function Editor(props: EditorProps) {
         <div
           className="hidden sm:block absolute rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
           style={{
-            width: `${brushSize}px`,
-            height: `${brushSize}px`,
+            width: `${brushSize * scale}px`,
+            height: `${brushSize * scale}px`,
             left: `${x}px`,
             top: `${y}px`,
             transform: 'translate(-50%, -50%)',
