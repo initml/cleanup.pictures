@@ -38,18 +38,20 @@ function App() {
   return (
     <div className="min-h-full flex flex-col">
       <header className="relative z-10 flex px-5 py-3 justify-between items-center sm:items-start">
-        <Button
-          className={[file ? '' : 'opacity-0 hidden sm:flex'].join(' ')}
-          icon={<ArrowLeftIcon className="w-6 h-6" />}
-          onClick={() => {
-            firebase.logEvent('start_new')
-            setFile(undefined)
-          }}
-        >
-          <span className="hidden sm:inline">Start new</span>
-        </Button>
-
-        <Logo />
+        {file ? (
+          <Button
+            icon={<ArrowLeftIcon className="w-6 h-6" />}
+            onClick={() => {
+              firebase.logEvent('start_new')
+              setFile(undefined)
+            }}
+          >
+            <span className="hidden sm:inline">Start new</span>
+          </Button>
+        ) : (
+          <></>
+        )}
+        <Logo className={[file ? 'h-12' : 'w-72 h-16'].join(' ')} />
         <Button
           className="hidden sm:flex"
           icon={<InformationCircleIcon className="w-6 h-6" />}
@@ -62,12 +64,17 @@ function App() {
         </Button>
       </header>
 
-      <main className="h-full flex flex-1 flex-col items-center justify-center overflow-hidden">
+      <main
+        className={[
+          'h-full flex flex-1 flex-col items-center justify-center overflow-hidden',
+          'pb-24',
+        ].join(' ')}
+      >
         {file ? (
           <Editor file={file} />
         ) : (
           <>
-            <div className="h-72 sm:w-1/2 max-w-5xl">
+            <div className="h-52 sm:h-72 sm:w-1/2 max-w-5xl">
               <FileSelect
                 onSelection={async f => {
                   const {

@@ -6,8 +6,8 @@ interface ButtonProps {
   icon?: ReactNode
   primary?: boolean
   onClick?: () => void
-  onDown?: () => void
-  onUp?: () => void
+  onDown?: (ev: PointerEvent) => void
+  onUp?: (ev: PointerEvent) => void
 }
 
 export default function Button(props: ButtonProps) {
@@ -28,17 +28,17 @@ export default function Button(props: ButtonProps) {
       role="button"
       onKeyDown={onClick}
       onClick={onClick}
-      onPointerDown={() => {
+      onPointerDown={(ev: React.PointerEvent<HTMLDivElement>) => {
         setActive(true)
-        onDown?.()
+        onDown?.(ev.nativeEvent)
       }}
-      onPointerUp={() => {
+      onPointerUp={(ev: React.PointerEvent<HTMLDivElement>) => {
         setActive(false)
-        onUp?.()
+        onUp?.(ev.nativeEvent)
       }}
       tabIndex={-1}
       className={[
-        'inline-flex space-x-3 py-3 px-5 rounded-md cursor-pointer',
+        'inline-flex sm:space-x-3 py-3 px-5 rounded-md cursor-pointer',
         background,
         className,
       ].join(' ')}

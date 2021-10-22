@@ -7,6 +7,8 @@ import Button from './components/Button'
 import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
 
+const TOOLBAR_SIZE = 200
+
 interface EditorProps {
   file: File
 }
@@ -96,7 +98,7 @@ export default function Editor(props: EditorProps) {
       context.canvas.width = original.naturalWidth
       context.canvas.height = original.naturalHeight
       const rW = windowSize.width / original.naturalWidth
-      const rH = (windowSize.height - 200) / original.naturalHeight
+      const rH = (windowSize.height - TOOLBAR_SIZE) / original.naturalHeight
       if (rW < 1 || rH < 1) {
         setScale(Math.min(rW, rH))
       } else {
@@ -236,12 +238,18 @@ export default function Editor(props: EditorProps) {
     <div
       className={[
         'flex flex-col items-center',
-        isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
+        isInpaintingLoading
+          ? 'animate-pulse-fast pointer-events-none transition-opacity'
+          : '',
+        scale !== 1 ? 'pb-24' : '',
       ].join(' ')}
+      style={{
+        height: scale !== 1 ? original.naturalHeight * scale : undefined,
+      }}
     >
       <div
-        className={[scale !== 1 ? 'absolute top-0' : 'relative'].join(' ')}
-        style={{ transform: `scale(${scale})` }}
+        className={[scale !== 1 ? '' : 'relative'].join(' ')}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
       >
         <canvas
           className="rounded-sm"
@@ -304,7 +312,7 @@ export default function Editor(props: EditorProps) {
       <div
         className={[
           'flex items-center w-full max-w-4xl py-6',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'space-x-3 sm:space-x-5',
           scale !== 1
             ? 'absolute bottom-0 justify-center'
             : 'relative justify-between',
@@ -319,7 +327,8 @@ export default function Editor(props: EditorProps) {
         />
         <Button
           icon={<EyeIcon className="w-6 h-6" />}
-          onDown={() => {
+          onDown={ev => {
+            ev.preventDefault()
             setShowSeparator(true)
             setShowOriginal(true)
           }}
@@ -328,14 +337,14 @@ export default function Editor(props: EditorProps) {
             setTimeout(() => setShowSeparator(false), 300)
           }}
         >
-          Original
+          <span className="hidden sm:inline">Original</span>
         </Button>
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
           onClick={download}
         >
-          Download
+          <span className="hidden sm:inline">Download</span>
         </Button>
       </div>
     </div>

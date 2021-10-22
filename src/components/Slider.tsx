@@ -17,7 +17,11 @@ export default function Slider(props: SliderProps) {
     <div className="inline-flex items-center space-x-4 text-black">
       <span>{label}</span>
       <input
-        className={['appearance-none rounded-lg h-4', 'bg-primary'].join(' ')}
+        className={[
+          'appearance-none rounded-lg h-4',
+          'bg-primary',
+          'w-24 sm:w-auto',
+        ].join(' ')}
         type="range"
         step={step}
         min={min}

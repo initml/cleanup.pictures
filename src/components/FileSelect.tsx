@@ -101,7 +101,7 @@ export default function FileSelect(props: FileSelectProps) {
       <div
         className={[
           'w-full h-full flex items-center justify-center px-6 pt-5 pb-6 text-xl',
-          'border-4 border-dashed rounded-md',
+          'border-2 border-dashed rounded-md',
           'hover:border-black hover:bg-primary',
           'text-center',
           dragHover ? 'border-black bg-primary' : 'bg-gray-100 border-gray-300',
