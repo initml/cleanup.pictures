@@ -100,7 +100,7 @@ export default function FileSelect(props: FileSelectProps) {
     >
       <div
         className={[
-          'w-full h-full flex items-center justify-center px-6 pt-5 pb-6 text-xl',
+          'w-full h-full flex items-center justify-center px-6 pt-5 pb-6 text-md',
           'border-2 border-dashed rounded-md',
           'hover:border-black hover:bg-primary',
           'text-center',
@@ -127,7 +127,8 @@ export default function FileSelect(props: FileSelectProps) {
           }}
           accept="image/png, image/jpeg"
         />
-        <p>Click here or drag image files</p>
+        <p className="hidden sm:block">Click here or drag an image file</p>
+        <p className="sm:hidden">Tap here to load your picture</p>
       </div>
     </label>
   )

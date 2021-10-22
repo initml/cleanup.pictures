@@ -74,7 +74,43 @@ function App() {
           <Editor file={file} />
         ) : (
           <>
-            <div className="h-52 sm:h-72 sm:w-1/2 max-w-5xl">
+            <div
+              className={[
+                'flex flex-col sm:flex-row items-center',
+                'space-y-5 sm:space-y-0 sm:space-x-6 p-5 pb-10',
+              ].join(' ')}
+            >
+              <div className="h-40 w-56 rounded-md overflow-hidden">
+                <video
+                  style={{ transform: 'scale(1.01, 1.01)' }}
+                  autoPlay
+                  muted
+                  loop
+                >
+                  <source src="demo_small.mp4" type="video/mp4" />
+                  <track kind="captions" />
+                </video>
+              </div>
+              <h1 className="text-md sm:text-3xl max-w-lg flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
+                <span className="text-center sm:text-left">
+                  Remove any object, people, text or defects from your pictures.
+                </span>
+                <a
+                  className="hidden sm:block"
+                  href="https://www.producthunt.com/posts/cleanup-pictures?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-cleanup-pictures"
+                >
+                  <img
+                    src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=light&period=daily"
+                    alt="CleanUp.Pictures - Remove objects and defects from your pictures - 100% free | Product Hunt"
+                    // style={{ width: '230px', height: '54px' }}
+                    width="250"
+                    height="54"
+                  />
+                </a>
+              </h1>
+            </div>
+
+            <div className="h-20 sm:h-52 px-4 w-full sm:w-1/2 sm:max-w-5xl">
               <FileSelect
                 onSelection={async f => {
                   const {
@@ -94,7 +130,7 @@ function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-              <span className="text-gray-500">Or try with a test image:</span>
+              <span className="text-gray-500">Or try with an example</span>
               <div className="flex space-x-2 sm:space-x-4 px-4">
                 {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
                   <div
@@ -105,7 +141,7 @@ function App() {
                     tabIndex={-1}
                   >
                     <img
-                      className="rounded-md hover:opacity-75"
+                      className="rounded-md hover:opacity-75 w-20 h-20 object-cover"
                       src={`exemples/${image}.thumb.jpeg`}
                       alt={image}
                     />
