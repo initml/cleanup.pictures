@@ -126,8 +126,8 @@ export default function Editor(props: EditorProps) {
       draw()
     }
     const onMouseDrag = (ev: MouseEvent) => {
-      const px = ev.offsetX - canvas.offsetLeft
-      const py = ev.offsetY - canvas.offsetTop
+      const px = ev.offsetX
+      const py = ev.offsetY
       onPaint(px, py)
     }
 
