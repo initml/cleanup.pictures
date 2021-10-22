@@ -110,7 +110,10 @@ function App() {
               </h1>
             </div>
 
-            <div className="h-20 sm:h-52 px-4 w-full sm:w-1/2 sm:max-w-5xl">
+            <div
+              className="h-20 sm:h-52 px-4 w-full"
+              style={{ maxWidth: '800px' }}
+            >
               <FileSelect
                 onSelection={async f => {
                   const {
