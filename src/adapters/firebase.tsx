@@ -20,12 +20,12 @@ const IS_DEV = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
-  authDomain: 'cleanup-pictures.firebaseapp.com',
-  projectId: 'cleanup-pictures',
-  storageBucket: 'cleanup-pictures.appspot.com',
-  messagingSenderId: '779551806082',
-  appId: '1:779551806082:web:b30ce45c5c661bd3f59a9b',
-  measurementId: 'G-3Y6G6H20DD',
+  authDomain: `${process.env.REACT_APP_FIREBASE_PROJECT_ID}.firebaseapp.com`,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: `${process.env.REACT_APP_FIREBASE_PROJECT_ID}.appspot.com`,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 }
 
 interface Firebase {
