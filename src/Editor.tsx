@@ -43,12 +43,12 @@ export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
   const [original, isOriginalLoaded] = useImage(file)
-  const [render] = useState(new Image())
+  const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
   })
-  const [lines] = useState<Line[]>([{ pts: [] }])
+  const [lines, setLines] = useState<Line[]>([{ pts: [] }])
   const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
   const [showBrush, setShowBrush] = useState(false)
   const [showOriginal, setShowOriginal] = useState(false)
@@ -63,14 +63,15 @@ export default function Editor(props: EditorProps) {
       return
     }
     context.clearRect(0, 0, context.canvas.width, context.canvas.height)
-    if (render.src) {
-      context.drawImage(render, 0, 0)
+    const currRender = renders[renders.length - 1]
+    if (currRender?.src) {
+      context.drawImage(currRender, 0, 0)
     } else {
       context.drawImage(original, 0, 0)
     }
     const currentLine = lines[lines.length - 1]
     drawLines(context, [currentLine])
-  }, [context, lines, original, render])
+  }, [context, lines, original, renders])
 
   const refreshCanvasMask = useCallback(() => {
     if (!context?.canvas.width || !context?.canvas.height) {
@@ -148,7 +149,14 @@ export default function Editor(props: EditorProps) {
           throw new Error('empty response')
         }
         // TODO: fix the render if it failed loading
-        await loadImage(render, res)
+        const newRender = new Image()
+        await loadImage(newRender, res)
+        renders.push(newRender)
+        lines.push({ pts: [] } as Line)
+
+        setRenders([...renders])
+        setLines([...lines])
+
         firebase?.logEvent('inpaint_processed', {
           duration: Date.now() - start,
           width: original.naturalWidth,
@@ -217,12 +225,22 @@ export default function Editor(props: EditorProps) {
     refreshCanvasMask,
     maskCanvas,
     original.src,
-    render,
+    renders,
     firebase,
     original.naturalHeight,
     original.naturalWidth,
     scale,
   ])
+
+  function undo() {
+    const l = lines
+    l.pop()
+    l.pop()
+    setLines([...l, { pts: [] }])
+    const r = renders
+    r.pop()
+    setRenders([...r])
+  }
 
   function download() {
     firebase?.logEvent('download')
@@ -325,6 +343,26 @@ export default function Editor(props: EditorProps) {
           value={brushSize}
           onChange={setBrushSize}
         />
+        {renders.length ? (
+          <>
+            <Button
+              icon={
+                <svg
+                  width="19"
+                  height="9"
+                  viewBox="0 0 19 9"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6"
+                >
+                  <path
+                    d="M2 1C2 0.447715 1.55228 0 1 0C0.447715 0 0 0.447715 0 1H2ZM1 8H0V9H1V8ZM8 9C8.55228 9 9 8.55229 9 8C9 7.44771 8.55228 7 8 7V9ZM16.5963 7.42809C16.8327 7.92721 17.429 8.14016 17.9281 7.90374C18.4272 7.66731 18.6402 7.07103 18.4037 6.57191L16.5963 7.42809ZM16.9468 5.83205L17.8505 5.40396L16.9468 5.83205ZM0 1V8H2V1H0ZM1 9H8V7H1V9ZM1.66896 8.74329L6.66896 4.24329L5.33104 2.75671L0.331035 7.25671L1.66896 8.74329ZM16.043 6.26014L16.5963 7.42809L18.4037 6.57191L17.8505 5.40396L16.043 6.26014ZM6.65079 4.25926C9.67554 1.66661 14.3376 2.65979 16.043 6.26014L17.8505 5.40396C15.5805 0.61182 9.37523 -0.710131 5.34921 2.74074L6.65079 4.25926Z"
+                    fill="black"
+                  />
+                </svg>
+              }
+              onClick={undo}
+            />
         <Button
           icon={<EyeIcon className="w-6 h-6" />}
           onDown={ev => {
@@ -337,8 +375,13 @@ export default function Editor(props: EditorProps) {
             setTimeout(() => setShowSeparator(false), 300)
           }}
         >
-          <span className="hidden sm:inline">Original</span>
+              {windowSize.width > 640 ? 'Original' : undefined}
         </Button>
+          </>
+        ) : (
+          <></>
+        )}
+
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
