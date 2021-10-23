@@ -8,6 +8,7 @@ import Slider from './components/Slider'
 import { downloadImage, loadImage, useImage } from './utils'
 
 const TOOLBAR_SIZE = 200
+const BRUSH_COLOR = 'rgba(189, 255, 1, 0.75)'
 
 interface EditorProps {
   file: File
@@ -21,7 +22,7 @@ interface Line {
 function drawLines(
   ctx: CanvasRenderingContext2D,
   lines: Line[],
-  color = 'rgba(255, 0, 0, 0.5)'
+  color = BRUSH_COLOR
 ) {
   ctx.strokeStyle = color
   ctx.lineCap = 'round'
@@ -92,10 +93,6 @@ export default function Editor(props: EditorProps) {
       return
     }
     if (isOriginalLoaded) {
-      firebase?.logEvent('image_loaded', {
-        width: original.naturalWidth,
-        height: original.naturalHeight,
-      })
       context.canvas.width = original.naturalWidth
       context.canvas.height = original.naturalHeight
       const rW = windowSize.width / original.naturalWidth
@@ -117,6 +114,17 @@ export default function Editor(props: EditorProps) {
     const canvas = context?.canvas
     if (!canvas) {
       return
+    }
+
+    const onMouseDown = (ev: MouseEvent) => {
+      if (!original.src) {
+        return
+      }
+      const currLine = lines[lines.length - 1]
+      currLine.size = brushSize
+      canvas.addEventListener('mousemove', onMouseDrag)
+      window.addEventListener('mouseup', onPointerUp)
+      onPaint(ev.offsetX, ev.offsetY)
     }
     const onMouseMove = (ev: MouseEvent) => {
       setCoords({ x: ev.pageX, y: ev.pageY })
@@ -169,8 +177,6 @@ export default function Editor(props: EditorProps) {
         // eslint-disable-next-line
         alert(e.message ? e.message : e.toString())
       }
-
-      lines.push({ pts: [] } as Line)
       setIsInpaintingLoading(false)
       draw()
     }
@@ -187,7 +193,7 @@ export default function Editor(props: EditorProps) {
       })
       draw()
     }
-    const onPointerStart = () => {
+    const onPointerStart = (ev: TouchEvent) => {
       if (!original.src) {
         return
       }
@@ -195,15 +201,17 @@ export default function Editor(props: EditorProps) {
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
       window.addEventListener('mouseup', onPointerUp)
-      // onPaint(e)
+      const coords = canvas.getBoundingClientRect()
+      const px = (ev.touches[0].clientX - coords.x) / scale
+      const py = (ev.touches[0].clientY - coords.y) / scale
+      onPaint(px, py)
     }
-
     canvas.addEventListener('touchstart', onPointerStart)
     canvas.addEventListener('touchmove', onTouchMove)
     canvas.addEventListener('touchend', onPointerUp)
     canvas.onmouseenter = () => setShowBrush(true)
     canvas.onmouseleave = () => setShowBrush(false)
-    canvas.onmousedown = onPointerStart
+    canvas.onmousedown = onMouseDown
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
@@ -316,7 +324,7 @@ export default function Editor(props: EditorProps) {
 
       {showBrush && (
         <div
-          className="hidden sm:block absolute rounded-full bg-red-500 bg-opacity-50 pointer-events-none"
+          className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
           style={{
             width: `${brushSize * scale}px`,
             height: `${brushSize * scale}px`,
@@ -329,15 +337,20 @@ export default function Editor(props: EditorProps) {
 
       <div
         className={[
-          'flex items-center w-full max-w-4xl py-6',
+          'flex items-center w-full max-w-3xl',
           'space-x-3 sm:space-x-5',
+          'p-6',
           scale !== 1
-            ? 'absolute bottom-0 justify-center'
-            : 'relative justify-between',
+            ? 'absolute bottom-0 justify-evenly'
+            : 'relative justify-evenly sm:justify-between',
         ].join(' ')}
       >
         <Slider
-          label="Brush Size"
+          label={
+            <span>
+              <span className="hidden md:inline">Brush</span> Size
+            </span>
+          }
           min={10}
           max={150}
           value={brushSize}
@@ -363,20 +376,20 @@ export default function Editor(props: EditorProps) {
               }
               onClick={undo}
             />
-        <Button
-          icon={<EyeIcon className="w-6 h-6" />}
-          onDown={ev => {
-            ev.preventDefault()
-            setShowSeparator(true)
-            setShowOriginal(true)
-          }}
-          onUp={() => {
-            setShowOriginal(false)
-            setTimeout(() => setShowSeparator(false), 300)
-          }}
-        >
+            <Button
+              icon={<EyeIcon className="w-6 h-6" />}
+              onDown={ev => {
+                ev.preventDefault()
+                setShowSeparator(true)
+                setShowOriginal(true)
+              }}
+              onUp={() => {
+                setShowOriginal(false)
+                setTimeout(() => setShowSeparator(false), 300)
+              }}
+            >
               {windowSize.width > 640 ? 'Original' : undefined}
-        </Button>
+            </Button>
           </>
         ) : (
           <></>
@@ -385,9 +398,10 @@ export default function Editor(props: EditorProps) {
         <Button
           primary
           icon={<DownloadIcon className="w-6 h-6" />}
+          disabled={!renders.length}
           onClick={download}
         >
-          <span className="hidden sm:inline">Download</span>
+          {windowSize.width > 640 ? 'Download' : undefined}
         </Button>
       </div>
     </div>

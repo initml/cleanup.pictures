@@ -38,3 +38,9 @@ input[type='range']::-webkit-slider-thumb {
   -webkit-user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 }
+
+@supports (-webkit-touch-callout: none) {
+  .full-visible-h-safari {
+    height: calc(100% - 80px); /* -webkit-fill-available;*/
+  }
+}

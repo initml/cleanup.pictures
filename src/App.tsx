@@ -4,7 +4,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/outline'
 import React, { useRef, useState } from 'react'
-import { useClickAway } from 'react-use'
+import { useClickAway, useWindowSize } from 'react-use'
 import { useFirebase } from './adapters/firebase'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
@@ -15,11 +15,14 @@ import Modal from './components/Modal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
 
+const EXAMPLES = ['bag', 'table', 'paris', 'jacket', 'shoe']
+
 function App() {
   const [file, setFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
   const firebase = useFirebase()
+  const windowSize = useWindowSize()
 
   useClickAway(modalRef, () => {
     setShowAbout(false)
@@ -36,8 +39,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-full flex flex-col">
-      <header className="relative z-10 flex px-5 py-3 justify-between items-center sm:items-start">
+    <div className="h-full full-visible-h-safari flex flex-col">
+      <header className="relative z-10 flex px-5 py-3 justify-center sm:justify-between items-center sm:items-start">
         {file ? (
           <Button
             icon={<ArrowLeftIcon className="w-6 h-6" />}
@@ -46,7 +49,7 @@ function App() {
               setFile(undefined)
             }}
           >
-            <span className="hidden sm:inline">Start new</span>
+            {windowSize.width > 640 ? 'Start new' : undefined}
           </Button>
         ) : (
           <></>
@@ -66,7 +69,8 @@ function App() {
 
       <main
         className={[
-          'h-full flex flex-1 flex-col items-center justify-center overflow-hidden',
+          'h-full flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
+          file ? 'items-center justify-center' : '', // center on mobile
           'pb-24',
         ].join(' ')}
       >
@@ -80,34 +84,41 @@ function App() {
                 'space-y-5 sm:space-y-0 sm:space-x-6 p-5 pb-10',
               ].join(' ')}
             >
-              <div className="h-40 w-56 rounded-md overflow-hidden">
-                <video
-                  style={{ transform: 'scale(1.01, 1.01)' }}
-                  autoPlay
-                  muted
-                  loop
-                >
-                  <source src="demo_small.mp4" type="video/mp4" />
-                  <track kind="captions" />
-                </video>
-              </div>
-              <h1 className="text-md sm:text-3xl max-w-lg flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
-                <span className="text-center sm:text-left">
+              <div className="max-w-lg flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
+                <h1 className="text-center sm:text-left text-xl sm:text-3xl">
                   Remove any object, people, text or defects from your pictures.
-                </span>
+                </h1>
+                {/* <span className="text-gray-500">
+                  Stunning quality for free on images up to 1024px
+                </span> */}
+
                 <a
-                  className="hidden sm:block"
+                  className="hidden sm:block pointer-events-auto"
                   href="https://www.producthunt.com/posts/cleanup-pictures?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-cleanup-pictures"
                 >
                   <img
                     src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=light&period=daily"
                     alt="CleanUp.Pictures - Remove objects and defects from your pictures - 100% free | Product Hunt"
                     // style={{ width: '230px', height: '54px' }}
-                    width="250"
+                    width="210"
                     height="54"
                   />
                 </a>
-              </h1>
+              </div>
+
+              <div className="h-40 w-56 flex items-center rounded-md overflow-hidden">
+                <video
+                  // className="h-40 w-56 rounded-md object-cover"
+                  style={{ transform: 'scale(1.01, 1.01)' }}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                >
+                  <source src="demo_small.mp4" type="video/mp4" />
+                  <track kind="captions" />
+                </video>
+              </div>
             </div>
 
             <div
@@ -132,26 +143,36 @@ function App() {
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-              <span className="text-gray-500">Or try with an example</span>
-              <div className="flex space-x-2 sm:space-x-4 px-4">
-                {['bag', 'jacket', 'table', 'shoe', 'paris'].map(image => (
-                  <div
-                    key={image}
-                    onClick={() => startWithDemoImage(image)}
-                    role="button"
-                    onKeyDown={() => startWithDemoImage(image)}
-                    tabIndex={-1}
-                  >
-                    <img
-                      className="rounded-md hover:opacity-75 w-20 h-20 object-cover"
-                      src={`exemples/${image}.thumb.jpeg`}
-                      alt={image}
-                    />
-                  </div>
-                ))}
+            {windowSize.height > 680 && (
+              <div
+                className={[
+                  'flex flex-col sm:flex-row items-center justify-center cursor-pointer',
+                  'pt-4 sm:pt-10',
+                ].join(' ')}
+              >
+                <span className="text-gray-500">Or try with an example</span>
+                <div className="flex space-x-2 sm:space-x-4 px-4">
+                  {EXAMPLES.slice(
+                    0,
+                    windowSize.width > 640 ? undefined : 3
+                  ).map(image => (
+                    <div
+                      key={image}
+                      onClick={() => startWithDemoImage(image)}
+                      role="button"
+                      onKeyDown={() => startWithDemoImage(image)}
+                      tabIndex={-1}
+                    >
+                      <img
+                        className="rounded-md hover:opacity-75 w-20 h-20 object-cover"
+                        src={`exemples/${image}.thumb.jpeg`}
+                        alt={image}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
       </main>
@@ -196,23 +217,25 @@ function App() {
 
       <footer
         className={[
-          'absolute bottom-0 pl-7 pb-5 px-5 w-full flex justify-between',
+          'absolute bottom-0 pl-7 pb-5 px-5 w-full flex items-center justify-between',
           'pointer-events-none',
           // Hide footer when editing on mobile
           file ? 'hidden lg:flex' : '',
         ].join(' ')}
       >
-        <a
-          className="pointer-events-auto"
-          href="https://clipdrop.co?utm_source=cleanup_pictures"
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => {
-            firebase.logEvent('click_clipdrop_badge')
-          }}
-        >
-          <MadeWidthBadge />
-        </a>
+        <div className="flex space-x-8 items-center">
+          <a
+            className="pointer-events-auto"
+            href="https://clipdrop.co?utm_source=cleanup_pictures"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              firebase.logEvent('click_clipdrop_badge')
+            }}
+          >
+            <MadeWidthBadge />
+          </a>
+        </div>
 
         <Button
           className="pointer-events-auto"

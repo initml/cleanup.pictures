@@ -20,7 +20,7 @@ export default function Slider(props: SliderProps) {
         className={[
           'appearance-none rounded-lg h-4',
           'bg-primary',
-          'w-24 sm:w-auto',
+          'w-24 md:w-auto',
         ].join(' ')}
         type="range"
         step={step}

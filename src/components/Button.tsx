@@ -1,20 +1,30 @@
 import React, { ReactNode, useState } from 'react'
 
 interface ButtonProps {
-  children: ReactNode
+  children?: ReactNode
   className?: string
   icon?: ReactNode
   primary?: boolean
+  disabled?: boolean
   onClick?: () => void
   onDown?: (ev: PointerEvent) => void
   onUp?: (ev: PointerEvent) => void
 }
 
 export default function Button(props: ButtonProps) {
-  const { children, className, icon, primary, onClick, onDown, onUp } = props
+  const {
+    children,
+    className,
+    disabled,
+    icon,
+    primary,
+    onClick,
+    onDown,
+    onUp,
+  } = props
   const [active, setActive] = useState(false)
   let background = ''
-  if (primary) {
+  if (primary && !disabled) {
     background = 'bg-primary hover:bg-black hover:text-white'
   }
   if (active) {
@@ -38,8 +48,10 @@ export default function Button(props: ButtonProps) {
       }}
       tabIndex={-1}
       className={[
-        'inline-flex sm:space-x-3 py-3 px-5 rounded-md cursor-pointer',
+        'inline-flex py-3 px-5 rounded-md cursor-pointer',
+        children ? 'space-x-3' : '',
         background,
+        disabled ? 'pointer-events-none opacity-50' : '',
         className,
       ].join(' ')}
     >

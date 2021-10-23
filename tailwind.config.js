@@ -9,7 +9,7 @@ module.exports = {
         primary: '#BDFF01',
       },
       keyframes: {
-        'pulse': {
+        pulse: {
           '0%, 100%': { opacity: 0.8 },
           '50%': { opacity: 0.7 },
         },
