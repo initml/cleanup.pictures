@@ -5,7 +5,7 @@ import { useFirebase } from './adapters/firebase'
 import inpaint from './adapters/inpainting'
 import Button from './components/Button'
 import Slider from './components/Slider'
-import { downloadImage, loadImage, useImage } from './utils'
+import { downloadImage, loadImage, shareImage, useImage } from './utils'
 
 const TOOLBAR_SIZE = 200
 const BRUSH_COLOR = 'rgba(189, 255, 1, 0.75)'
@@ -269,13 +269,18 @@ export default function Editor(props: EditorProps) {
   }, [renders, undo])
 
   function download() {
-    firebase?.logEvent('download')
     const base64 = context?.canvas.toDataURL(file.type)
     if (!base64) {
       throw new Error('could not get canvas data')
     }
     const name = file.name.replace(/(\.[\w\d_-]+)$/i, '_cleanup$1')
-    downloadImage(base64, name)
+    if (typeof navigator.share !== 'undefined') {
+      firebase?.logEvent('download', { mode: 'share' })
+      shareImage(base64, name)
+    } else {
+      firebase?.logEvent('download', { mode: 'download' })
+      downloadImage(base64, name)
+    }
   }
 
   return (

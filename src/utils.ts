@@ -43,6 +43,15 @@ export function downloadImage(uri: string, name: string) {
   }, 100)
 }
 
+export function shareImage(base64: string, name: string) {
+  const blob = dataURItoBlob(base64)
+  const filesArray = [new File([blob], name, { type: 'image/jpeg' })]
+  const shareData = {
+    files: filesArray,
+  }
+  navigator.share(shareData)
+}
+
 export function loadImage(image: HTMLImageElement, src: string) {
   return new Promise((resolve, reject) => {
     const initSRC = image.src
