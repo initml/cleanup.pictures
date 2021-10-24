@@ -40,7 +40,7 @@ function App() {
 
   return (
     <div className="h-full full-visible-h-safari flex flex-col">
-      <header className="relative z-10 flex px-5 py-3 justify-center sm:justify-between items-center sm:items-start">
+      <header className="relative z-10 flex px-5 pt-3 justify-center sm:justify-between items-center sm:items-start">
         {file ? (
           <Button
             icon={<ArrowLeftIcon className="w-6 h-6" />}
@@ -70,8 +70,9 @@ function App() {
       <main
         className={[
           'h-full flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
-          file ? 'items-center justify-center' : '', // center on mobile
-          'pb-24',
+          // file ? 'items-center justify-center' : '', // center on mobile
+          'items-center justify-center',
+          'pb-20',
         ].join(' ')}
       >
         {file ? (
@@ -81,7 +82,7 @@ function App() {
             <div
               className={[
                 'flex flex-col sm:flex-row items-center',
-                'space-y-5 sm:space-y-0 sm:space-x-6 p-5 pb-10',
+                'space-y-5 sm:space-y-0 sm:space-x-6 p-5 pt-0 pb-10',
               ].join(' ')}
             >
               <div className="max-w-lg flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
@@ -143,7 +144,7 @@ function App() {
               />
             </div>
 
-            {windowSize.height > 680 && (
+            {(windowSize.width > 1024 || windowSize.height > 650) && (
               <div
                 className={[
                   'flex flex-col sm:flex-row items-center justify-center cursor-pointer',
@@ -154,7 +155,7 @@ function App() {
                 <div className="flex space-x-2 sm:space-x-4 px-4">
                   {EXAMPLES.slice(
                     0,
-                    windowSize.width > 640 ? undefined : 3
+                    windowSize.width > 650 ? undefined : 3
                   ).map(image => (
                     <div
                       key={image}
