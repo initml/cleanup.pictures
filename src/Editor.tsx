@@ -274,12 +274,11 @@ export default function Editor(props: EditorProps) {
       throw new Error('could not get canvas data')
     }
     const name = file.name.replace(/(\.[\w\d_-]+)$/i, '_cleanup$1')
-    if (typeof navigator.share !== 'undefined') {
+    if (shareImage(base64, name)) {
       firebase?.logEvent('download', { mode: 'share' })
-      shareImage(base64, name)
     } else {
-      firebase?.logEvent('download', { mode: 'download' })
       downloadImage(base64, name)
+      firebase?.logEvent('download', { mode: 'download' })
     }
   }
 

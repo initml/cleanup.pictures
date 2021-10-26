@@ -49,7 +49,15 @@ export function shareImage(base64: string, name: string) {
   const shareData = {
     files: filesArray,
   }
-  navigator.share(shareData)
+  // eslint-disable-nextline
+  const nav: any = navigator
+  const canShare = nav.canShare && nav.canShare(shareData)
+  const isEdge = !/Edge/.test(navigator.userAgent)
+  if (canShare && isEdge) {
+    navigator.share(shareData)
+    return true
+  }
+  return false
 }
 
 export function loadImage(image: HTMLImageElement, src: string) {
