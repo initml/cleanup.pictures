@@ -98,9 +98,8 @@ function App() {
                   href="https://www.producthunt.com/posts/cleanup-pictures?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-cleanup-pictures"
                 >
                   <img
-                    src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=light&period=daily"
-                    alt="CleanUp.Pictures - Remove objects and defects from your pictures - 100% free | Product Hunt"
-                    // style={{ width: '230px', height: '54px' }}
+                    src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=light&period=weekly"
+                    alt="CleanUp.pictures - Remove objects and defects from your pictures - 100% free | Product Hunt"
                     width="210"
                     height="54"
                   />
