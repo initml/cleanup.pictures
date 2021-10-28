@@ -52,8 +52,9 @@ export function shareImage(base64: string, name: string) {
   // eslint-disable-nextline
   const nav: any = navigator
   const canShare = nav.canShare && nav.canShare(shareData)
-  const isEdge = !/Edge/.test(navigator.userAgent)
-  if (canShare && isEdge) {
+  const userAgent = navigator.userAgent || navigator.vendor
+  const isMobile = /android|iPad|iPhone|iPod/i.test(userAgent)
+  if (canShare && isMobile) {
     navigator.share(shareData)
     return true
   }
