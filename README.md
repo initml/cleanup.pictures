@@ -8,24 +8,24 @@ This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a 
 
 - A frontend built with [React](https://reactjs.org/) / [Typescript](https://www.typescriptlang.org/) / [TailwindCSS](https://tailwindcss.com/)
 - A Nodejs Firebase function to proxy the fetch requests on a secure HTTPS endpoint with [AppCheck/reCAPTCHA v3](https://firebase.google.com/docs/app-check)
-- An inpainting service running [LaMa](https://github.com/saic-mdal/lama) on GPU via [Cloud Run for Anthos](https://cloud.google.com/anthos/run)
+- An inpainting service running [LaMa](https://github.com/saic-mdal/lama) on GPU
 
 ## Setup
 
 1. Function: `cd functions && npm i`
-2. Frontend: `yarn`
+2. Frontend: `npm i`
 
 Then edit the [.env](.env) file to match your firebase & backend settings.
 
 ## Development
 
 1. Function: `cd functions && npm run serve`
-2. Frontend: `yarn dev`
+2. Frontend: `npm run dev`
 
 ## Deployment
 
 1. Function: `firebase deploy --only functions`
-2. Frontend: `yarn build && firebase deploy --only hosting`
+2. Frontend: The frontend is automatically deployed when a PR is created/merged
 
 ## Acknowledgements
 
