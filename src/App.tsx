@@ -10,7 +10,7 @@ import Button from './components/Button'
 import FileSelect from './components/FileSelect'
 import Link from './components/Link'
 import Logo from './components/Logo'
-import MadeWidthBadge from './components/MadeWidthBadge'
+import TryClipDrop from './components/TryClipDrop'
 import Modal from './components/Modal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
@@ -36,6 +36,22 @@ function App() {
     firebase?.logEvent('set_demo_file', { demo_image: img })
     const imgBlob = await fetch(`/exemples/${img}.jpeg`).then(r => r.blob())
     setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
+  }
+
+  function getClipDropURL() {
+    const userAgent = navigator.userAgent || navigator.vendor
+    // If IOS return the iOS App Store
+    const isIOS = /ipad|iphone|ipod/i.test(userAgent.toLowerCase())
+    if (isIOS) {
+      return 'https://apps.apple.com/us/app/id1512594879'
+    }
+    // If Android return the play store URL
+    const isAndroid = /android/i.test(userAgent.toLowerCase())
+    if (isAndroid) {
+      return 'https://play.google.com/store/apps/details?id=app.arcopypaste'
+    }
+    // Otherwise return the main website
+    return 'https://clipdrop.co?utm_source=cleanup_pictures'
   }
 
   return (
@@ -217,7 +233,7 @@ function App() {
 
       <footer
         className={[
-          'absolute bottom-0 pl-7 pb-5 px-5 w-full flex items-center justify-between',
+          'absolute bottom-0 pb-5 px-5 w-full flex items-center justify-between',
           'pointer-events-none',
           // Hide footer when editing on mobile
           file ? 'hidden lg:flex' : '',
@@ -226,14 +242,12 @@ function App() {
         <div className="flex space-x-8 items-center">
           <a
             className="pointer-events-auto"
-            href="https://clipdrop.co?utm_source=cleanup_pictures"
-            target="_blank"
-            rel="noreferrer"
+            href={getClipDropURL()}
             onClick={() => {
               firebase.logEvent('click_clipdrop_badge')
             }}
           >
-            <MadeWidthBadge />
+            <TryClipDrop />
           </a>
         </div>
 

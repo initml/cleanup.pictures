@@ -22,6 +22,7 @@ body {
   font-family: 'Work Sans';
   font-weight: 600;
   overflow: hidden;
+  background-color: white;
 }
 
 input[type='range']::-webkit-slider-thumb {
