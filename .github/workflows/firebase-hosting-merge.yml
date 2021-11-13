@@ -12,6 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
+        env:
+          REACT_APP_INPAINTING_ENDPOINT: '${{ secrets.INPAINTING_ENDPOINT }}'
+          REACT_APP_RECAPTCHA_SITE_KEY: '${{ secrets.RECAPTCHA_SITE_KEY }}'
+          REACT_APP_FIREBASE_KEY: '${{ secrets.FIREBASE_KEY }}'
+          REACT_APP_FIREBASE_PROJECT_ID: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          REACT_APP_FIREBASE_SENDER_ID: '${{ secrets.FIREBASE_SENDER_ID }}'
+          REACT_APP_FIREBASE_APP_ID: '${{ secrets.FIREBASE_APP_ID }}'
+          REACT_APP_FIREBASE_MEASUREMENT_ID: '${{ secrets.FIREBASE_MEASUREMENT_ID }}'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
