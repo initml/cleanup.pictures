@@ -10,7 +10,7 @@ import { fileParser } from 'express-multipart-file-parser'
 // eslint-disable-next-line
 const firebaseAdmin = require('firebase-admin')
 
-const CLEANUP_ENDPOINT = functions.config().cleanup.endpoint
+const CLEANUP_ENDPOINT = functions.config().cleanup.endpoint_v2
 
 const app = express()
 app.use(cors({ origin: true }))
@@ -79,7 +79,7 @@ app.post(
     } catch (e) {
       functions.logger.error(e, { structuredData: true })
       response.statusCode = 500
-      return response.send(e)
+      return response.send('Internal server error')
     }
   }
 )
