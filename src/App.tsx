@@ -142,21 +142,10 @@ function App() {
               }}
             />
           )}
-          {/* {(windowSize.width > 640 || file) &&
-            user?.user?.entitlement !== 'pro' && (
-              <Button
-                primary
-                className="flex"
-                // icon={<InformationCircleIcon className="w-6 h-6" />}
-                onClick={() => {
-                  firebase.logEvent('show_upgrade')
-                  setShowUpgrade(true)
-                }}
-              >
-                Try Cleanup Pro
-              </Button>
-            )} */}
-          <Menu onAbout={() => setShowAbout(true)} />
+          <Menu
+            onAbout={() => setShowAbout(true)}
+            onUpgrade={() => setShowUpgrade(true)}
+          />
         </div>
       </header>
 
