@@ -87,6 +87,14 @@ export default function Editor(props: EditorProps) {
     drawLines(ctx, lines, 'white')
   }, [context?.canvas.height, context?.canvas.width, lines, maskCanvas])
 
+  // Reset when the file changes
+  useEffect(() => {
+    setRenders([])
+    setLines([{ pts: [] }])
+    setScale(1)
+    setIsInpaintingLoading(false)
+  }, [file])
+
   // Draw once the original image is loaded
   useEffect(() => {
     if (!context?.canvas) {
@@ -360,8 +368,8 @@ export default function Editor(props: EditorProps) {
       <div
         className={[
           'flex items-center w-full max-w-3xl',
-          'space-x-3 sm:space-x-5',
-          'p-6',
+          // 'space-x-1 sm:space-x-5',
+          'py-4 sm:p-6',
           scale !== 1
             ? 'absolute bottom-0 justify-evenly'
             : 'relative justify-evenly sm:justify-between',
