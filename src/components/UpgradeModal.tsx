@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useClickAway, useWindowSize } from 'react-use'
+import { useFirebase } from '../adapters/firebase'
 import useSubscriptions, { checkout, Product } from '../adapters/subscriptions'
 import { useUser } from '../adapters/user'
 import Button from './Button'
@@ -84,8 +85,10 @@ function CheckoutFlow() {
   const user = useUser()
   const products = useSubscriptions()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
+  const firebase = useFirebase()
 
   function startCheckout(priceId: string) {
+    firebase?.logEvent('upgrade_checkout', { priceId })
     if (!user?.user) {
       throw new Error('no user')
     }
@@ -104,7 +107,13 @@ function CheckoutFlow() {
   }
   // Step 1 - Login required
   return (
-    <Button primary onClick={() => user?.signInWithGoogle()}>
+    <Button
+      primary
+      onClick={() => {
+        firebase?.logEvent('upgrade_sign_in')
+        user?.signInWithGoogle()
+      }}
+    >
       Continue with Google
     </Button>
   )

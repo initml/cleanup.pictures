@@ -86,6 +86,7 @@ function App() {
   }
 
   function closeUpgradeFlow() {
+    firebase?.logEvent('upgrade_close')
     window.history.pushState({}, document.title, '/')
     setUpgradeFlowScreen(null)
     setShowUpgrade(false)
@@ -123,6 +124,7 @@ function App() {
               label="HD"
               enabled={useHD}
               setEnabled={(value: boolean) => {
+                firebase.logEvent('upgrade_hd_toggle', { enabled: value })
                 if (user?.isPro()) {
                   if (originalFile) {
                     // eslint-disable-next-line no-alert
