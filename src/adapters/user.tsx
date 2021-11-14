@@ -62,12 +62,8 @@ export default function UserProvider(props: Props) {
           entitlement: decodedToken.claims.stripeRole?.toString(),
         })
       } catch (error: any) {
-        // Handle Errors here.
-        const errorCode = error.code
-        const errorMessage = error.message
-        // The email of the user's account used.
-        const { email } = error
-        console.error(errorCode, errorMessage, email)
+        // eslint-disable-next-line no-alert
+        alert(`Error ${error.code}: ${error.message}`)
       }
     }
 
@@ -81,12 +77,8 @@ export default function UserProvider(props: Props) {
       const auth = getAuth()
       await signInWithPopup(auth, provider)
     } catch (error: any) {
-      // Handle Errors here.
-      const errorCode = error.code
-      const errorMessage = error.message
-      // The email of the user's account used.
-      const { email } = error
-      console.error(errorCode, errorMessage, email)
+      // eslint-disable-next-line no-alert
+      alert(`Error ${error.code}: ${error.message}`)
     }
   }
 
