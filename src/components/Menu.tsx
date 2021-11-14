@@ -1,5 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import {
+  ArrowUpIcon,
   ChatAltIcon,
   CogIcon,
   ExternalLinkIcon,
@@ -16,10 +17,11 @@ type MenuItemButtonProps = {
   label: string
   icon?: ReactNode
   onClick: () => void
+  primary?: boolean
 }
 
 function MenuItemButton(props: MenuItemButtonProps) {
-  const { label, onClick, icon } = props
+  const { label, onClick, icon, primary } = props
   return (
     <Menu.Item>
       {({ active }) => (
@@ -27,6 +29,7 @@ function MenuItemButton(props: MenuItemButtonProps) {
           type="button"
           className={[
             active ? 'bg-gray-100' : '',
+            primary ? 'bg-primary' : '',
             'flex w-full px-5 py-3 text-sm text-gray-700 space-x-3 whitespace-nowrap flex-nowrap',
           ].join(' ')}
           onClick={onClick}
@@ -41,10 +44,11 @@ function MenuItemButton(props: MenuItemButtonProps) {
 
 interface UserMenuProps {
   onAbout: () => void
+  onUpgrade: () => void
 }
 
 export default function UserMenu(props: UserMenuProps) {
-  const { onAbout } = props
+  const { onAbout, onUpgrade } = props
   const user = useUser()
   const firebase = useFirebase()
   const [isLoading, setIsLoading] = useState(false)
@@ -89,6 +93,14 @@ export default function UserMenu(props: UserMenuProps) {
                       {user.user?.firebaseUser.uid}
                     </p>
                   </div>
+                )}
+                {!user?.isPro() && (
+                  <MenuItemButton
+                    primary
+                    label="Upgrade to Cleanup Pro"
+                    icon={<ArrowUpIcon className="w-6 h-6" />}
+                    onClick={onUpgrade}
+                  />
                 )}
                 {!user?.user && (
                   <MenuItemButton
