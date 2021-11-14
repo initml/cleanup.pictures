@@ -48,8 +48,8 @@ export default function Button(props: ButtonProps) {
       }}
       tabIndex={-1}
       className={[
-        'inline-flex py-3 px-5 rounded-md cursor-pointer',
-        children ? 'space-x-3' : '',
+        'inline-flex py-3 rounded-md cursor-pointer',
+        children ? 'space-x-3 px-5' : 'px-3 sm:px-5',
         background,
         disabled ? 'pointer-events-none opacity-50' : '',
         className,

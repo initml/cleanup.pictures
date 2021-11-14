@@ -34,7 +34,7 @@ input[type='range']::-webkit-slider-thumb {
   border-radius: 50%;
 }
 
-*:not(input):not(textarea) {
+*:not(input):not(textarea):not(.selection-text) {
   user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
@@ -43,5 +43,17 @@ input[type='range']::-webkit-slider-thumb {
 @supports (-webkit-touch-callout: none) {
   .full-visible-h-safari {
     height: calc(100% - 80px); /* -webkit-fill-available;*/
+  }
+}
+
+@keyframes wait {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.5);
   }
 }

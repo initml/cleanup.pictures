@@ -15,7 +15,12 @@ This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a 
 1. Function: `cd functions && npm i`
 2. Frontend: `npm i`
 
-Then edit the [.env](.env) file to match your firebase & backend settings.
+Then edit the [.env](.env) file (or add a new `.env.local` file) that matches your firebase & backend settings.
+
+To point the frontend to the local functions emulator, update your .env file with:
+```
+REACT_APP_INPAINTING_ENDPOINT=http://localhost:5001/cleanup-pictures/us-central1/default/cleanup
+```
 
 ## Development
 

@@ -1,17 +1,17 @@
-import {
-  ArrowLeftIcon,
-  ChatAltIcon,
-  InformationCircleIcon,
-} from '@heroicons/react/outline'
-import React, { useRef, useState } from 'react'
-import { useClickAway, useWindowSize } from 'react-use'
+import { ArrowLeftIcon } from '@heroicons/react/outline'
+import React, { useEffect, useState } from 'react'
+import { useWindowSize } from 'react-use'
 import { useFirebase } from './adapters/firebase'
+import { useUser } from './adapters/user'
+import AboutModal from './components/AboutModal'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
-import Link from './components/Link'
 import Logo from './components/Logo'
+import LogoPro from './components/LogoPro'
+import Menu from './components/Menu'
+import Toggle from './components/Toggle'
 import TryClipDrop from './components/TryClipDrop'
-import Modal from './components/Modal'
+import UpgradeModal from './components/UpgradeModal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
 
@@ -19,14 +19,27 @@ const EXAMPLES = ['bag', 'table', 'paris', 'jacket', 'shoe']
 
 function App() {
   const [file, setFile] = useState<File>()
+  const [originalFile, setOriginalFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
-  const modalRef = useRef(null)
+  const [upgradeFlowScreen, setUpgradeFlowScreen] = useState(
+    new URLSearchParams(window.location.search).get('upgrade')
+  )
+  const [showUpgrade, setShowUpgrade] = useState(
+    upgradeFlowScreen !== null && typeof upgradeFlowScreen !== 'undefined'
+  )
+  const user = useUser()
+  const [useHD, setUseHD] = useState(user?.isPro() || false)
+
+  useEffect(() => {
+    if (user?.isPro()) {
+      setUseHD(true)
+    } else {
+      setUseHD(false)
+    }
+  }, [user])
+
   const firebase = useFirebase()
   const windowSize = useWindowSize()
-
-  useClickAway(modalRef, () => {
-    setShowAbout(false)
-  })
 
   if (!firebase) {
     return <></>
@@ -54,14 +67,47 @@ function App() {
     return 'https://clipdrop.co?utm_source=cleanup_pictures'
   }
 
+  async function onFileChange(f: File, hd: boolean) {
+    if (!firebase) {
+      throw new Error('No firebase')
+    }
+    const {
+      file: resizedFile,
+      resized,
+      originalWidth,
+      originalHeight,
+    } = await resizeImageFile(f, hd ? 2000 : 720)
+    firebase.logEvent('set_file', {
+      resized,
+      originalWidth,
+      originalHeight,
+    })
+    setFile(resizedFile)
+  }
+
+  function closeUpgradeFlow() {
+    firebase?.logEvent('upgrade_close')
+    window.history.pushState({}, document.title, '/')
+    setUpgradeFlowScreen(null)
+    setShowUpgrade(false)
+  }
+
+  function getLogo() {
+    if (user?.isPro()) {
+      return <LogoPro className={[file ? 'h-12' : 'w-72 h-16'].join(' ')} />
+    }
+    return <Logo className={[file ? 'h-12' : 'w-72 h-16'].join(' ')} />
+  }
+
   return (
     <div className="h-full full-visible-h-safari flex flex-col">
-      <header className="relative z-10 flex px-5 pt-3 justify-center sm:justify-between items-center sm:items-start">
+      <header className="relative z-10 flex sm:px-5 pt-3 justify-between items-center sm:items-start">
         {file ? (
           <Button
             icon={<ArrowLeftIcon className="w-6 h-6" />}
             onClick={() => {
               firebase.logEvent('start_new')
+              setOriginalFile(undefined)
               setFile(undefined)
             }}
           >
@@ -70,17 +116,48 @@ function App() {
         ) : (
           <></>
         )}
-        <Logo className={[file ? 'h-12' : 'w-72 h-16'].join(' ')} />
-        <Button
-          className="hidden sm:flex"
-          icon={<InformationCircleIcon className="w-6 h-6" />}
-          onClick={() => {
-            firebase.logEvent('show_modal')
-            setShowAbout(true)
-          }}
-        >
-          About
-        </Button>
+        {windowSize.width > 640 || !file ? getLogo() : <></>}
+
+        <div className="flex space-x-4">
+          {(windowSize.width > 640 || file) && (
+            <Toggle
+              label="HD"
+              enabled={useHD}
+              setEnabled={(value: boolean) => {
+                firebase.logEvent('upgrade_hd_toggle', { enabled: value })
+                if (user?.isPro()) {
+                  if (originalFile) {
+                    // eslint-disable-next-line no-alert
+                    const result = window.confirm(
+                      'Current changes will be reset. Continue?'
+                    )
+                    if (result) {
+                      onFileChange(originalFile, value)
+                    }
+                  }
+                  setUseHD(value)
+                } else {
+                  setShowUpgrade(true)
+                }
+              }}
+            />
+          )}
+          {/* {(windowSize.width > 640 || file) &&
+            user?.user?.entitlement !== 'pro' && (
+              <Button
+                primary
+                className="flex"
+                // icon={<InformationCircleIcon className="w-6 h-6" />}
+                onClick={() => {
+                  firebase.logEvent('show_upgrade')
+                  setShowUpgrade(true)
+                }}
+              >
+                Try Cleanup Pro
+              </Button>
+            )} */}
+          <Menu onAbout={() => setShowAbout(true)} />
+        </div>
       </header>
 
       <main
@@ -115,7 +192,7 @@ function App() {
                 >
                   <img
                     src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=light&period=weekly"
-                    alt="CleanUp.pictures - Remove objects and defects from your pictures - 100% free | Product Hunt"
+                    alt="CleanUp.pictures - Remove objects and defects from your pictures for free | Product Hunt"
                     width="210"
                     height="54"
                   />
@@ -142,19 +219,9 @@ function App() {
               style={{ maxWidth: '800px' }}
             >
               <FileSelect
-                onSelection={async f => {
-                  const {
-                    file: resizedFile,
-                    resized,
-                    originalWidth,
-                    originalHeight,
-                  } = await resizeImageFile(f, 1024)
-                  firebase.logEvent('set_file', {
-                    resized,
-                    originalWidth,
-                    originalHeight,
-                  })
-                  setFile(resizedFile)
+                onSelection={f => {
+                  setOriginalFile(f)
+                  onFileChange(f, useHD)
                 }}
               />
             </div>
@@ -193,74 +260,38 @@ function App() {
         )}
       </main>
 
-      {showAbout && (
-        <Modal>
-          <div ref={modalRef} className="text-xl space-y-5">
-            <p>
-              Some photobomber ruined your selfie? There’s a ketchup stain on
-              your shirt? You want to replace some text or graphic?
-            </p>
+      {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
 
-            <p>
-              <Link href="https://cleanup.pictures">CleanUp.pictures</Link> is a
-              free web application that lets you cleanup your photos with a
-              quick & simple interface.
-            </p>
-
-            <p>
-              It uses <Link href="https://arxiv.org/abs/2109.07161">LaMa</Link>,
-              an open-source model from Samsung’s AI Lab to automatically &
-              acurately redraw the areas that you delete.
-            </p>
-
-            <p>
-              <Link href="https://cleanup.pictures">CleanUp.pictures</Link> has
-              been built by the engineering team at{' '}
-              <Link href="https://clipdrop.co">ClipDrop</Link> and it&apos;s{' '}
-              <Link href="https://github.com/initml/cleanup.pictures">
-                open-source
-              </Link>{' '}
-              under the Apache License 2.0.
-            </p>
-
-            <p>
-              If you have any question please{' '}
-              <Link href="mailto:contact@clipdrop.co">contact us!</Link>
-            </p>
-          </div>
-        </Modal>
+      {showUpgrade && (
+        <UpgradeModal
+          onClose={() => closeUpgradeFlow()}
+          screen={upgradeFlowScreen}
+          isProUser={user?.isPro()}
+        />
       )}
 
-      <footer
-        className={[
-          'absolute bottom-0 pb-5 px-5 w-full flex items-center justify-between',
-          'pointer-events-none',
-          // Hide footer when editing on mobile
-          file ? 'hidden lg:flex' : '',
-        ].join(' ')}
-      >
-        <div className="flex space-x-8 items-center">
-          <a
-            className="pointer-events-auto"
-            href={getClipDropURL()}
-            onClick={() => {
-              firebase.logEvent('click_clipdrop_badge')
-            }}
-          >
-            <TryClipDrop />
-          </a>
-        </div>
-
-        <Button
-          className="pointer-events-auto"
-          icon={<ChatAltIcon className="w-6 h-6" />}
-          onClick={() =>
-            window.open('mailto:contact@cleanup.pictures', '_blank')
-          }
+      {!showAbout && !showUpgrade && (
+        <footer
+          className={[
+            'absolute bottom-0 pb-5 px-5 w-full flex items-center justify-between',
+            'pointer-events-none',
+            // Hide footer when editing on mobile
+            file ? 'hidden lg:flex' : '',
+          ].join(' ')}
         >
-          Report issue
-        </Button>
-      </footer>
+          <div className="flex space-x-8 items-center">
+            <a
+              className="pointer-events-auto"
+              href={getClipDropURL()}
+              onClick={() => {
+                firebase.logEvent('click_clipdrop_badge')
+              }}
+            >
+              <TryClipDrop />
+            </a>
+          </div>
+        </footer>
+      )}
     </div>
   )
 }

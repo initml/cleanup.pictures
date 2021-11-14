@@ -17,7 +17,7 @@ app.use(cors({ origin: true }))
 
 const fileParserMiddleware = fileParser({
   rawBodyOptions: {
-    limit: '10mb',
+    limit: '20mb',
   },
 })
 
