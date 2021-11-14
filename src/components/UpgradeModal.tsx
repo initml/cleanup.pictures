@@ -19,6 +19,7 @@ interface UpgradeModalProps {
 export default function UpgradeModal(props: UpgradeModalProps) {
   const { onClose, screen, isProUser } = props
   const upgradeModalRef = useRef(null)
+  const firebase = useFirebase()
 
   useClickAway(upgradeModalRef, () => {
     onClose()
@@ -31,6 +32,13 @@ export default function UpgradeModal(props: UpgradeModalProps) {
       onClose()
     }
   }, [screen, isProUser, onClose])
+
+  // Report success screen event
+  useEffect(() => {
+    if (screen === 'success') {
+      firebase?.logEvent('upgrade_success')
+    }
+  }, [firebase, screen])
 
   if (screen === 'success') {
     return (
