@@ -90,7 +90,8 @@ export default function UserProvider(props: Props) {
       let email = window.localStorage.getItem('emailForSignIn')
       if (!email) {
         // User opened the link on a different device. To prevent session fixation
-        // attacks, ask the user to provide the associated email again. For example:
+        // attacks, ask the user to provide the associated email again.
+        // eslint-disable-next-line no-alert
         email = window.prompt('Please provide your email for confirmation')
       }
       if (!email) {
@@ -98,7 +99,7 @@ export default function UserProvider(props: Props) {
       }
       // The client SDK will parse the code from the link for you.
       signInWithEmailLink(auth, email, window.location.href)
-        .then(result => {
+        .then(() => {
           // Clear email from storage.
           window.localStorage.removeItem('emailForSignIn')
           // You can access the new user via result.user
@@ -107,9 +108,9 @@ export default function UserProvider(props: Props) {
           // You can check if the user is new or existing:
           // result.additionalUserInfo.isNewUser
         })
-        .catch(error => {
-          // Some error occurred, you can inspect the code: error.code
-          // Common errors could be invalid email and invalid or expired OTPs.
+        .catch((error: any) => {
+          // eslint-disable-next-line no-alert
+          alert(error.message)
         })
     }
   }, [firebase?.app])
