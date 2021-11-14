@@ -34,7 +34,7 @@ export default function Modal(props: ModalProps) {
         <Button
           icon={<XIcon className="w-6 h-6" />}
           className={[
-            'absolute right-2 top-2 sm:right-4 sm:top-4 rounded-full bg-gray-100 w-8 h-8 sm:w-10 sm:h-10',
+            'absolute right-4 top-4 rounded-full bg-gray-100 w-10 h-10',
             'flex justify-center items-center py-0 px-0 sm:px-0',
           ].join(' ')}
           onClick={onClose}

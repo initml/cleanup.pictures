@@ -8,6 +8,7 @@ import Loader from './Loader'
 import LogoPro from './LogoPro'
 import Modal from './Modal'
 import PriceSelector from './PriceSelector'
+import Signin from './Signin'
 
 interface UpgradeModalProps {
   onClose: () => void
@@ -99,24 +100,18 @@ function CheckoutFlow() {
 
   // Step 3 - Wait for checking session to be created
   if (isCheckingOut) {
-    return <Loader />
+    return (
+      <span className="flex justify-center">
+        <Loader />
+      </span>
+    )
   }
   // Step 2 - Show the price
   if (user?.user) {
     return <Prices products={products} onCheckout={startCheckout} />
   }
   // Step 1 - Login required
-  return (
-    <Button
-      primary
-      onClick={() => {
-        firebase?.logEvent('upgrade_sign_in')
-        user?.signInWithGoogle()
-      }}
-    >
-      Continue with Google
-    </Button>
-  )
+  return <Signin />
 }
 
 interface PricesProps {
