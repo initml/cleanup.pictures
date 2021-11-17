@@ -8,7 +8,7 @@ This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a 
 
 - A frontend built with [React](https://reactjs.org/) / [Typescript](https://www.typescriptlang.org/) / [TailwindCSS](https://tailwindcss.com/)
 - A Nodejs Firebase function to proxy the fetch requests on a secure HTTPS endpoint with [AppCheck/reCAPTCHA v3](https://firebase.google.com/docs/app-check)
-- An inpainting service running [LaMa](https://github.com/saic-mdal/lama) on GPU
+- An inpainting service running [LaMa](https://github.com/saic-mdal/lama) on GPU. [Here](https://github.com/Sanster/lama-cleaner) is an example implementation by [@Sanster](https://github.com/Sanster) that you can run locally
 
 ## Setup
 
