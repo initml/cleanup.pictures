@@ -56,12 +56,12 @@ function App() {
     // If IOS return the iOS App Store
     const isIOS = /ipad|iphone|ipod/i.test(userAgent.toLowerCase())
     if (isIOS) {
-      return 'https://apps.apple.com/us/app/id1512594879'
+      return 'https://apps.apple.com/app/apple-store/id1512594879?pt=335286&ct=cleanup_pictures&mt=8'
     }
     // If Android return the play store URL
     const isAndroid = /android/i.test(userAgent.toLowerCase())
     if (isAndroid) {
-      return 'https://play.google.com/store/apps/details?id=app.arcopypaste'
+      return 'https://play.google.com/store/apps/details?id=app.arcopypaste&referrer=utm_source%3Dcleanup_pictures'
     }
     // Otherwise return the main website
     return 'https://clipdrop.co?utm_source=cleanup_pictures'
