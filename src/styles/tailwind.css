@@ -26,6 +26,7 @@ body {
 }
 
 main h1 {
+  font-family: 'Work Sans';
   font-size: 2rem;
   font-weight: 900;
   margin-bottom: 1rem;
