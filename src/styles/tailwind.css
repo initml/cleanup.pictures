@@ -13,29 +13,29 @@
 /* Stop purging. */
 
 /* Your own custom utilities */
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@600;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
 
 html,
 body {
   min-width: 100%;
   /* min-height: 100%; */
-  font-family: 'Work Sans';
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
   font-weight: 600;
   /* overflow: hidden; */
   background-color: white;
 }
 
 main h1 {
-  font-family: 'Work Sans';
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: 800;
   margin-bottom: 1rem;
 }
 
 main h2 {
-  font-family: 'Work Sans';
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   margin: 3rem 0 1rem;
 }
 
