@@ -10,7 +10,6 @@ import Logo from './components/Logo'
 import LogoPro from './components/LogoPro'
 import Menu from './components/Menu'
 import Toggle from './components/Toggle'
-import TryClipDrop from './components/TryClipDrop'
 import UpgradeModal from './components/UpgradeModal'
 import Editor from './Editor'
 import { resizeImageFile } from './utils'
@@ -38,6 +37,15 @@ function App() {
     }
   }, [user])
 
+  // Toggle the editor class on body when a file is selected
+  useEffect(() => {
+    if (file) {
+      document.body.classList.add('editor')
+    } else {
+      document.body.classList.remove('editor')
+    }
+  }, [file])
+
   const firebase = useFirebase()
   const windowSize = useWindowSize()
 
@@ -49,22 +57,6 @@ function App() {
     firebase?.logEvent('set_demo_file', { demo_image: img })
     const imgBlob = await fetch(`/exemples/${img}.jpeg`).then(r => r.blob())
     setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
-  }
-
-  function getClipDropURL() {
-    const userAgent = navigator.userAgent || navigator.vendor
-    // If IOS return the iOS App Store
-    const isIOS = /ipad|iphone|ipod/i.test(userAgent.toLowerCase())
-    if (isIOS) {
-      return 'https://apps.apple.com/app/apple-store/id1512594879?pt=335286&ct=cleanup_pictures&mt=8'
-    }
-    // If Android return the play store URL
-    const isAndroid = /android/i.test(userAgent.toLowerCase())
-    if (isAndroid) {
-      return 'https://play.google.com/store/apps/details?id=app.arcopypaste&referrer=utm_source%3Dcleanup_pictures'
-    }
-    // Otherwise return the main website
-    return 'https://clipdrop.co?utm_source=cleanup_pictures'
   }
 
   async function onFileChange(f: File, hd: boolean) {
@@ -100,7 +92,7 @@ function App() {
   }
 
   return (
-    <div className="h-full full-visible-h-safari flex flex-col">
+    <div className="app full-visible-h-safari flex flex-col">
       <header className="relative z-10 flex sm:px-5 pt-3 justify-between items-center sm:items-start">
         {file ? (
           <Button
@@ -151,8 +143,9 @@ function App() {
 
       <main
         className={[
-          'h-full flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
+          'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
           // file ? 'items-center justify-center' : '', // center on mobile
+          'mt-10',
           'items-center justify-center',
           'pb-20',
         ].join(' ')}
@@ -215,19 +208,16 @@ function App() {
               />
             </div>
 
-            {(windowSize.width > 1024 || windowSize.height > 650) && (
-              <div
-                className={[
-                  'flex flex-col sm:flex-row items-center justify-center cursor-pointer',
-                  'pt-4 sm:pt-10',
-                ].join(' ')}
-              >
-                <span className="text-gray-500">Or try with an example</span>
-                <div className="flex space-x-2 sm:space-x-4 px-4">
-                  {EXAMPLES.slice(
-                    0,
-                    windowSize.width > 650 ? undefined : 3
-                  ).map(image => (
+            <div
+              className={[
+                'flex flex-col sm:flex-row items-center justify-center cursor-pointer',
+                'pt-4 sm:pt-10',
+              ].join(' ')}
+            >
+              <span className="text-gray-500">Or try with an example</span>
+              <div className="flex space-x-2 sm:space-x-4 px-4">
+                {EXAMPLES.slice(0, windowSize.width > 650 ? undefined : 3).map(
+                  image => (
                     <div
                       key={image}
                       onClick={() => startWithDemoImage(image)}
@@ -241,10 +231,10 @@ function App() {
                         alt={image}
                       />
                     </div>
-                  ))}
-                </div>
+                  )
+                )}
               </div>
-            )}
+            </div>
           </>
         )}
       </main>
@@ -257,29 +247,6 @@ function App() {
           screen={upgradeFlowScreen}
           isProUser={user?.isPro()}
         />
-      )}
-
-      {!showAbout && !showUpgrade && (
-        <footer
-          className={[
-            'absolute bottom-0 pb-5 px-5 w-full flex items-center justify-between',
-            'pointer-events-none',
-            // Hide footer when editing on mobile
-            file ? 'hidden lg:flex' : '',
-          ].join(' ')}
-        >
-          <div className="flex space-x-8 items-center">
-            <a
-              className="pointer-events-auto"
-              href={getClipDropURL()}
-              onClick={() => {
-                firebase.logEvent('click_clipdrop_badge')
-              }}
-            >
-              <TryClipDrop />
-            </a>
-          </div>
-        </footer>
       )}
     </div>
   )

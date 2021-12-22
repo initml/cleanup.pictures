@@ -21,9 +21,9 @@ export default function AboutModal(props: AboutModalProps) {
         )}
 
         <p>
-          <Link href="https://cleanup.pictures">CleanUp.pictures</Link> is a web
-          application that lets you cleanup photos with a quick & simple
-          interface.
+          <Link href="https://cleanup.pictures">CleanUp.pictures</Link> is a
+          free web application that lets you cleanup photos with a quick &
+          simple interface.
         </p>
 
         <p>

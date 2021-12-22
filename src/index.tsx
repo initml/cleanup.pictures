@@ -7,7 +7,6 @@ import UserProvider from './adapters/user'
 
 const root = document.createElement('div')
 root.id = 'root'
-root.classList.add('h-full')
 document.body.prepend(root)
 
 ReactDOM.render(
