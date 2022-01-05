@@ -150,7 +150,7 @@
     </footer>
 
     <script>
-      if (location.hostname !== 'cleanup.pictures') {
+      if (location.hostname.includes('localhost')) {
         self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
       }
     </script>
