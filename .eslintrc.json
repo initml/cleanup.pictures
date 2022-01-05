@@ -16,6 +16,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
+  "ignorePatterns": ["*.js"],
   "rules": {
     "import/no-unresolved": 0,
     "react/jsx-no-bind": "off",
