@@ -96,61 +96,67 @@ export function useImage(file: File): [HTMLImageElement, boolean] {
 interface ResizeImageFileResult {
   file: File
   resized: boolean
-  originalWidth?: number
-  originalHeight?: number
+  originalWidth: number
+  originalHeight: number
 }
-export function resizeImageFile(
+export async function resizeImageFile(
   file: File,
   maxSize: number
 ): Promise<ResizeImageFileResult> {
-  const reader = new FileReader()
-  const image = new Image()
+  const image = await getImage(file)
   const canvas = document.createElement('canvas')
 
-  const resize = (): ResizeImageFileResult => {
-    let { width, height } = image
+  let { width, height } = image
 
-    if (width > height) {
-      if (width > maxSize) {
-        height *= maxSize / width
-        width = maxSize
-      }
-    } else if (height > maxSize) {
-      width *= maxSize / height
-      height = maxSize
+  if (width > height) {
+    if (width > maxSize) {
+      height *= maxSize / width
+      width = maxSize
     }
+  } else if (height > maxSize) {
+    width *= maxSize / height
+    height = maxSize
+  }
 
-    if (width === image.width && height === image.height) {
-      return { file, resized: false }
-    }
-
-    canvas.width = width
-    canvas.height = height
-    const ctx = canvas.getContext('2d')
-    if (!ctx) {
-      throw new Error('could not get context')
-    }
-    canvas.getContext('2d')?.drawImage(image, 0, 0, width, height)
-    const dataUrl = canvas.toDataURL('image/jpeg')
-    const blob = dataURItoBlob(dataUrl)
-    const f = new File([blob], file.name, {
-      type: file.type,
-    })
+  if (width === image.width && height === image.height) {
     return {
-      file: f,
-      resized: true,
+      file,
+      resized: false,
       originalWidth: image.width,
       originalHeight: image.height,
     }
   }
 
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) {
+    throw new Error('could not get context')
+  }
+  canvas.getContext('2d')?.drawImage(image, 0, 0, width, height)
+  const dataUrl = canvas.toDataURL('image/jpeg')
+  const blob = dataURItoBlob(dataUrl)
+  const f = new File([blob], file.name, {
+    type: file.type,
+  })
+  return {
+    file: f,
+    resized: true,
+    originalWidth: image.width,
+    originalHeight: image.height,
+  }
+}
+
+export function getImage(file: File): Promise<HTMLImageElement> {
+  const reader = new FileReader()
+  const image = new Image()
   return new Promise((resolve, reject) => {
     if (!file.type.match(/image.*/)) {
       reject(new Error('Not an image'))
       return
     }
     reader.onload = (readerEvent: any) => {
-      image.onload = () => resolve(resize())
+      image.onload = () => resolve(image)
       image.src = readerEvent.target.result
     }
     reader.readAsDataURL(file)

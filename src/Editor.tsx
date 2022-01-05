@@ -11,7 +11,9 @@ const TOOLBAR_SIZE = 200
 const BRUSH_COLOR = 'rgba(189, 255, 1, 0.75)'
 
 interface EditorProps {
+  hd: boolean
   file: File
+  original: File
 }
 
 interface Line {
@@ -41,9 +43,10 @@ function drawLines(
 }
 
 export default function Editor(props: EditorProps) {
-  const { file } = props
+  const { file, original, hd } = props
   const [brushSize, setBrushSize] = useState(40)
-  const [original, isOriginalLoaded] = useImage(file)
+  const [image, isImageLoaded] = useImage(file)
+  const [originalImage, isOriginalLoaded] = useImage(original)
   const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
@@ -68,11 +71,11 @@ export default function Editor(props: EditorProps) {
     if (currRender?.src) {
       context.drawImage(currRender, 0, 0)
     } else {
-      context.drawImage(original, 0, 0)
+      context.drawImage(image, 0, 0)
     }
     const currentLine = lines[lines.length - 1]
     drawLines(context, [currentLine])
-  }, [context, lines, original, renders])
+  }, [context, lines, image, renders])
 
   const refreshCanvasMask = useCallback(() => {
     if (!context?.canvas.width || !context?.canvas.height) {
@@ -95,16 +98,16 @@ export default function Editor(props: EditorProps) {
     setIsInpaintingLoading(false)
   }, [file])
 
-  // Draw once the original image is loaded
+  // Draw once the image image is loaded
   useEffect(() => {
     if (!context?.canvas) {
       return
     }
-    if (isOriginalLoaded) {
-      context.canvas.width = original.naturalWidth
-      context.canvas.height = original.naturalHeight
-      const rW = windowSize.width / original.naturalWidth
-      const rH = (windowSize.height - TOOLBAR_SIZE) / original.naturalHeight
+    if (isImageLoaded) {
+      context.canvas.width = image.naturalWidth
+      context.canvas.height = image.naturalHeight
+      const rW = windowSize.width / image.naturalWidth
+      const rH = (windowSize.height - TOOLBAR_SIZE) / image.naturalHeight
       if (rW < 1 || rH < 1) {
         setScale(Math.min(rW, rH))
       } else {
@@ -112,7 +115,7 @@ export default function Editor(props: EditorProps) {
       }
       draw()
     }
-  }, [context?.canvas, draw, original, isOriginalLoaded, firebase, windowSize])
+  }, [context?.canvas, draw, image, isImageLoaded, firebase, windowSize])
 
   // Handle mouse interactions
   useEffect(() => {
@@ -125,7 +128,7 @@ export default function Editor(props: EditorProps) {
     }
 
     const onMouseDown = (ev: MouseEvent) => {
-      if (!original.src) {
+      if (!image.src) {
         return
       }
       const currLine = lines[lines.length - 1]
@@ -149,7 +152,7 @@ export default function Editor(props: EditorProps) {
     }
 
     const onPointerUp = async () => {
-      if (!original.src) {
+      if (!image.src) {
         return
       }
       setIsInpaintingLoading(true)
@@ -175,8 +178,8 @@ export default function Editor(props: EditorProps) {
 
         firebase?.logEvent('inpaint_processed', {
           duration: Date.now() - start,
-          width: original.naturalWidth,
-          height: original.naturalHeight,
+          width: image.naturalWidth,
+          height: image.naturalHeight,
         })
       } catch (e: any) {
         firebase?.logEvent('inpaint_failed', {
@@ -202,7 +205,7 @@ export default function Editor(props: EditorProps) {
       draw()
     }
     const onPointerStart = (ev: TouchEvent) => {
-      if (!original.src) {
+      if (!image.src) {
         return
       }
       const currLine = lines[lines.length - 1]
@@ -240,11 +243,11 @@ export default function Editor(props: EditorProps) {
     lines,
     refreshCanvasMask,
     maskCanvas,
-    original.src,
+    image.src,
     renders,
     firebase,
-    original.naturalHeight,
-    original.naturalWidth,
+    image.naturalHeight,
+    image.naturalWidth,
     scale,
   ])
 
@@ -277,7 +280,7 @@ export default function Editor(props: EditorProps) {
   }, [renders, undo])
 
   function download() {
-    const base64 = context?.canvas.toDataURL(file.type)
+    const base64 = hd ? renderOutput() : context?.canvas.toDataURL(file.type)
     if (!base64) {
       throw new Error('could not get canvas data')
     }
@@ -290,6 +293,48 @@ export default function Editor(props: EditorProps) {
     }
   }
 
+  function renderOutput() {
+    if (!originalImage || !isOriginalLoaded || !context?.canvas) {
+      return
+    }
+    const patch = document.createElement('canvas')
+    patch.width = originalImage.width
+    patch.height = originalImage.height
+    const patchCtx = patch.getContext('2d')
+    if (!patchCtx) {
+      throw new Error('Could not get patch context')
+    }
+
+    // Draw the inpainted image masked by the mask
+    patchCtx?.drawImage(
+      maskCanvas,
+      0,
+      0,
+      originalImage.width,
+      originalImage.height
+    )
+    patchCtx.globalCompositeOperation = 'source-in'
+    patchCtx?.drawImage(
+      context?.canvas,
+      0,
+      0,
+      originalImage.width,
+      originalImage.height
+    )
+
+    // Draw the final output
+    const output = document.createElement('canvas')
+    output.width = originalImage.width
+    output.height = originalImage.height
+    const outputCtx = output.getContext('2d')
+    if (!patchCtx) {
+      throw new Error('Could not get output context')
+    }
+    outputCtx?.drawImage(originalImage, 0, 0)
+    outputCtx?.drawImage(patch, 0, 0)
+    return outputCtx?.canvas.toDataURL(file.type)
+  }
+
   return (
     <div
       className={[
@@ -300,7 +345,7 @@ export default function Editor(props: EditorProps) {
         scale !== 1 ? 'pb-24' : '',
       ].join(' ')}
       style={{
-        height: scale !== 1 ? original.naturalHeight * scale : undefined,
+        height: scale !== 1 ? image.naturalHeight * scale : undefined,
       }}
     >
       <div
@@ -328,10 +373,8 @@ export default function Editor(props: EditorProps) {
             // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
           ].join(' ')}
           style={{
-            width: showOriginal
-              ? `${Math.round(original.naturalWidth)}px`
-              : '0px',
-            height: original.naturalHeight,
+            width: showOriginal ? `${Math.round(image.naturalWidth)}px` : '0px',
+            height: image.naturalHeight,
             transitionProperty: 'width, height',
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
             transitionDuration: '300ms',
@@ -339,13 +382,13 @@ export default function Editor(props: EditorProps) {
         >
           <img
             className="absolute right-0"
-            src={original.src}
+            src={image.src}
             alt="original"
-            width={`${original.naturalWidth}px`}
-            height={`${original.naturalHeight}px`}
+            width={`${image.naturalWidth}px`}
+            height={`${image.naturalHeight}px`}
             style={{
-              width: `${original.naturalWidth}px`,
-              height: `${original.naturalHeight}px`,
+              width: `${image.naturalWidth}px`,
+              height: `${image.naturalHeight}px`,
               maxWidth: 'none',
             }}
           />

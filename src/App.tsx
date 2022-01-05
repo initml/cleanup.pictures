@@ -68,7 +68,7 @@ function App() {
       resized,
       originalWidth,
       originalHeight,
-    } = await resizeImageFile(f, hd ? 2000 : 720)
+    } = await resizeImageFile(f, hd ? 1920 : 720)
     firebase.logEvent('set_file', {
       resized,
       originalWidth,
@@ -151,7 +151,7 @@ function App() {
         ].join(' ')}
       >
         {file ? (
-          <Editor file={file} />
+          <Editor file={file} original={originalFile || file} hd={useHD} />
         ) : (
           <>
             <div
@@ -201,7 +201,7 @@ function App() {
               style={{ maxWidth: '800px' }}
             >
               <FileSelect
-                onSelection={f => {
+                onSelection={async f => {
                   setOriginalFile(f)
                   onFileChange(f, useHD)
                 }}
