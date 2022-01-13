@@ -100,6 +100,7 @@ export function EditorProvider(props: any) {
 
   // console.log(isOriginalLoaded)
 
+  // Refresh HD & pro layoutclass when the user changes
   useEffect(() => {
     if (user?.isPro()) {
       setUseHD(true)
@@ -111,12 +112,13 @@ export function EditorProvider(props: any) {
   }, [user])
 
   // Reset when the file changes
-  // const reset = useCallback(() => {
-
-  // }, [])
   useEffect(() => {
-    setRenders([])
-    setLines([{ pts: [] }])
+    if (!file) {
+      setOriginalFile(undefined)
+      setRenders([])
+      setLines([{ pts: [] }])
+      setContext(undefined)
+    }
   }, [file])
 
   const undo = useCallback(() => {

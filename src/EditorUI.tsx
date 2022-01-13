@@ -42,6 +42,12 @@ export default function EditorUI({
     useHD,
   } = editor
 
+  // Reset when the file changes
+  useEffect(() => {
+    setScale(1)
+    setIsInpaintingLoading(false)
+  }, [])
+
   // Draw once the image image is loaded
   useEffect(() => {
     if (!context?.canvas || !image) {
@@ -59,13 +65,7 @@ export default function EditorUI({
       }
       draw()
     }
-  }, [context?.canvas, draw, image, isImageLoaded, firebase, windowSize])
-
-  // Reset when the file changes
-  useEffect(() => {
-    setScale(1)
-    setIsInpaintingLoading(false)
-  }, [])
+  }, [context?.canvas, draw, image, isImageLoaded, windowSize])
 
   // Handle mouse interactions
   useEffect(() => {
@@ -236,7 +236,6 @@ export default function EditorUI({
               'overflow-hidden',
               'border-primary',
               showSeparator ? 'border-l-4' : '',
-              // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
             ].join(' ')}
             style={{
               width: showOriginal
@@ -324,6 +323,7 @@ export default function EditorUI({
         {editor.useHD ? (
           <Button
             primary
+            disabled={isInpaintingLoading}
             onClick={async () => {
               setIsInpaintingLoading(true)
               await render()
