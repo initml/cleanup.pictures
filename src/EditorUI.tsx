@@ -5,7 +5,7 @@ import Button from './components/Button'
 import Slider from './components/Slider'
 import { useEditor } from './context/EditorContext'
 
-const TOOLBAR_SIZE = 200
+const TOOLBAR_SIZE = 180
 
 interface EditorUIProps {
   showOriginal: boolean
@@ -202,11 +202,9 @@ export default function EditorUI({
     <>
       <div
         className={[
-          'flex flex-col items-center',
           isInpaintingLoading
             ? 'animate-pulse-fast pointer-events-none transition-opacity'
             : '',
-          scale !== 1 ? 'pb-24' : '',
         ].join(' ')}
         style={{
           height: scale !== 1 ? image.naturalHeight * scale : undefined,
@@ -277,67 +275,67 @@ export default function EditorUI({
             }}
           />
         )}
+      </div>
 
-        <div
-          className={[
-            'absolute bottom-4',
-            'flex items-center space-x-8 max-w-3xl',
-            // 'space-x-1 sm:space-x-5',
-            'bg-gray-200 bg-opacity-50 backdrop-blur px-4 rounded-2xl',
-            'p-2 sm:px-6 sm:py-2',
-            // scale !== 1
-            // ?
-            'fixed bottom-0 justify-evenly',
-            // : 'relative justify-evenly sm:justify-between',
-          ].join(' ')}
-        >
-          {lines.length ? (
-            <Button
-              icon={
-                <svg
-                  width="19"
-                  height="9"
-                  viewBox="0 0 19 9"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                >
-                  <path
-                    d="M2 1C2 0.447715 1.55228 0 1 0C0.447715 0 0 0.447715 0 1H2ZM1 8H0V9H1V8ZM8 9C8.55228 9 9 8.55229 9 8C9 7.44771 8.55228 7 8 7V9ZM16.5963 7.42809C16.8327 7.92721 17.429 8.14016 17.9281 7.90374C18.4272 7.66731 18.6402 7.07103 18.4037 6.57191L16.5963 7.42809ZM16.9468 5.83205L17.8505 5.40396L16.9468 5.83205ZM0 1V8H2V1H0ZM1 9H8V7H1V9ZM1.66896 8.74329L6.66896 4.24329L5.33104 2.75671L0.331035 7.25671L1.66896 8.74329ZM16.043 6.26014L16.5963 7.42809L18.4037 6.57191L17.8505 5.40396L16.043 6.26014ZM6.65079 4.25926C9.67554 1.66661 14.3376 2.65979 16.043 6.26014L17.8505 5.40396C15.5805 0.61182 9.37523 -0.710131 5.34921 2.74074L6.65079 4.25926Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              }
-              onClick={undo}
-            />
-          ) : (
-            <></>
-          )}
-          <div className="py-2">
-            <Slider
-              label={<span>Brush Size</span>}
-              min={10}
-              max={150}
-              value={brushSize}
-              onChange={setBrushSize}
-            />
-          </div>
-          {editor.useHD ? (
-            <Button
-              primary
-              onClick={async () => {
-                setIsInpaintingLoading(true)
-                await render()
-                setIsInpaintingLoading(false)
-                draw(true)
-              }}
-            >
-              Clean HD
-            </Button>
-          ) : (
-            <></>
-          )}
+      <div
+        className={[
+          'absolute bottom-3',
+          'flex items-center space-x-8 max-w-3xl',
+          'bg-gray-200 bg-opacity-50 backdrop-blur px-4 rounded-2xl',
+          'p-2 sm:px-6 sm:py-2',
+          'fixed justify-evenly',
+        ].join(' ')}
+      >
+        {lines.length ? (
+          <Button
+            icon={
+              <svg
+                width="19"
+                height="9"
+                viewBox="0 0 19 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6"
+              >
+                <path
+                  d="M2 1C2 0.447715 1.55228 0 1 0C0.447715 0 0 0.447715 0 1H2ZM1 8H0V9H1V8ZM8 9C8.55228 9 9 8.55229 9 8C9 7.44771 8.55228 7 8 7V9ZM16.5963 7.42809C16.8327 7.92721 17.429 8.14016 17.9281 7.90374C18.4272 7.66731 18.6402 7.07103 18.4037 6.57191L16.5963 7.42809ZM16.9468 5.83205L17.8505 5.40396L16.9468 5.83205ZM0 1V8H2V1H0ZM1 9H8V7H1V9ZM1.66896 8.74329L6.66896 4.24329L5.33104 2.75671L0.331035 7.25671L1.66896 8.74329ZM16.043 6.26014L16.5963 7.42809L18.4037 6.57191L17.8505 5.40396L16.043 6.26014ZM6.65079 4.25926C9.67554 1.66661 14.3376 2.65979 16.043 6.26014L17.8505 5.40396C15.5805 0.61182 9.37523 -0.710131 5.34921 2.74074L6.65079 4.25926Z"
+                  fill="currentColor"
+                />
+              </svg>
+            }
+            onClick={undo}
+          />
+        ) : (
+          <></>
+        )}
+        <div className="py-2">
+          <Slider
+            label={
+              <span>
+                <span className="hidden sm:inline">Brush </span>Size
+              </span>
+            }
+            min={10}
+            max={150}
+            value={brushSize}
+            onChange={setBrushSize}
+          />
         </div>
+        {editor.useHD ? (
+          <Button
+            primary
+            onClick={async () => {
+              setIsInpaintingLoading(true)
+              await render()
+              setIsInpaintingLoading(false)
+              draw(true)
+            }}
+          >
+            Clean HD
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   )

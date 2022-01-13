@@ -26,7 +26,13 @@ export default function EditorHeader({
   const editor = useEditor()
 
   return (
-    <header className="relative z-10 flex sm:px-5 pt-3 justify-between items-center sm:items-start">
+    <header
+      className={[
+        'absolute z-10 flex sm:px-5 pt-3 w-full',
+        'bg-white bg-opacity-50 backdrop-blur',
+        'justify-between items-center sm:items-start',
+      ].join(' ')}
+    >
       <Button icon={<ArrowLeftIcon className="w-6 h-6" />} onClick={onBack}>
         {windowSize.width > 640 ? 'Start new' : undefined}
       </Button>

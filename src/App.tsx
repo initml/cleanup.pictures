@@ -71,7 +71,7 @@ function App() {
   }
 
   return (
-    <div className="app full-visible-h-safari flex flex-col">
+    <div className="app full-visible-h-safari min-h-full flex flex-col">
       {editor.file ? (
         <>
           <EditorHeader
@@ -105,10 +105,8 @@ function App() {
           <main
             className={[
               'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
-              // file ? 'items-center justify-center' : '', // center on mobile
-              'mt-10',
+              'h-full',
               'items-center justify-center',
-              'pb-20',
             ].join(' ')}
           >
             <EditorUI
