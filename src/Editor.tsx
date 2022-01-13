@@ -336,147 +336,154 @@ export default function Editor(props: EditorProps) {
   }
 
   return (
-    <div
-      className={[
-        'flex flex-col items-center',
-        isInpaintingLoading
-          ? 'animate-pulse-fast pointer-events-none transition-opacity'
-          : '',
-        scale !== 1 ? 'pb-24' : '',
-      ].join(' ')}
-      style={{
-        height: scale !== 1 ? image.naturalHeight * scale : undefined,
-      }}
-    >
-      <div
-        className={[scale !== 1 ? '' : 'relative'].join(' ')}
-        style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
-      >
-        <canvas
-          className="rounded-sm"
-          style={showBrush ? { cursor: 'none' } : {}}
-          ref={r => {
-            if (r && !context) {
-              const ctx = r.getContext('2d')
-              if (ctx) {
-                setContext(ctx)
-              }
-            }
-          }}
-        />
-        <div
-          className={[
-            'absolute top-0 right-0 pointer-events-none',
-            'overflow-hidden',
-            'border-primary',
-            showSeparator ? 'border-l-4' : '',
-            // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
-          ].join(' ')}
-          style={{
-            width: showOriginal ? `${Math.round(image.naturalWidth)}px` : '0px',
-            height: image.naturalHeight,
-            transitionProperty: 'width, height',
-            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-            transitionDuration: '300ms',
-          }}
-        >
-          <img
-            className="absolute right-0"
-            src={image.src}
-            alt="original"
-            width={`${image.naturalWidth}px`}
-            height={`${image.naturalHeight}px`}
-            style={{
-              width: `${image.naturalWidth}px`,
-              height: `${image.naturalHeight}px`,
-              maxWidth: 'none',
-            }}
-          />
-        </div>
-      </div>
-
-      {showBrush && (
-        <div
-          className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
-          style={{
-            width: `${brushSize * scale}px`,
-            height: `${brushSize * scale}px`,
-            left: `${x}px`,
-            top: `${y}px`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-      )}
-
+    <>
       <div
         className={[
-          'flex items-center w-full max-w-3xl',
-          // 'space-x-1 sm:space-x-5',
-          'py-4 sm:p-6',
-          scale !== 1
-            ? 'absolute bottom-0 justify-evenly'
-            : 'relative justify-evenly sm:justify-between',
+          'flex flex-col items-center',
+          isInpaintingLoading
+            ? 'animate-pulse-fast pointer-events-none transition-opacity'
+            : '',
+          scale !== 1 ? 'pb-24' : '',
         ].join(' ')}
+        style={{
+          height: scale !== 1 ? image.naturalHeight * scale : undefined,
+        }}
       >
-        <Slider
-          label={
-            <span>
-              <span className="hidden md:inline">Brush</span> Size
-            </span>
-          }
-          min={10}
-          max={150}
-          value={brushSize}
-          onChange={setBrushSize}
-        />
-        {renders.length ? (
-          <>
-            <Button
-              icon={
-                <svg
-                  width="19"
-                  height="9"
-                  viewBox="0 0 19 9"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                >
-                  <path
-                    d="M2 1C2 0.447715 1.55228 0 1 0C0.447715 0 0 0.447715 0 1H2ZM1 8H0V9H1V8ZM8 9C8.55228 9 9 8.55229 9 8C9 7.44771 8.55228 7 8 7V9ZM16.5963 7.42809C16.8327 7.92721 17.429 8.14016 17.9281 7.90374C18.4272 7.66731 18.6402 7.07103 18.4037 6.57191L16.5963 7.42809ZM16.9468 5.83205L17.8505 5.40396L16.9468 5.83205ZM0 1V8H2V1H0ZM1 9H8V7H1V9ZM1.66896 8.74329L6.66896 4.24329L5.33104 2.75671L0.331035 7.25671L1.66896 8.74329ZM16.043 6.26014L16.5963 7.42809L18.4037 6.57191L17.8505 5.40396L16.043 6.26014ZM6.65079 4.25926C9.67554 1.66661 14.3376 2.65979 16.043 6.26014L17.8505 5.40396C15.5805 0.61182 9.37523 -0.710131 5.34921 2.74074L6.65079 4.25926Z"
-                    fill="currentColor"
-                  />
-                </svg>
+        <div
+          className={[scale !== 1 ? '' : 'relative'].join(' ')}
+          style={{
+            transform: `scale(${scale})`,
+            transformOrigin: 'top center',
+          }}
+        >
+          <canvas
+            className="rounded-sm"
+            style={showBrush ? { cursor: 'none' } : {}}
+            ref={r => {
+              if (r && !context) {
+                const ctx = r.getContext('2d')
+                if (ctx) {
+                  setContext(ctx)
+                }
               }
-              onClick={undo}
+            }}
+          />
+          <div
+            className={[
+              'absolute top-0 right-0 pointer-events-none',
+              'overflow-hidden',
+              'border-primary',
+              showSeparator ? 'border-l-4' : '',
+              // showOriginal ? 'border-opacity-100' : 'border-opacity-0',
+            ].join(' ')}
+            style={{
+              width: showOriginal
+                ? `${Math.round(image.naturalWidth)}px`
+                : '0px',
+              height: image.naturalHeight,
+              transitionProperty: 'width, height',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              transitionDuration: '300ms',
+            }}
+          >
+            <img
+              className="absolute right-0"
+              src={image.src}
+              alt="original"
+              width={`${image.naturalWidth}px`}
+              height={`${image.naturalHeight}px`}
+              style={{
+                width: `${image.naturalWidth}px`,
+                height: `${image.naturalHeight}px`,
+                maxWidth: 'none',
+              }}
             />
-            <Button
-              icon={<EyeIcon className="w-6 h-6" />}
-              onDown={ev => {
-                ev.preventDefault()
-                setShowSeparator(true)
-                setShowOriginal(true)
-              }}
-              onUp={() => {
-                setShowOriginal(false)
-                setTimeout(() => setShowSeparator(false), 300)
-              }}
-            >
-              {windowSize.width > 640 ? 'Original' : undefined}
-            </Button>
-          </>
-        ) : (
-          <></>
+          </div>
+        </div>
+
+        {showBrush && (
+          <div
+            className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
+            style={{
+              width: `${brushSize * scale}px`,
+              height: `${brushSize * scale}px`,
+              left: `${x}px`,
+              top: `${y}px`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
         )}
 
-        <Button
-          primary
-          icon={<DownloadIcon className="w-6 h-6" />}
-          disabled={!renders.length}
-          onClick={download}
+        <div
+          className={[
+            'flex items-center w-full max-w-3xl',
+            // 'space-x-1 sm:space-x-5',
+            'py-4 sm:p-6',
+            scale !== 1
+              ? 'absolute bottom-0 justify-evenly'
+              : 'relative justify-evenly sm:justify-between',
+          ].join(' ')}
         >
-          {windowSize.width > 640 ? 'Download' : undefined}
-        </Button>
+          <Slider
+            label={
+              <span>
+                <span className="hidden md:inline">Brush</span> Size
+              </span>
+            }
+            min={10}
+            max={150}
+            value={brushSize}
+            onChange={setBrushSize}
+          />
+          {renders.length ? (
+            <>
+              <Button
+                icon={
+                  <svg
+                    width="19"
+                    height="9"
+                    viewBox="0 0 19 9"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      d="M2 1C2 0.447715 1.55228 0 1 0C0.447715 0 0 0.447715 0 1H2ZM1 8H0V9H1V8ZM8 9C8.55228 9 9 8.55229 9 8C9 7.44771 8.55228 7 8 7V9ZM16.5963 7.42809C16.8327 7.92721 17.429 8.14016 17.9281 7.90374C18.4272 7.66731 18.6402 7.07103 18.4037 6.57191L16.5963 7.42809ZM16.9468 5.83205L17.8505 5.40396L16.9468 5.83205ZM0 1V8H2V1H0ZM1 9H8V7H1V9ZM1.66896 8.74329L6.66896 4.24329L5.33104 2.75671L0.331035 7.25671L1.66896 8.74329ZM16.043 6.26014L16.5963 7.42809L18.4037 6.57191L17.8505 5.40396L16.043 6.26014ZM6.65079 4.25926C9.67554 1.66661 14.3376 2.65979 16.043 6.26014L17.8505 5.40396C15.5805 0.61182 9.37523 -0.710131 5.34921 2.74074L6.65079 4.25926Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                }
+                onClick={undo}
+              />
+              <Button
+                icon={<EyeIcon className="w-6 h-6" />}
+                onDown={ev => {
+                  ev.preventDefault()
+                  setShowSeparator(true)
+                  setShowOriginal(true)
+                }}
+                onUp={() => {
+                  setShowOriginal(false)
+                  setTimeout(() => setShowSeparator(false), 300)
+                }}
+              >
+                {windowSize.width > 640 ? 'Original' : undefined}
+              </Button>
+            </>
+          ) : (
+            <></>
+          )}
+
+          <Button
+            primary
+            icon={<DownloadIcon className="w-6 h-6" />}
+            disabled={!renders.length}
+            onClick={download}
+          >
+            {windowSize.width > 640 ? 'Download' : undefined}
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
