@@ -1,4 +1,4 @@
-import React from 'react'
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import FirebaseProvider from './adapters/firebase'
 import UserProvider from './adapters/user'
@@ -10,12 +10,12 @@ root.id = 'root'
 document.body.prepend(root)
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <FirebaseProvider>
       <UserProvider>
         <App />
       </UserProvider>
     </FirebaseProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   root
 )

@@ -1,5 +1,4 @@
 import { Switch } from '@headlessui/react'
-import React from 'react'
 
 interface ToggleProps {
   label: string

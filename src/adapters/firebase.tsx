@@ -7,7 +7,7 @@ import {
   ReCaptchaV3Provider,
 } from 'firebase/app-check'
 import { Analytics, getAnalytics, logEvent } from 'firebase/analytics'
-import React, {
+import {
   createContext,
   ReactNode,
   useContext,

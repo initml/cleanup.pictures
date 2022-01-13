@@ -1,5 +1,5 @@
 import { DownloadIcon, EyeIcon } from '@heroicons/react/outline'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { useFirebase } from './adapters/firebase'
 import inpaint from './adapters/inpainting'

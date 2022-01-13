@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFirebase } from './adapters/firebase'
 import { useUser } from './adapters/user'
 import UpgradeModal from './components/UpgradeModal'

@@ -7,7 +7,7 @@ import {
   LogoutIcon,
   UserIcon,
 } from '@heroicons/react/outline'
-import React, { Fragment, ReactNode, useState } from 'react'
+import { Fragment, ReactNode, useState } from 'react'
 import { useUser } from '../adapters/user'
 import Loader from './Loader'
 

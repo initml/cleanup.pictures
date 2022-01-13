@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useClickAway, useWindowSize } from 'react-use'
 import { useFirebase } from '../adapters/firebase'
 import useSubscriptions, { checkout, Product } from '../adapters/subscriptions'

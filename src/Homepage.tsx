@@ -1,4 +1,3 @@
-import React from 'react'
 import { useWindowSize } from 'react-use'
 import { useUser } from './adapters/user'
 import FileSelect from './components/FileSelect'

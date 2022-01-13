@@ -7,7 +7,7 @@ import {
   User as FirebaseUser,
 } from 'firebase/auth'
 import { getFunctions, httpsCallable } from 'firebase/functions'
-import React, {
+import {
   createContext,
   ReactNode,
   useContext,

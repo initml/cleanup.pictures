@@ -19,6 +19,8 @@
   "ignorePatterns": ["*.js"],
   "rules": {
     "import/no-unresolved": 0,
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": [
       1,
