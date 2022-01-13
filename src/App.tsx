@@ -1,42 +1,35 @@
 import { useEffect, useState } from 'react'
 import { useFirebase } from './adapters/firebase'
-import { useUser } from './adapters/user'
 import UpgradeModal from './components/UpgradeModal'
-import Editor from './Editor'
+import EditorUI from './EditorUI'
 import EditorHeader from './EditorHeader'
 import Homepage from './Homepage'
 import { resizeImageFile } from './utils'
+import { useEditor } from './context/EditorContext'
+import { useUser } from './adapters/user'
 
 function App() {
-  const [file, setFile] = useState<File>()
-  const [originalFile, setOriginalFile] = useState<File>()
+  const editor = useEditor()
   const [upgradeFlowScreen, setUpgradeFlowScreen] = useState(
     new URLSearchParams(window.location.search).get('upgrade')
   )
   const [showUpgrade, setShowUpgrade] = useState(
     upgradeFlowScreen !== null && typeof upgradeFlowScreen !== 'undefined'
   )
-  const user = useUser()
-  const [useHD, setUseHD] = useState(user?.isPro() || false)
 
-  useEffect(() => {
-    if (user?.isPro()) {
-      setUseHD(true)
-      document.body.classList.add('pro')
-    } else {
-      setUseHD(false)
-      document.body.classList.remove('pro')
-    }
-  }, [user])
+  const [showOriginal, setShowOriginal] = useState(false)
+  const [showSeparator, setShowSeparator] = useState(false)
+
+  const user = useUser()
 
   // Toggle the editor class on body when a file is selected
   useEffect(() => {
-    if (file) {
+    if (editor.file) {
       document.body.classList.add('editor')
     } else {
       document.body.classList.remove('editor')
     }
-  }, [file])
+  }, [editor.file])
 
   const firebase = useFirebase()
 
@@ -47,7 +40,9 @@ function App() {
   async function startWithDemoImage(img: string) {
     firebase?.logEvent('set_demo_file', { demo_image: img })
     const imgBlob = await fetch(`/exemples/${img}.jpeg`).then(r => r.blob())
-    setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
+    const f = new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' })
+    editor.setFile(f)
+    editor.setOriginalFile(f)
   }
 
   async function onFileChange(f: File, hd: boolean) {
@@ -65,7 +60,7 @@ function App() {
       originalWidth,
       originalHeight,
     })
-    setFile(resizedFile)
+    editor.setFile(resizedFile)
   }
 
   function closeUpgradeFlow() {
@@ -77,33 +72,35 @@ function App() {
 
   return (
     <div className="app full-visible-h-safari flex flex-col">
-      {file ? (
+      {editor.file ? (
         <>
           <EditorHeader
-            useHD={useHD}
+            useHD={editor.useHD}
             setUseHD={(value: boolean) => {
               firebase?.logEvent('upgrade_hd_toggle', { enabled: value })
               if (user?.isPro()) {
-                if (originalFile) {
+                if (editor.originalFile) {
                   // eslint-disable-next-line no-alert
                   const result = window.confirm(
                     'Current changes will be reset. Continue?'
                   )
                   if (result) {
-                    onFileChange(originalFile, value)
+                    onFileChange(editor.originalFile, value)
                   }
                 }
-                setUseHD(value)
+                editor.setUseHD(value)
               } else {
                 setShowUpgrade(true)
               }
             }}
             onBack={() => {
               firebase?.logEvent('start_new')
-              setOriginalFile(undefined)
-              setFile(undefined)
+              editor.setOriginalFile(undefined)
+              editor.setFile(undefined)
             }}
             setShowUpgrade={setShowUpgrade}
+            setShowOriginal={setShowOriginal}
+            setShowSeparator={setShowSeparator}
           />
           <main
             className={[
@@ -114,13 +111,16 @@ function App() {
               'pb-20',
             ].join(' ')}
           >
-            <Editor file={file} original={originalFile || file} hd={useHD} />
+            <EditorUI
+              showOriginal={showOriginal}
+              showSeparator={showSeparator}
+            />
           </main>
         </>
       ) : (
         <Homepage
-          setOriginalFile={setOriginalFile}
-          onFileChange={f => onFileChange(f, useHD)}
+          setOriginalFile={editor.setOriginalFile}
+          onFileChange={f => onFileChange(f, editor.useHD)}
           startWithDemoImage={startWithDemoImage}
           setShowUpgrade={setShowUpgrade}
         />
