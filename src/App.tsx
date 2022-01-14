@@ -6,6 +6,7 @@ import { useUser } from './adapters/user'
 import AboutModal from './components/AboutModal'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
+import KittyModal from './components/KittyModal'
 import Logo from './components/Logo'
 import LogoPro from './components/LogoPro'
 import Menu from './components/Menu'
@@ -20,6 +21,7 @@ function App() {
   const [file, setFile] = useState<File>()
   const [originalFile, setOriginalFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
+  const [showKitty, setShowKitty] = useState(!localStorage.getItem('kitty'))
   const [upgradeFlowScreen, setUpgradeFlowScreen] = useState(
     new URLSearchParams(window.location.search).get('upgrade')
   )
@@ -93,6 +95,20 @@ function App() {
 
   return (
     <div className="app full-visible-h-safari flex flex-col">
+      {!file && (
+        <p className="py-4 bg-black text-white text-sm flex items-center justify-center">
+          Cleanup has been nomited for a 🏆{' '}
+          <a
+            href="https://www.producthunt.com/golden-kitty-awards-2021/ai-machine-learning"
+            target="_blank"
+            rel="noreferrer"
+            className="underline font-bold"
+          >
+            Product Hunt Golden Kitty Award
+          </a>
+          ! It&apos;s a good time to show your love 🥰
+        </p>
+      )}
       <header className="relative z-10 flex sm:px-5 pt-3 justify-between items-center sm:items-start">
         {file ? (
           <Button
@@ -240,6 +256,15 @@ function App() {
       </main>
 
       {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+
+      {showKitty && (
+        <KittyModal
+          onClose={() => {
+            localStorage.setItem('kitty', 'true')
+            setShowKitty(false)
+          }}
+        />
+      )}
 
       {showUpgrade && (
         <UpgradeModal
