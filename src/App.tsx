@@ -6,6 +6,7 @@ import { useUser } from './adapters/user'
 import AboutModal from './components/AboutModal'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
+import KittyModal from './components/KittyModal'
 import Logo from './components/Logo'
 import LogoPro from './components/LogoPro'
 import Menu from './components/Menu'
@@ -20,6 +21,7 @@ function App() {
   const [file, setFile] = useState<File>()
   const [originalFile, setOriginalFile] = useState<File>()
   const [showAbout, setShowAbout] = useState(false)
+  const [showKitty, setShowKitty] = useState(!localStorage.getItem('kitty'))
   const [upgradeFlowScreen, setUpgradeFlowScreen] = useState(
     new URLSearchParams(window.location.search).get('upgrade')
   )
@@ -240,6 +242,15 @@ function App() {
       </main>
 
       {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+
+      {showKitty && (
+        <KittyModal
+          onClose={() => {
+            localStorage.setItem('kitty', 'true')
+            setShowKitty(false)
+          }}
+        />
+      )}
 
       {showUpgrade && (
         <UpgradeModal
