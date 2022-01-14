@@ -24,6 +24,18 @@ export default function Homepage({
   const user = useUser()
   return (
     <>
+      <p className="py-4 bg-black text-white text-sm flex items-center justify-center">
+        Cleanup has been nomited for a 🏆{' '}
+        <a
+          href="https://www.producthunt.com/golden-kitty-awards-2021/ai-machine-learning"
+          target="_blank"
+          rel="noreferrer"
+          className="underline font-bold"
+        >
+          Product Hunt Golden Kitty Award
+        </a>
+        ! It&apos;s a good time to show your love 🥰
+      </p>
       <header className="relative z-10 flex px-5 pt-3 justify-between items-center sm:items-start">
         <div>
           {user?.isPro() ? (

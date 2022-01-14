@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useFirebase } from './adapters/firebase'
+import KittyModal from './components/KittyModal'
 import UpgradeModal from './components/UpgradeModal'
 import EditorUI from './EditorUI'
 import EditorHeader from './EditorHeader'
@@ -10,6 +11,7 @@ import { useUser } from './adapters/user'
 
 function App() {
   const editor = useEditor()
+  const [showKitty, setShowKitty] = useState(!localStorage.getItem('kitty'))
   const [upgradeFlowScreen, setUpgradeFlowScreen] = useState(
     new URLSearchParams(window.location.search).get('upgrade')
   )
@@ -121,6 +123,15 @@ function App() {
           onFileChange={f => onFileChange(f, editor.useHD)}
           startWithDemoImage={startWithDemoImage}
           setShowUpgrade={setShowUpgrade}
+        />
+      )}
+
+      {showKitty && (
+        <KittyModal
+          onClose={() => {
+            localStorage.setItem('kitty', 'true')
+            setShowKitty(false)
+          }}
         />
       )}
 
