@@ -83,17 +83,17 @@ export default function UserMenu(props: UserMenuProps) {
                 static
                 className="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
-                {user?.isPro() && (
-                  <div className="p-4 ">
-                    <p>Cleanup Pro</p>
+                <div className="p-4 ">
+                  {user?.isPro() && <p>Cleanup Pro</p>}
+                  {user && (
                     <p
                       className="text-xs font-thin font-mono opacity-70 selection-text"
                       style={{ userSelect: 'text' }}
                     >
                       {user.user?.firebaseUser.uid}
                     </p>
-                  </div>
-                )}
+                  )}
+                </div>
                 {!user?.isPro() && (
                   <MenuItemButton
                     primary
