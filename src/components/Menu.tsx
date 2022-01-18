@@ -4,12 +4,10 @@ import {
   ChatAltIcon,
   CogIcon,
   ExternalLinkIcon,
-  InformationCircleIcon,
   LogoutIcon,
   UserIcon,
 } from '@heroicons/react/outline'
-import React, { Fragment, ReactNode, useState } from 'react'
-import { useFirebase } from '../adapters/firebase'
+import { Fragment, ReactNode, useState } from 'react'
 import { useUser } from '../adapters/user'
 import Loader from './Loader'
 
@@ -35,7 +33,7 @@ function MenuItemButton(props: MenuItemButtonProps) {
           onClick={onClick}
         >
           {icon}
-          <span>{label}</span>
+          <span className="font-medium">{label}</span>
         </button>
       )}
     </Menu.Item>
@@ -43,14 +41,12 @@ function MenuItemButton(props: MenuItemButtonProps) {
 }
 
 interface UserMenuProps {
-  onAbout: () => void
   onUpgrade: () => void
 }
 
 export default function UserMenu(props: UserMenuProps) {
-  const { onAbout, onUpgrade } = props
+  const { onUpgrade } = props
   const user = useUser()
-  const firebase = useFirebase()
   const [isLoading, setIsLoading] = useState(false)
 
   return (
@@ -109,14 +105,6 @@ export default function UserMenu(props: UserMenuProps) {
                     onClick={() => user?.signInWithGoogle()}
                   />
                 )}
-                <MenuItemButton
-                  label="About"
-                  icon={<InformationCircleIcon className="w-6 h-6" />}
-                  onClick={() => {
-                    firebase?.logEvent('show_modal')
-                    onAbout()
-                  }}
-                />
                 <MenuItemButton
                   label="Contact Support"
                   icon={<ChatAltIcon className="w-6 h-6" />}

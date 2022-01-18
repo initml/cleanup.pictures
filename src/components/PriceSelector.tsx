@@ -1,5 +1,4 @@
 import { RadioGroup } from '@headlessui/react'
-import React from 'react'
 import { Price } from '../adapters/subscriptions'
 
 interface PriceSelectorProps {

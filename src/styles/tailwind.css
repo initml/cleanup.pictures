@@ -44,7 +44,7 @@ main h2 {
   flex-direction: column;
   align-items: center;
 }
-.editor .faq, .editor footer {
+.pro .faq, .editor .faq, .editor footer {
   display: none;
 }
 

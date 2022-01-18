@@ -1,6 +1,3 @@
-import React from 'react'
-// import { useWindowSize } from 'react-use'
-
 interface LogoProProps {
   className?: string
 }

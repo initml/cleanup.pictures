@@ -1,6 +1,6 @@
 import { CheckIcon } from '@heroicons/react/outline'
 import { getAuth, sendSignInLinkToEmail } from 'firebase/auth'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useFirebase } from '../adapters/firebase'
 import { useUser } from '../adapters/user'
 import Button from './Button'

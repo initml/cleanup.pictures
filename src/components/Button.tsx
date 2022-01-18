@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 interface ButtonProps {
   children?: ReactNode
@@ -48,7 +48,7 @@ export default function Button(props: ButtonProps) {
       }}
       tabIndex={-1}
       className={[
-        'inline-flex py-3 rounded-md cursor-pointer',
+        'inline-flex py-3 rounded-xl cursor-pointer',
         children ? 'space-x-3 px-5' : 'px-3 sm:px-5',
         background,
         disabled ? 'pointer-events-none opacity-50' : '',
