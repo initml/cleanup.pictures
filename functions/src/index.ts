@@ -1,11 +1,11 @@
 import axios from 'axios'
-import * as FormData from 'form-data'
-import * as functions from 'firebase-functions'
+import * as cors from 'cors'
 import * as express from 'express'
 import { NextFunction, Request, Response } from 'express'
-import * as cors from 'cors'
 // @ts-ignore
 import { fileParser } from 'express-multipart-file-parser'
+import * as functions from 'firebase-functions'
+import * as FormData from 'form-data'
 
 // eslint-disable-next-line
 const firebaseAdmin = require('firebase-admin')
@@ -51,7 +51,7 @@ const appCheckVerification = async (
 }
 
 app.post(
-  '/cleanup',
+  '/',
   appCheckVerification,
   fileParserMiddleware,
   async (request, response) => {
@@ -84,5 +84,5 @@ app.post(
   }
 )
 
-const api = functions.https.onRequest(app)
-export default api
+const cleanup = functions.https.onRequest(app)
+exports.cleanup = cleanup

@@ -19,7 +19,7 @@ Then edit the [.env](.env) file (or add a new `.env.local` file) that matches yo
 
 To point the frontend to the local functions emulator, update your .env file with:
 ```
-REACT_APP_INPAINTING_ENDPOINT=http://localhost:5001/cleanup-pictures/us-central1/default/cleanup
+REACT_APP_INPAINTING_ENDPOINT=http://localhost:5001/cleanup-pictures/us-central1/cleanup
 ```
 
 ## Development
