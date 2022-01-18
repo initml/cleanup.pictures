@@ -102,18 +102,7 @@ function App() {
             setShowOriginal={setShowOriginal}
             setShowSeparator={setShowSeparator}
           />
-          <main
-            className={[
-              'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
-              'h-full',
-              'items-center justify-center',
-            ].join(' ')}
-          >
-            <EditorUI
-              showOriginal={showOriginal}
-              showSeparator={showSeparator}
-            />
-          </main>
+          <EditorUI showOriginal={showOriginal} showSeparator={showSeparator} />
         </>
       ) : (
         <Homepage
