@@ -318,10 +318,10 @@ export default function EditorUI({
             onChange={setBrushSize}
           />
         </div>
-        {editor.useHD && currentEdit.lines.length > 1 ? (
+        {editor.useHD ? (
           <Button
             primary
-            disabled={isInpaintingLoading}
+            disabled={isInpaintingLoading || currentEdit.lines.length <= 1}
             onClick={async () => {
               setIsInpaintingLoading(true)
               await render()
