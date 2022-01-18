@@ -12,6 +12,11 @@ import { downloadImage, loadImage, shareImage, useImage } from '../utils'
 
 const BRUSH_COLOR = 'rgba(189, 255, 1, 0.75)'
 
+interface BatchEdit {
+  lines: Line[]
+  render?: HTMLImageElement
+}
+
 export type Editor = {
   useHD: boolean
   setUseHD: (useHD: boolean) => void
@@ -26,23 +31,16 @@ export type Editor = {
   isImageLoaded: boolean
   originalImage?: HTMLImageElement
 
-  renders: HTMLImageElement[]
-  // setRenders: (renders: HTMLImageElement[]) => void
-
   maskCanvas: HTMLCanvasElement
 
-  lines: Line[]
+  edits: BatchEdit[]
   addLine: () => void
-  // setLines: (lines: Line[]) => void
 
   context?: CanvasRenderingContext2D
   setContext: (ctx: CanvasRenderingContext2D) => void
 
-  // refreshCanvasMask: () => void
-
   render: () => void
-  draw: (noLine?: boolean) => void
-  // reset: () => void
+  draw: () => void
   undo: () => void
   download: () => void
 }
@@ -80,8 +78,7 @@ export function EditorProvider(props: any) {
 
   const [context, setContext] = useState<CanvasRenderingContext2D>()
 
-  const [renders, setRenders] = useState<HTMLImageElement[]>([])
-  const [lines, setLines] = useState<Line[]>([{ pts: [] }])
+  const [edits, setEdits] = useState<BatchEdit[]>([{ lines: [{ pts: [] }] }])
 
   const [file, setFile] = useState<File>()
   const [originalFile, setOriginalFile] = useState<File>()
@@ -98,8 +95,6 @@ export function EditorProvider(props: any) {
 
   const firebase = useFirebase()
 
-  // console.log(isOriginalLoaded)
-
   // Refresh HD & pro layoutclass when the user changes
   useEffect(() => {
     if (user?.isPro()) {
@@ -111,47 +106,66 @@ export function EditorProvider(props: any) {
     }
   }, [user])
 
+  // Reset edits when HD changes
+  useEffect(() => {
+    setEdits([{ lines: [{ pts: [] }] }])
+  }, [useHD])
+
   // Reset when the file changes
   useEffect(() => {
     if (!file) {
       setOriginalFile(undefined)
-      setRenders([])
-      setLines([{ pts: [] }])
+      setEdits([{ lines: [{ pts: [] }] }])
       setContext(undefined)
     }
   }, [file])
 
   const undo = useCallback(() => {
-    const l = lines
-    l.pop()
-    l.pop()
-    setLines([...l, { pts: [] }])
-    const r = renders
-    r.pop()
-    setRenders([...r])
-  }, [lines, renders])
+    const currentEdit = edits[edits.length - 1]
+    if (!currentEdit) {
+      throw new Error('no edit to undo')
+    }
+    if (!useHD) {
+      edits.pop()
+      edits[edits.length - 1].lines = [{ pts: [] }]
+      setEdits([...edits])
+    }
+    // If the current batch has more than one line, we just remove the last line
+    else if (currentEdit.lines.length > 1 || !useHD) {
+      currentEdit.lines.pop()
+      currentEdit.lines[currentEdit.lines.length - 1] = { pts: [] }
+      setEdits([...edits])
+    }
+    // Otherwise if the current batch has only one line and there are more than
+    // 1 batch, we remove the entire batch
+    else if (edits.length > 1) {
+      edits.pop()
+      setEdits([...edits])
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('nothing to undo')
+    }
+  }, [edits, useHD])
 
-  const draw = useCallback(
-    (noLine?: boolean) => {
-      if (!context || !image) {
-        return
-      }
-      context.clearRect(0, 0, context.canvas.width, context.canvas.height)
-      const currRender = renders[renders.length - 1]
-      if (currRender?.src) {
-        context.drawImage(currRender, 0, 0)
-      } else {
-        context.drawImage(image, 0, 0)
-      }
-      if (useHD && !noLine) {
-        drawLines(context, lines)
-      } else {
-        const currentLine = lines[lines.length - 1]
-        drawLines(context, [currentLine])
-      }
-    },
-    [context, lines, image, renders, useHD]
-  )
+  const draw = useCallback(() => {
+    if (!context || !image) {
+      return
+    }
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+    const currentEdit = edits[edits.length - 1]
+    if (currentEdit.render?.src) {
+      context.drawImage(currentEdit.render, 0, 0)
+    } else {
+      context.drawImage(image, 0, 0)
+    }
+
+    drawLines(context, edits[edits.length - 1].lines)
+  }, [context, image, edits])
+
+  // Draw when edits change
+  useEffect(() => {
+    draw()
+  }, [edits, draw])
 
   const refreshCanvasMask = useCallback(() => {
     if (!context?.canvas.width || !context?.canvas.height) {
@@ -163,8 +177,13 @@ export function EditorProvider(props: any) {
     if (!ctx) {
       throw new Error('could not retrieve mask canvas')
     }
+    // Combine the lines of all the edits into one array using reduce
+    const lines = edits.reduce(
+      (acc, edit) => [...acc, ...edit.lines],
+      [] as Line[]
+    )
     drawLines(ctx, lines, 'white')
-  }, [context?.canvas.height, context?.canvas.width, lines, maskCanvas])
+  }, [context?.canvas.height, context?.canvas.width, edits, maskCanvas])
 
   const renderOutput = useCallback(() => {
     if (!file || !originalImage || !isOriginalLoaded || !context?.canvas) {
@@ -248,11 +267,9 @@ export function EditorProvider(props: any) {
       // TODO: fix the render if it failed loading
       const newRender = new Image()
       await loadImage(newRender, res)
-      renders.push(newRender)
-      lines.push({ pts: [] } as Line)
 
-      setRenders([...renders])
-      setLines([...lines])
+      // Add the new render.
+      setEdits([...edits, { lines: [{ pts: [] }], render: newRender }])
 
       firebase?.logEvent('inpaint_processed', {
         duration: Date.now() - start,
@@ -266,12 +283,21 @@ export function EditorProvider(props: any) {
       // eslint-disable-next-line
       alert(e.message ? e.message : e.toString())
     }
-  }, [file, firebase, image, maskCanvas, renders, lines, refreshCanvasMask])
+  }, [file, firebase, image, maskCanvas, edits, refreshCanvasMask])
 
   const addLine = useCallback(() => {
-    lines.push({ pts: [] } as Line)
-    setLines([...lines])
-  }, [lines])
+    // In SD we create a new batch for each line
+    if (!useHD) {
+      const newEdit = { lines: [{ pts: [] }] }
+      setEdits([...edits, newEdit])
+    }
+    // In HD we add the line to the current batch
+    else {
+      const currentEdit = edits[edits.length - 1]
+      currentEdit.lines.push({ pts: [] } as Line)
+      setEdits([...edits])
+    }
+  }, [edits, useHD])
 
   const editor: Editor = {
     useHD,
@@ -285,9 +311,8 @@ export function EditorProvider(props: any) {
     image,
     isImageLoaded,
 
-    renders,
+    edits,
 
-    lines,
     addLine,
 
     maskCanvas,

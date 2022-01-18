@@ -29,9 +29,8 @@ export default function EditorUI({
   const {
     image,
     undo,
-    renders,
     file,
-    lines,
+    edits,
     addLine,
     context,
     isImageLoaded,
@@ -41,6 +40,7 @@ export default function EditorUI({
     maskCanvas,
     useHD,
   } = editor
+  const currentEdit = edits[edits.length - 1]
 
   // Reset when the file changes
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function EditorUI({
       if (!image.src) {
         return
       }
-      const currLine = lines[lines.length - 1]
+      const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
       window.addEventListener('mouseup', onPointerUp)
@@ -91,7 +91,7 @@ export default function EditorUI({
       setCoords({ x: ev.pageX, y: ev.pageY })
     }
     const onPaint = (px: number, py: number) => {
-      const currLine = lines[lines.length - 1]
+      const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       currLine.pts.push({ x: px, y: py })
       draw()
     }
@@ -111,7 +111,6 @@ export default function EditorUI({
         setIsInpaintingLoading(true)
         await render()
         setIsInpaintingLoading(false)
-        draw()
       } else {
         addLine()
       }
@@ -121,7 +120,7 @@ export default function EditorUI({
     const onTouchMove = (ev: TouchEvent) => {
       ev.preventDefault()
       ev.stopPropagation()
-      const currLine = lines[lines.length - 1]
+      const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       const coords = canvas.getBoundingClientRect()
       currLine.pts.push({
         x: (ev.touches[0].clientX - coords.x) / scale,
@@ -133,7 +132,7 @@ export default function EditorUI({
       if (!image.src) {
         return
       }
-      const currLine = lines[lines.length - 1]
+      const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
       window.addEventListener('mouseup', onPointerUp)
@@ -165,11 +164,10 @@ export default function EditorUI({
     context,
     file,
     draw,
-    lines,
     addLine,
     maskCanvas,
     image,
-    renders,
+    currentEdit,
     firebase,
     scale,
     render,
@@ -179,7 +177,7 @@ export default function EditorUI({
   // Handle Cmd+Z
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
-      if (!lines.length) {
+      if (edits.length < 2 && !currentEdit.lines.length) {
         return
       }
       const isCmdZ = (event.metaKey || event.ctrlKey) && event.key === 'z'
@@ -192,7 +190,7 @@ export default function EditorUI({
     return () => {
       window.removeEventListener('keydown', handler)
     }
-  }, [lines, undo])
+  }, [edits, currentEdit, undo])
 
   if (!image) {
     return <></>
@@ -285,7 +283,7 @@ export default function EditorUI({
           'fixed justify-evenly',
         ].join(' ')}
       >
-        {lines.length ? (
+        {edits.length > 1 || currentEdit.lines.length > 1 ? (
           <Button
             icon={
               <svg
@@ -320,7 +318,7 @@ export default function EditorUI({
             onChange={setBrushSize}
           />
         </div>
-        {editor.useHD ? (
+        {editor.useHD && currentEdit.lines.length > 1 ? (
           <Button
             primary
             disabled={isInpaintingLoading}
@@ -328,7 +326,6 @@ export default function EditorUI({
               setIsInpaintingLoading(true)
               await render()
               setIsInpaintingLoading(false)
-              draw(true)
             }}
           >
             Clean HD

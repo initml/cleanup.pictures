@@ -41,7 +41,7 @@ export default function EditorHeader({
         <div className="mr-4 flex items-center">
           <Toggle label="HD" enabled={useHD} setEnabled={setUseHD} />
         </div>
-        {editor.renders.length ? (
+        {editor.edits[editor.edits.length - 1].render ? (
           <>
             <Button
               icon={<EyeIcon className="w-6 h-6" />}
