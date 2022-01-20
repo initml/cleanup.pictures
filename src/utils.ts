@@ -74,25 +74,25 @@ export function loadImage(image: HTMLImageElement, src: string) {
   })
 }
 
-export function useImage(file?: File): [HTMLImageElement, boolean] {
-  const [image] = useState(new Image())
-  const [isLoaded, setIsLoaded] = useState(false)
+export function useImage(file?: File): HTMLImageElement | undefined {
+  const [image, setImage] = useState<HTMLImageElement>()
 
   useEffect(() => {
     if (!file) {
+      setImage(undefined)
       return
     }
-    image.onload = () => {
-      setIsLoaded(true)
+    const img = new Image()
+    img.onload = () => {
+      setImage(img)
     }
-    setIsLoaded(false)
-    image.src = URL.createObjectURL(file)
+    img.src = URL.createObjectURL(file)
     return () => {
-      image.onload = null
+      img.onload = null
     }
-  }, [file, image])
+  }, [file])
 
-  return [image, isLoaded]
+  return image
 }
 
 // https://stackoverflow.com/questions/23945494/use-html5-to-resize-an-image-before-upload

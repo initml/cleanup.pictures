@@ -43,7 +43,6 @@ export default function EditorUI({
     edits,
     addLine,
     context,
-    isImageLoaded,
     render,
     draw,
     setContext,
@@ -107,22 +106,23 @@ export default function EditorUI({
     if (!image) {
       return
     }
-    if (isImageLoaded) {
-      const rW = windowSize.width / image.naturalWidth
-      const rH = (windowSize.height - TOOLBAR_SIZE) / image.naturalHeight
-      if (rW < 1 || rH < 1) {
-        const s = Math.min(rW, rH)
-        setMinScale(s)
-      } else {
-        setMinScale(1)
-      }
-      if (context?.canvas) {
-        context.canvas.width = image.naturalWidth
-        context.canvas.height = image.naturalHeight
-      }
-      draw()
+    console.log(image.width, image.height)
+    const rW = windowSize.width / image.naturalWidth
+    const rH = (windowSize.height - TOOLBAR_SIZE) / image.naturalHeight
+    if (rW < 1 || rH < 1) {
+      const s = Math.min(rW, rH)
+      setMinScale(s)
+      // setCurrScale(s)
+    } else {
+      setMinScale(1)
+      // setCurrScale(1)
     }
-  }, [context?.canvas, draw, image, isImageLoaded, windowSize, minScale])
+    if (context?.canvas) {
+      context.canvas.width = image.naturalWidth
+      context.canvas.height = image.naturalHeight
+    }
+    draw()
+  }, [context?.canvas, draw, image, windowSize])
 
   // Handle mouse interactions
   useEffect(() => {
