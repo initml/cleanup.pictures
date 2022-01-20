@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useWindowSize } from 'react-use'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { useFirebase } from './adapters/firebase'
-import Button from './components/Button'
-import Slider from './components/Slider'
+import CleanupTools from './components/CleanupTools'
+import ZoomTools from './components/ZoomTools'
 import { useEditor } from './context/EditorContext'
+import EditorToolSelector, { EditorTool } from './EditorToolSelector'
 
 const TOOLBAR_SIZE = 180
 
@@ -21,8 +23,11 @@ export default function EditorUI({
   const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
   const [showBrush, setShowBrush] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
+  const [tool, setTool] = useState<EditorTool>('clean')
   const firebase = useFirebase()
-  const [scale, setScale] = useState(1)
+  const [scale, setScale] = useState<number>()
+  const [minScale, setMinScale] = useState<number>()
+  const [zoom, setZoom] = useState(1)
   const windowSize = useWindowSize()
 
   const editor = useEditor()
@@ -43,33 +48,38 @@ export default function EditorUI({
   const currentEdit = edits[edits.length - 1]
 
   // Reset when the file changes
-  useEffect(() => {
-    setScale(1)
-    setIsInpaintingLoading(false)
-  }, [])
+  // useEffect(() => {
+  //   setScale(1)
+  //   setIsInpaintingLoading(false)
+  // }, [image])
 
   // Draw once the image image is loaded
   useEffect(() => {
-    if (!context?.canvas || !image) {
+    if (!image) {
       return
     }
     if (isImageLoaded) {
-      context.canvas.width = image.naturalWidth
-      context.canvas.height = image.naturalHeight
       const rW = windowSize.width / image.naturalWidth
       const rH = (windowSize.height - TOOLBAR_SIZE) / image.naturalHeight
       if (rW < 1 || rH < 1) {
-        setScale(Math.min(rW, rH))
+        const s = Math.min(rW, rH)
+        setMinScale(s)
+        setScale(s)
       } else {
+        setMinScale(1)
         setScale(1)
+      }
+      if (context?.canvas) {
+        context.canvas.width = image.naturalWidth
+        context.canvas.height = image.naturalHeight
       }
       draw()
     }
-  }, [context?.canvas, draw, image, isImageLoaded, windowSize])
+  }, [context?.canvas, draw, image, isImageLoaded, windowSize, minScale])
 
   // Handle mouse interactions
   useEffect(() => {
-    if (!firebase || !image || !context) {
+    if (!firebase || !image || !context || tool !== 'clean' || !scale) {
       return
     }
     const canvas = context?.canvas
@@ -172,6 +182,7 @@ export default function EditorUI({
     scale,
     render,
     useHD,
+    tool,
   ])
 
   // Handle Cmd+Z
@@ -192,41 +203,40 @@ export default function EditorUI({
     }
   }, [edits, currentEdit, undo])
 
-  if (!image) {
+  if (!image || !scale) {
     return <></>
+  }
+
+  function getCursor() {
+    if (showBrush) {
+      return 'none'
+    }
+    if (tool === 'zoom') {
+      return 'grab'
+    }
+    return undefined
   }
 
   return (
     <>
-      <main
-        className={[
-          'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
-          'h-full',
-          'items-center justify-center',
-        ].join(' ')}
+      <TransformWrapper
+        disabled={tool !== 'zoom'}
+        // centerZoomedOut
+        // alignmentAnimation={{ disabled: true }}
+        centerOnInit
+        // initialScale={scale}
+        minScale={minScale}
+        onZoom={ref => {
+          console.log(ref.state.scale)
+          setScale(ref.state.scale)
+        }}
       >
-        <div
-          className={[
-            isInpaintingLoading
-              ? 'animate-pulse-fast pointer-events-none transition-opacity'
-              : '',
-          ].join(' ')}
-          style={{
-            height: scale !== 1 ? image.naturalHeight * scale : undefined,
-          }}
-        >
-          <div
-            className={[scale !== 1 ? '' : 'relative'].join(' ')}
-            style={{
-              transform: `scale(${scale})`,
-              transformOrigin: 'top center',
-            }}
-          >
+        <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+          <>
             <canvas
               className="rounded-sm"
-              style={showBrush ? { cursor: 'none' } : {}}
+              style={{ cursor: getCursor() }}
               ref={r => {
-                // console.log('ref', context)
                 if (r && !context) {
                   const ctx = r.getContext('2d')
                   if (ctx) {
@@ -265,22 +275,22 @@ export default function EditorUI({
                 }}
               />
             </div>
-          </div>
+          </>
+        </TransformComponent>
+      </TransformWrapper>
 
-          {showBrush && (
-            <div
-              className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
-              style={{
-                width: `${brushSize * scale}px`,
-                height: `${brushSize * scale}px`,
-                left: `${x}px`,
-                top: `${y}px`,
-                transform: 'translate(-50%, -50%)',
-              }}
-            />
-          )}
-        </div>
-      </main>
+      {showBrush && tool === 'clean' && (
+        <div
+          className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
+          style={{
+            width: `${brushSize * scale}px`,
+            height: `${brushSize * scale}px`,
+            left: `${x}px`,
+            top: `${y}px`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      )}
 
       <div
         className="fixed w-full flex justify-center items-center bottom-0 bg-red"
@@ -289,65 +299,29 @@ export default function EditorUI({
           height: `${(window.innerHeight - image.naturalHeight * scale) / 2}px`,
         }}
       >
-        <div
-          className={[
-            'flex items-center space-x-8 max-w-3xl',
-            'bg-gray-200 bg-opacity-50 backdrop-blur px-4 rounded-2xl',
-            'p-2 sm:px-6 sm:py-2',
-            'justify-evenly',
-          ].join(' ')}
-        >
-          {edits.length > 1 || currentEdit.lines.length > 1 ? (
-            <Button
-              icon={
-                <svg
-                  width="19"
-                  height="9"
-                  viewBox="0 0 19 9"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                >
-                  <path
-                    d="M2 1C2 0.447715 1.55228 0 1 0C0.447715 0 0 0.447715 0 1H2ZM1 8H0V9H1V8ZM8 9C8.55228 9 9 8.55229 9 8C9 7.44771 8.55228 7 8 7V9ZM16.5963 7.42809C16.8327 7.92721 17.429 8.14016 17.9281 7.90374C18.4272 7.66731 18.6402 7.07103 18.4037 6.57191L16.5963 7.42809ZM16.9468 5.83205L17.8505 5.40396L16.9468 5.83205ZM0 1V8H2V1H0ZM1 9H8V7H1V9ZM1.66896 8.74329L6.66896 4.24329L5.33104 2.75671L0.331035 7.25671L1.66896 8.74329ZM16.043 6.26014L16.5963 7.42809L18.4037 6.57191L17.8505 5.40396L16.043 6.26014ZM6.65079 4.25926C9.67554 1.66661 14.3376 2.65979 16.043 6.26014L17.8505 5.40396C15.5805 0.61182 9.37523 -0.710131 5.34921 2.74074L6.65079 4.25926Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              }
-              onClick={undo}
-            />
-          ) : (
-            <></>
-          )}
-          <div className="py-2">
-            <Slider
-              label={
-                <span>
-                  <span className="hidden sm:inline">Brush </span>Size
-                </span>
-              }
-              min={10}
-              max={150}
-              value={brushSize}
-              onChange={setBrushSize}
-            />
-          </div>
-          {editor.useHD ? (
-            <Button
-              primary
-              disabled={isInpaintingLoading || currentEdit.lines.length <= 1}
-              onClick={async () => {
-                setIsInpaintingLoading(true)
-                await render()
-                setIsInpaintingLoading(false)
-              }}
-            >
-              Clean HD
-            </Button>
-          ) : (
-            <></>
-          )}
-        </div>
+        <EditorToolSelector tool={tool} onChange={setTool} />
+        {tool === 'clean' && (
+          <CleanupTools
+            editor={editor}
+            brushSize={brushSize}
+            setBrushSize={setBrushSize}
+            isLoading={isInpaintingLoading}
+            onCleanupClick={async () => {
+              setIsInpaintingLoading(true)
+              await render()
+              setIsInpaintingLoading(false)
+            }}
+          />
+        )}
+        {tool === 'zoom' && (
+          <ZoomTools
+            zoom={scale}
+            setZoom={setScale}
+            onResetClick={async () => {
+              // Pass
+            }}
+          />
+        )}
       </div>
     </>
   )

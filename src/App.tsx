@@ -71,7 +71,12 @@ function App() {
   }
 
   return (
-    <div className="app full-visible-h-safari min-h-full flex flex-col">
+    <div
+      className={[
+        'app full-visible-h-safari min-h-full flex flex-col',
+        editor.file ? 'h-full' : '',
+      ].join(' ')}
+    >
       {editor.file ? (
         <>
           <EditorHeader

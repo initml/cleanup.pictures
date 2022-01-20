@@ -29,7 +29,7 @@ export default function EditorHeader({
     <header
       className={[
         'absolute z-10 flex sm:px-5 pt-3 w-full',
-        'bg-white bg-opacity-50 backdrop-blur',
+        'bg-white bg-opacity-50 backdrop-blur-xl',
         'justify-between items-center sm:items-start',
       ].join(' ')}
     >
