@@ -1,5 +1,12 @@
 import { dataURItoBlob } from '../utils'
 
+/**
+ * Run the inpainting remote service on an input file and mask.
+ * @param imageFile The original image file. It's recommended to always use the original file here.
+ * @param maskBase64 A black & white mask with the parts to remove in white.
+ * @param appCheckToken A valid AppCheck Token.
+ * @returns A base64 encoding of the result image.
+ */
 export default async function inpaint(
   imageFile: File,
   maskBase64: string,
