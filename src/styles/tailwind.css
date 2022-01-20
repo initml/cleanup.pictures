@@ -21,7 +21,6 @@ body {
   /* min-height: 100%; */
   font-family: 'Inter', Helvetica, Arial, sans-serif;
   font-weight: 600;
-  /* overflow: hidden; */
   background-color: white;
 }
 
@@ -44,7 +43,9 @@ main h2 {
   flex-direction: column;
   align-items: center;
 }
-.pro .faq, .editor .faq, .editor footer {
+.pro .faq,
+.editor .faq,
+.editor footer {
   display: none;
 }
 

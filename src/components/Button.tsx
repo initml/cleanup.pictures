@@ -27,8 +27,11 @@ export default function Button(props: ButtonProps) {
   if (primary && !disabled) {
     background = 'bg-primary hover:bg-black hover:text-white'
   }
+  if (primary && disabled) {
+    background = 'bg-primary'
+  }
   if (active) {
-    background = 'bg-black text-white'
+    background = 'bg-primary text-white'
   }
   if (!primary && !active) {
     background = 'hover:bg-primary'

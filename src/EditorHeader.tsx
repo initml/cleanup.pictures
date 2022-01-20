@@ -28,7 +28,7 @@ export default function EditorHeader({
   return (
     <header
       className={[
-        'absolute z-10 flex sm:px-5 pt-3 w-full',
+        'absolute z-10 flex p-2 w-full',
         'bg-white bg-opacity-50 backdrop-blur-xl',
         'justify-between items-center sm:items-start',
       ].join(' ')}

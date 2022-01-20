@@ -19,16 +19,17 @@ export default function CleanupTools({
 }: CleanupToolsProps) {
   const { undo, edits } = editor
   const currentEdit = edits[edits.length - 1]
+  const canUndo = edits.length > 1 || currentEdit.lines.length > 1
   return (
     <div
       className={[
-        'flex items-center space-x-8 max-w-3xl',
-        'bg-gray-200 bg-opacity-50 backdrop-blur-xl px-4 rounded-2xl',
-        'p-2 sm:px-6 sm:py-2',
+        'flex items-center space-x-6 max-w-3xl',
+        'bg-gray-200 bg-opacity-50 backdrop-blur-xl rounded-2xl',
+        'p-2',
         'justify-evenly',
       ].join(' ')}
     >
-      {edits.length > 1 || currentEdit.lines.length > 1 ? (
+      {canUndo ? (
         <Button
           icon={
             <svg
@@ -50,13 +51,9 @@ export default function CleanupTools({
       ) : (
         <></>
       )}
-      <div className="py-2">
+      <div className={['py-2', canUndo ? 'ml-0' : 'pl-4'].join(' ')}>
         <Slider
-          label={
-            <span>
-              <span className="hidden sm:inline">Brush </span>Size
-            </span>
-          }
+          label={<span>Brush</span>}
           min={10}
           max={150}
           value={brushSize}

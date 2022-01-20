@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react'
-import { useWindowSize } from 'react-use'
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useKeyPressEvent, useWindowSize } from 'react-use'
+import {
+  ReactZoomPanPinchRef,
+  TransformComponent,
+  TransformWrapper,
+} from 'react-zoom-pan-pinch'
 import { useFirebase } from './adapters/firebase'
 import CleanupTools from './components/CleanupTools'
 import ZoomTools from './components/ZoomTools'
@@ -25,10 +29,11 @@ export default function EditorUI({
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
   const [tool, setTool] = useState<EditorTool>('clean')
   const firebase = useFirebase()
-  const [scale, setScale] = useState<number>()
   const [minScale, setMinScale] = useState<number>()
-  const [zoom, setZoom] = useState(1)
   const windowSize = useWindowSize()
+  const viewportRef = useRef<ReactZoomPanPinchRef | undefined | null>()
+  // Save the scale to a state to refresh when the user zooms in.
+  const [currScale, setCurrScale] = useState<number>()
 
   const editor = useEditor()
   const {
@@ -47,11 +52,55 @@ export default function EditorUI({
   } = editor
   const currentEdit = edits[edits.length - 1]
 
-  // Reset when the file changes
-  // useEffect(() => {
-  //   setScale(1)
-  //   setIsInpaintingLoading(false)
-  // }, [image])
+  const scale = viewportRef.current?.state.scale || 1
+
+  // Zoom reset
+  const resetZoom = useCallback(() => {
+    if (!minScale || !image || !windowSize) {
+      return
+    }
+    const viewport = viewportRef.current
+    if (!viewport) {
+      throw new Error('no viewport')
+    }
+    const offsetX = (windowSize.width - image.width * minScale) / 2
+    const offsetY = (windowSize.height - image.height * minScale) / 2
+    viewport.setTransform(offsetX, offsetY, minScale, 200, 'easeOutQuad')
+    setCurrScale(minScale)
+  }, [minScale, image, windowSize])
+
+  const setZoom = useCallback((s: number) => {
+    const viewport = viewportRef.current
+    if (!viewport) {
+      return
+    }
+    viewportRef.current?.setTransform(
+      viewport.state.positionX,
+      viewport.state.positionY,
+      s,
+      200,
+      'easeOutQuad'
+    )
+    setCurrScale(s)
+  }, [])
+
+  // Toggle clean/zoom tool on spacebar.
+  useKeyPressEvent(
+    ' ',
+    ev => {
+      ev?.preventDefault()
+      setShowBrush(false)
+      setTool('zoom')
+    },
+    ev => {
+      ev?.preventDefault()
+      setShowBrush(true)
+      setTool('clean')
+    }
+  )
+
+  // Reset zoom on Escale
+  useKeyPressEvent('Escape', resetZoom)
 
   // Draw once the image image is loaded
   useEffect(() => {
@@ -64,10 +113,8 @@ export default function EditorUI({
       if (rW < 1 || rH < 1) {
         const s = Math.min(rW, rH)
         setMinScale(s)
-        setScale(s)
       } else {
         setMinScale(1)
-        setScale(1)
       }
       if (context?.canvas) {
         context.canvas.width = image.naturalWidth
@@ -183,6 +230,9 @@ export default function EditorUI({
     render,
     useHD,
     tool,
+    // Add showBrush dependency to fix issue when moving the mouse while
+    // pressing spacebar.
+    showBrush,
   ])
 
   // Handle Cmd+Z
@@ -203,11 +253,8 @@ export default function EditorUI({
     }
   }, [edits, currentEdit, undo])
 
-  if (!image || !scale) {
-    return <></>
-  }
-
-  function getCursor() {
+  // Current cursor
+  const getCursor = useCallback(() => {
     if (showBrush) {
       return 'none'
     }
@@ -215,20 +262,29 @@ export default function EditorUI({
       return 'grab'
     }
     return undefined
+  }, [showBrush, tool])
+
+  if (!image || !scale || !minScale) {
+    return <></>
   }
 
   return (
     <>
       <TransformWrapper
-        disabled={tool !== 'zoom'}
-        // centerZoomedOut
-        // alignmentAnimation={{ disabled: true }}
+        ref={r => {
+          if (r) {
+            viewportRef.current = r
+          }
+        }}
+        panning={{ disabled: tool !== 'zoom', velocityDisabled: true }}
+        centerZoomedOut
+        alignmentAnimation={{ disabled: true }}
         centerOnInit
-        // initialScale={scale}
+        limitToBounds={false}
+        initialScale={minScale}
         minScale={minScale}
         onZoom={ref => {
-          console.log(ref.state.scale)
-          setScale(ref.state.scale)
+          setCurrScale(ref.state.scale)
         }}
       >
         <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
@@ -296,7 +352,10 @@ export default function EditorUI({
         className="fixed w-full flex justify-center items-center bottom-0 bg-red"
         style={{
           // Center the action bar in the white area available.
-          height: `${(window.innerHeight - image.naturalHeight * scale) / 2}px`,
+          height: `${Math.max(
+            TOOLBAR_SIZE / 2,
+            (window.innerHeight - image.naturalHeight * scale) / 2
+          )}px`,
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />
@@ -315,11 +374,10 @@ export default function EditorUI({
         )}
         {tool === 'zoom' && (
           <ZoomTools
-            zoom={scale}
-            setZoom={setScale}
-            onResetClick={async () => {
-              // Pass
-            }}
+            zoom={currScale || minScale}
+            minZoom={minScale}
+            setZoom={setZoom}
+            onResetClick={resetZoom}
           />
         )}
       </div>

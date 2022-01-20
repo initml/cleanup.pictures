@@ -74,7 +74,7 @@ function App() {
     <div
       className={[
         'app full-visible-h-safari min-h-full flex flex-col',
-        editor.file ? 'h-full' : '',
+        editor.file ? 'absolute w-full h-full overflow-hidden' : '',
       ].join(' ')}
     >
       {editor.file ? (
