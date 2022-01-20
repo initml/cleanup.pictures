@@ -356,13 +356,16 @@ export default function EditorUI({
       )}
 
       <div
-        className="fixed w-full flex justify-center items-center bottom-0 bg-red"
+        className="fixed w-full px-2 pb-2 sm:pb-0 sm:flex justify-center items-center bottom-0 bg-red"
         style={{
           // Center the action bar in the white area available.
-          height: `${Math.max(
-            TOOLBAR_SIZE / 2,
-            (window.innerHeight - image.naturalHeight * scale) / 2
-          )}px`,
+          height:
+            windowSize.width > 640
+              ? `${Math.max(
+                  TOOLBAR_SIZE / 2,
+                  (window.innerHeight - image.naturalHeight * scale) / 2
+                )}px`
+              : undefined,
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />

@@ -23,7 +23,7 @@ export default function CleanupTools({
   return (
     <div
       className={[
-        'flex items-center space-x-6 max-w-3xl',
+        'flex items-center space-x-4 max-w-3xl',
         'bg-gray-200 bg-opacity-50 backdrop-blur-xl rounded-2xl',
         'p-2',
         'justify-evenly',
@@ -51,7 +51,14 @@ export default function CleanupTools({
       ) : (
         <></>
       )}
-      <div className={['py-2', canUndo ? 'ml-0' : 'pl-4'].join(' ')}>
+      <div
+        className={[
+          'py-2',
+          canUndo ? 'ml-0' : 'pl-4',
+          // Add padding to the right if there is no "Clean HD" button
+          editor.useHD ? '' : 'pr-4',
+        ].join(' ')}
+      >
         <Slider
           label={<span>Brush</span>}
           min={10}
