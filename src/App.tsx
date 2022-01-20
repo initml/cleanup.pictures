@@ -91,6 +91,8 @@ function App() {
                   )
                   if (result) {
                     onFileChange(editor.originalFile, value)
+                  } else {
+                    return
                   }
                 }
                 editor.setUseHD(value)
