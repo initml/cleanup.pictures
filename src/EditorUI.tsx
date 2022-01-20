@@ -68,20 +68,32 @@ export default function EditorUI({
     setCurrScale(minScale)
   }, [minScale, image, windowSize])
 
-  const setZoom = useCallback((s: number) => {
-    const viewport = viewportRef.current
-    if (!viewport) {
-      return
-    }
-    viewportRef.current?.setTransform(
-      viewport.state.positionX,
-      viewport.state.positionY,
-      s,
-      200,
-      'easeOutQuad'
-    )
-    setCurrScale(s)
-  }, [])
+  const setZoom = useCallback(
+    (s: number) => {
+      const viewport = viewportRef.current
+      if (!viewport || !image) {
+        return
+      }
+      // Get the percentage of the image currently on the center.
+      const anchor = {
+        x:
+          (windowSize.width * 0.5 - viewport.state.positionX) /
+          (image.width * viewport.state.scale),
+        y:
+          (windowSize.height * 0.5 - viewport.state.positionY) /
+          (image.height * viewport.state.scale),
+      }
+      viewportRef.current?.setTransform(
+        windowSize.width * 0.5 - image.width * s * anchor.x,
+        windowSize.height * 0.5 - image.height * s * anchor.y,
+        s,
+        200,
+        'easeOutQuad'
+      )
+      setCurrScale(s)
+    },
+    [windowSize.width, windowSize.height, image]
+  )
 
   // Toggle clean/zoom tool on spacebar.
   useKeyPressEvent(
@@ -106,7 +118,6 @@ export default function EditorUI({
     if (!image) {
       return
     }
-    console.log(image.width, image.height)
     const rW = windowSize.width / image.naturalWidth
     const rH = (windowSize.height - TOOLBAR_SIZE) / image.naturalHeight
     if (rW < 1 || rH < 1) {
