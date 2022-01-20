@@ -287,7 +287,14 @@ export default function EditorUI({
           setCurrScale(ref.state.scale)
         }}
       >
-        <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+        <TransformComponent
+          wrapperStyle={{ width: '100%', height: '100%' }}
+          contentClass={
+            isInpaintingLoading
+              ? 'animate-pulse-fast pointer-events-none transition-opacity'
+              : ''
+          }
+        >
           <>
             <canvas
               className="rounded-sm"
