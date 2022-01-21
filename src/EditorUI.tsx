@@ -7,6 +7,7 @@ import {
 } from 'react-zoom-pan-pinch'
 import { useFirebase } from './adapters/firebase'
 import CleanupTools from './components/CleanupTools'
+import OriginalPreviewTools from './components/OriginalPreviewTools'
 import ZoomTools from './components/ZoomTools'
 import { useEditor } from './context/EditorContext'
 import EditorToolSelector, { EditorTool } from './EditorToolSelector'
@@ -16,11 +17,15 @@ const TOOLBAR_SIZE = 180
 interface EditorUIProps {
   showOriginal: boolean
   showSeparator: boolean
+  setShowOriginal: (showOriginal: boolean) => void
+  setShowSeparator: (showSeparator: boolean) => void
 }
 
 export default function EditorUI({
   showOriginal,
   showSeparator,
+  setShowOriginal,
+  setShowSeparator,
 }: EditorUIProps) {
   const [brushSize, setBrushSize] = useState(40)
 
@@ -95,6 +100,17 @@ export default function EditorUI({
     [windowSize.width, windowSize.height, image]
   )
 
+  // Toggle original
+  useEffect(() => {
+    if (tool === 'original') {
+      setShowOriginal(true)
+      setShowSeparator(true)
+    } else {
+      setShowOriginal(false)
+      setTimeout(() => setShowSeparator(false), 300)
+    }
+  }, [tool, setShowOriginal, setShowSeparator])
+
   // Toggle clean/zoom tool on spacebar.
   useKeyPressEvent(
     ' ',
@@ -112,6 +128,45 @@ export default function EditorUI({
 
   // Reset zoom on Escale
   useKeyPressEvent('Escape', resetZoom)
+
+  // Handle Tab
+  useKeyPressEvent(
+    'Tab',
+    ev => {
+      ev?.preventDefault()
+      ev?.stopPropagation()
+      setTool('original')
+    },
+    ev => {
+      ev?.preventDefault()
+      ev?.stopPropagation()
+      setTool('clean')
+    }
+  )
+
+  // Handle Cmd+Z
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      // Switch to original tool when we press tab
+      if (event.key === 'Tab') {
+        event.preventDefault()
+        setTool('original')
+      }
+      // Handle Cmdt+Z
+      if (edits.length < 2 && !currentEdit.lines.length) {
+        return
+      }
+      const isCmdZ = (event.metaKey || event.ctrlKey) && event.key === 'z'
+      if (isCmdZ) {
+        event.preventDefault()
+        undo()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => {
+      window.removeEventListener('keydown', handler)
+    }
+  }, [edits, currentEdit, undo])
 
   // Draw once the image image is loaded
   useEffect(() => {
@@ -245,24 +300,6 @@ export default function EditorUI({
     // pressing spacebar.
     showBrush,
   ])
-
-  // Handle Cmd+Z
-  useEffect(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (edits.length < 2 && !currentEdit.lines.length) {
-        return
-      }
-      const isCmdZ = (event.metaKey || event.ctrlKey) && event.key === 'z'
-      if (isCmdZ) {
-        event.preventDefault()
-        undo()
-      }
-    }
-    window.addEventListener('keydown', handler)
-    return () => {
-      window.removeEventListener('keydown', handler)
-    }
-  }, [edits, currentEdit, undo])
 
   // Current cursor
   const getCursor = useCallback(() => {
@@ -406,6 +443,7 @@ export default function EditorUI({
             onResetClick={resetZoom}
           />
         )}
+        {tool === 'original' && <OriginalPreviewTools />}
       </div>
     </>
   )

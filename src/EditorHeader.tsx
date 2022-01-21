@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, DownloadIcon, EyeIcon } from '@heroicons/react/outline'
+import { ArrowLeftIcon, DownloadIcon } from '@heroicons/react/outline'
 import { useWindowSize } from 'react-use'
 import Button from './components/Button'
 import Menu from './components/Menu'
@@ -10,8 +10,6 @@ interface EditorHeaderProps {
   useHD: boolean
   setUseHD: (useHD: boolean) => void
   setShowUpgrade: (showUpgrade: boolean) => void
-  setShowOriginal: (showOriginal: boolean) => void
-  setShowSeparator: (showSeparator: boolean) => void
 }
 
 export default function EditorHeader({
@@ -19,8 +17,6 @@ export default function EditorHeader({
   useHD,
   setUseHD,
   setShowUpgrade,
-  setShowOriginal,
-  setShowSeparator,
 }: EditorHeaderProps) {
   const windowSize = useWindowSize()
   const editor = useEditor()
@@ -43,18 +39,6 @@ export default function EditorHeader({
         </div>
         {editor.edits[editor.edits.length - 1].render ? (
           <>
-            <Button
-              icon={<EyeIcon className="w-6 h-6" />}
-              onDown={ev => {
-                ev.preventDefault()
-                setShowOriginal(true)
-                setShowSeparator(true)
-              }}
-              onUp={() => {
-                setShowOriginal(false)
-                setTimeout(() => setShowSeparator(false), 300)
-              }}
-            />
             <Button
               primary
               icon={<DownloadIcon className="w-6 h-6" />}

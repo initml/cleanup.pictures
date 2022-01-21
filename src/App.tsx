@@ -106,10 +106,13 @@ function App() {
               editor.setFile(undefined)
             }}
             setShowUpgrade={setShowUpgrade}
+          />
+          <EditorUI
+            showOriginal={showOriginal}
+            showSeparator={showSeparator}
             setShowOriginal={setShowOriginal}
             setShowSeparator={setShowSeparator}
           />
-          <EditorUI showOriginal={showOriginal} showSeparator={showSeparator} />
         </>
       ) : (
         <Homepage
