@@ -12,7 +12,7 @@ export default function Slider(props: SliderProps) {
   const step = ((max || 100) - (min || 0)) / 100
 
   return (
-    <div className="inline-flex items-center space-x-4 text-black">
+    <div className="inline-flex items-center py-1 space-x-4 text-black">
       <span>{label}</span>
       <input
         className={[

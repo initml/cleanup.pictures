@@ -7,7 +7,6 @@ import { EditorProvider } from './context/EditorContext'
 import './styles/index.css'
 
 const root = document.createElement('div')
-root.className = 'h-full'
 root.id = 'root'
 document.body.prepend(root)
 

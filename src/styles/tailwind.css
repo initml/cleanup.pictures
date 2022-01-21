@@ -21,7 +21,6 @@ body {
   /* min-height: 100%; */
   font-family: 'Inter', Helvetica, Arial, sans-serif;
   font-weight: 600;
-  /* overflow: hidden; */
   background-color: white;
 }
 
@@ -44,7 +43,9 @@ main h2 {
   flex-direction: column;
   align-items: center;
 }
-.pro .faq, .editor .faq, .editor footer {
+.pro .faq,
+.editor .faq,
+.editor footer {
   display: none;
 }
 
@@ -83,6 +84,18 @@ input[type='range']::-webkit-slider-thumb {
   user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-user-select: none; /* disable selection/Copy of UIWebView */
   -webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+}
+
+/** Tooltips **/
+
+.tooltip {
+  @apply transition-all opacity-0 absolute;
+  transform: translate(calc(24px - 50%), -140px);
+}
+
+.has-tooltip:hover .tooltip {
+  @apply delay-500 opacity-100 z-50;
+  transform: translate(calc(24px - 50%), -100px);
 }
 
 @supports (-webkit-touch-callout: none) {

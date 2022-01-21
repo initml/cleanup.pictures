@@ -28,7 +28,6 @@ export type Editor = {
   setOriginalFile: (file?: File) => void
 
   image?: HTMLImageElement
-  isImageLoaded: boolean
   originalImage?: HTMLImageElement
 
   maskCanvas: HTMLCanvasElement
@@ -83,8 +82,8 @@ export function EditorProvider(props: any) {
   const [file, setFile] = useState<File>()
   const [originalFile, setOriginalFile] = useState<File>()
 
-  const [image, isImageLoaded] = useImage(file)
-  const [originalImage, isOriginalLoaded] = useImage(originalFile)
+  const image = useImage(file)
+  const originalImage = useImage(originalFile)
 
   const user = useUser()
   const [useHD, setUseHD] = useState(user?.isPro() || false)
@@ -186,9 +185,9 @@ export function EditorProvider(props: any) {
   }, [context?.canvas.height, context?.canvas.width, edits, maskCanvas])
 
   const renderOutput = useCallback(() => {
-    if (!file || !originalImage || !isOriginalLoaded || !context?.canvas) {
+    if (!file || !originalImage || !context?.canvas) {
       // eslint-disable-next-line
-      console.error(file, originalImage, isOriginalLoaded, context?.canvas)
+      console.error(file, originalImage, context?.canvas)
       return
     }
     const patch = document.createElement('canvas')
@@ -227,7 +226,7 @@ export function EditorProvider(props: any) {
     outputCtx?.drawImage(originalImage, 0, 0)
     outputCtx?.drawImage(patch, 0, 0)
     return outputCtx?.canvas.toDataURL(file.type)
-  }, [context, file, isOriginalLoaded, maskCanvas, originalImage])
+  }, [context, file, maskCanvas, originalImage])
 
   const download = useCallback(() => {
     if (!file || !context) {
@@ -256,6 +255,9 @@ export function EditorProvider(props: any) {
       }
       if (!file) {
         throw new Error('No file')
+      }
+      if (!image) {
+        throw new Error('No image')
       }
       const start = Date.now()
       firebase?.logEvent('inpaint_start')
@@ -309,7 +311,6 @@ export function EditorProvider(props: any) {
     setOriginalFile,
 
     image,
-    isImageLoaded,
 
     edits,
 

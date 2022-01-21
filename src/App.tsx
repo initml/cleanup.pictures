@@ -71,7 +71,12 @@ function App() {
   }
 
   return (
-    <div className="app full-visible-h-safari min-h-full flex flex-col">
+    <div
+      className={[
+        'app full-visible-h-safari min-h-full flex flex-col',
+        editor.file ? 'absolute w-full h-full overflow-hidden' : '',
+      ].join(' ')}
+    >
       {editor.file ? (
         <>
           <EditorHeader
@@ -86,6 +91,8 @@ function App() {
                   )
                   if (result) {
                     onFileChange(editor.originalFile, value)
+                  } else {
+                    return
                   }
                 }
                 editor.setUseHD(value)
@@ -99,10 +106,13 @@ function App() {
               editor.setFile(undefined)
             }}
             setShowUpgrade={setShowUpgrade}
+          />
+          <EditorUI
+            showOriginal={showOriginal}
+            showSeparator={showSeparator}
             setShowOriginal={setShowOriginal}
             setShowSeparator={setShowSeparator}
           />
-          <EditorUI showOriginal={showOriginal} showSeparator={showSeparator} />
         </>
       ) : (
         <Homepage

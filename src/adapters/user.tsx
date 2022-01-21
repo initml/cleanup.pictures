@@ -121,8 +121,10 @@ export default function UserProvider(props: Props) {
       const auth = getAuth()
       await signInWithPopup(auth, provider)
     } catch (error: any) {
-      // eslint-disable-next-line no-alert
-      alert(`Error ${error.code}: ${error.message}`)
+      if (error.code !== 'auth/popup-closed-by-user') {
+        // eslint-disable-next-line no-alert
+        alert(`Error ${error.code}: ${error.message}`)
+      }
     }
   }
 
