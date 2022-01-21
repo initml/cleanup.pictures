@@ -288,6 +288,7 @@ export default function EditorUI({
           }
         }}
         panning={{ disabled: tool !== 'zoom', velocityDisabled: true }}
+        wheel={{ step: 0.05 }}
         centerZoomedOut
         alignmentAnimation={{ disabled: true }}
         centerOnInit
