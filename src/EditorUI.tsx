@@ -367,7 +367,11 @@ export default function EditorUI({
       )}
 
       <div
-        className="fixed w-full px-2 pb-2 sm:pb-0 sm:flex justify-center items-center bottom-0 bg-red"
+        className={[
+          'fixed w-full px-2 pb-2 sm:pb-0 flex',
+          ' flex-col sm:flex-row space-y-2 sm:space-y-0',
+          'justify-center items-end sm:items-center bottom-0',
+        ].join(' ')}
         style={{
           // Center the action bar in the white area available.
           height:

@@ -41,7 +41,7 @@ export default function Homepage({
           // file ? 'items-center justify-center' : '', // center on mobile
           'mt-10',
           'items-center justify-center',
-          'pb-20',
+          'pb-10',
         ].join(' ')}
       >
         <div

@@ -31,7 +31,7 @@ export default function EditorToolSelector({
   return (
     <div
       className={[
-        'flex sm:mx-4 space-x-2',
+        'flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:mx-4 sm:space-x-2',
         'bg-white bg-opacity-50 backdrop-blur-xl rounded-2xl',
         'p-2 sm:py-2',
       ].join(' ')}
