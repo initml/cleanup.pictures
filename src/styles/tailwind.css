@@ -89,7 +89,7 @@ input[type='range']::-webkit-slider-thumb {
 /** Tooltips **/
 
 .tooltip {
-  @apply transition-all delay-0 opacity-0 absolute;
+  @apply transition-all opacity-0 absolute;
   transform: translate(calc(24px - 50%), -140px);
 }
 
