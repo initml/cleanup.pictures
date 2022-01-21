@@ -78,8 +78,8 @@ export default function UpgradeModal(props: UpgradeModalProps) {
             </video>
           </div>
           <p className="pb-4 mt-4">
-            Upgrade now to enable high resolution up with no compression (vs
-            720p max for the free version).
+            Upgrade now to enable high resolution with no compression (vs 720p
+            max for the free version).
           </p>
         </div>
         <div className="sm:flex-1 bg-gray-100 p-4 sm:p-12 sm:flex sm:items-center sm:justify-center">
