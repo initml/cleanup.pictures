@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useRef, useState } from 'react'
 
 interface ButtonProps {
   children?: ReactNode
@@ -23,6 +23,7 @@ export default function Button(props: ButtonProps) {
     onUp,
   } = props
   const [active, setActive] = useState(false)
+  const ref = useRef<HTMLDivElement>()
   let background = ''
   if (primary && !disabled) {
     background = 'bg-primary hover:bg-black hover:text-white'
@@ -38,9 +39,19 @@ export default function Button(props: ButtonProps) {
   }
   return (
     <div
+      ref={r => {
+        if (r) {
+          ref.current = r
+        }
+      }}
       role="button"
-      onKeyDown={onClick}
-      onClick={onClick}
+      onKeyDown={() => {
+        // do nothing
+      }}
+      onClick={() => {
+        ref.current?.blur()
+        onClick?.()
+      }}
       onPointerDown={(ev: React.PointerEvent<HTMLDivElement>) => {
         setActive(true)
         onDown?.(ev.nativeEvent)
