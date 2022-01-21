@@ -1,5 +1,6 @@
 import Button from './components/Button'
 import { ZoomIcon, ErasorIcon } from './components/Icons'
+import Tooltip from './components/Tooltip'
 
 export type EditorTool = 'clean' | 'zoom'
 
@@ -12,14 +13,19 @@ function SelectorButton({
   active,
   icon,
   onClick,
+  tip,
 }: {
   active: boolean
   icon: JSX.Element
   onClick: () => void
+  tip?: string
 }) {
   return (
-    <div className={active ? 'pointer-events-none' : ''}>
+    <div
+      className={[active ? 'pointer-events-none' : '', 'has-tooltip'].join(' ')}
+    >
       <Button primary={active} icon={icon} onClick={onClick} />
+      {tip && <Tooltip>{tip}</Tooltip>}
     </div>
   )
 }
@@ -45,6 +51,7 @@ export default function EditorToolSelector({
         icon={<ZoomIcon />}
         active={tool === 'zoom'}
         onClick={() => onChange('zoom')}
+        tip="Hold Spacebar"
       />
     </div>
   )
