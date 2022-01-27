@@ -96,15 +96,15 @@ export default function FileSelect(props: FileSelectProps) {
   return (
     <label
       htmlFor={uploadElemId}
-      className="block w-full h-full group relative cursor-pointer rounded-md font-medium focus-within:outline-none"
+      className="flex items-center w-full h-full group relative cursor-pointer rounded-md font-medium focus-within:outline-none"
     >
       <div
         className={[
-          'w-full h-full flex items-center justify-center px-6 pt-5 pb-6 text-md',
-          'border-2 border-dashed rounded-md',
-          'hover:border-black hover:bg-primary',
+          'w-full flex items-center justify-center px-6 py-8 sm:py-16 text- font-semibold',
+          'border-4 border-dashed rounded-3xl',
+          'border-black hover:bg-primary',
           'text-center',
-          dragHover ? 'border-black bg-primary' : 'bg-gray-100 border-gray-300',
+          dragHover ? 'bg-primary' : 'bg-gray-100',
         ].join(' ')}
         onDrop={handleDrop}
         onDragOver={ev => {
