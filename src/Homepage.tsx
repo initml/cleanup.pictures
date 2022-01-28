@@ -28,12 +28,14 @@ export default function Homepage({
   const [showBanner, setShowBanner] = useState(true)
   return (
     <>
-      {showBanner && (
+      {showBanner && !user?.isPro && (
         <div className="hidden sm:block bg-black text-white p-5 text-center relative">
           Looking for automatic background removal?{' '}
           <a
             className="underline"
-            href="https://clipdrop.co?source=cleanup_pictures"
+            href="https://clipdrop.co?utm_campaign=cleanup_pictures"
+            target="_blank"
+            rel="noreferrer dofollow"
           >
             Try ClipDrop!
           </a>
@@ -45,27 +47,43 @@ export default function Homepage({
           </div>
         </div>
       )}
-      <header className="relative z-10 flex px-5 pt-3 pb-5 justify-between items-center sm:items-start">
+      <header
+        className={[
+          'fixed w-full bg-white bg-opacity-70',
+          // 'border-b-2 border-black',
+          'filter backdrop-blur-3xl z-10 flex px-5 pt-3 pb-3',
+          'justify-between items-center sm:items-start',
+        ].join(' ')}
+      >
         <div>
-          {user?.isPro() ? (
-            <LogoPro className="w-60 h-14" />
-          ) : (
-            <Logo className="w-60 h-14" />
-          )}
+          <a href="/#">
+            {user?.isPro() ? (
+              <LogoPro className="w-60 h-14" />
+            ) : (
+              <Logo className="w-60 h-14" />
+            )}
+          </a>
         </div>
         <div className="flex items-center space-x-8">
-          <a
-            className="hidden sm:inline-block hover:underline"
-            href="#usecases"
-          >
-            Use cases
-          </a>
-          <a className="hidden sm:inline-block hover:underline" href="#pricing">
-            Pricing
-          </a>
-          <a className="hidden sm:inline-block hover:underline" href="#faq">
-            FAQ
-          </a>
+          {(!user?.user || !user?.isPro) && (
+            <>
+              <a
+                className="hidden sm:inline-block hover:underline"
+                href="#usecases"
+              >
+                Use cases
+              </a>
+              <a
+                className="hidden sm:inline-block hover:underline"
+                href="#pricing"
+              >
+                Pricing
+              </a>
+              <a className="hidden sm:inline-block hover:underline" href="#faq">
+                FAQ
+              </a>
+            </>
+          )}
           <Menu onUpgrade={() => setShowUpgrade(true)} />
         </div>
       </header>
@@ -75,6 +93,7 @@ export default function Homepage({
           'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
           // file ? 'items-center justify-center' : '', // center on mobile
           'sm:mt-10',
+          'pt-24',
           'items-center justify-center',
           'pb-10',
         ].join(' ')}
@@ -85,8 +104,8 @@ export default function Homepage({
             'space-y-5 sm:space-y-0 sm:space-x-6 p-5 pt-0 pb-10',
           ].join(' ')}
         >
-          <div className="max-w-lg flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
-            <h1 className="text-center font-bold sm:text-left text-xl sm:text-4xl">
+          <div className="sm:max-w-lg lg:max-w-2xl flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
+            <h1 className="text-center font-bold sm:text-left text-xl sm:text-3xl lg:text-5xl">
               Remove any unwanted{' '}
               <span className="bg-primary font-varent rounded-l-full rounded-r-full px-2">
                 object
@@ -111,7 +130,7 @@ export default function Homepage({
       </span> */}
           </div>
 
-          <div className="w-48 sm:w-72 flex items-center rounded-xl overflow-hidden">
+          <div className="w-60 sm:w-80 flex items-center rounded-xl overflow-hidden">
             <video
               // className="h-40 w-56 rounded-md object-cover"
               style={{ transform: 'scale(1.01, 1.01)' }}

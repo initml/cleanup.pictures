@@ -147,6 +147,10 @@ footer {
   border-top: 1px solid #eaeaea;
 }
 
+.pro footer {
+  display: none;
+}
+
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
