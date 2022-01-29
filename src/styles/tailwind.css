@@ -72,7 +72,7 @@ main h2 {
   flex-direction: column;
   align-items: center;
 }
-.pro .homepage,
+
 .editor .homepage,
 .editor footer {
   display: none;

@@ -65,25 +65,18 @@ export default function Homepage({
           </a>
         </div>
         <div className="flex items-center space-x-8">
-          {(!user?.user || !user?.isPro) && (
-            <>
-              <a
-                className="hidden sm:inline-block hover:underline"
-                href="#usecases"
-              >
-                Use cases
-              </a>
-              <a
-                className="hidden sm:inline-block hover:underline"
-                href="#pricing"
-              >
-                Pricing
-              </a>
-              <a className="hidden sm:inline-block hover:underline" href="#faq">
-                FAQ
-              </a>
-            </>
-          )}
+          <a
+            className="hidden sm:inline-block hover:underline"
+            href="#usecases"
+          >
+            Use cases
+          </a>
+          <a className="hidden sm:inline-block hover:underline" href="#pricing">
+            Pricing
+          </a>
+          <a className="hidden sm:inline-block hover:underline" href="#faq">
+            FAQ
+          </a>
           <Menu onUpgrade={() => setShowUpgrade(true)} />
         </div>
       </header>
