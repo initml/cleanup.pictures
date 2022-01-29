@@ -60,105 +60,656 @@
       picture for free.</noscript
     >
 
-    <main class="faq">
-      <div class="alt-block">
-        <h1>
-          Retouch images in seconds with incredible quality
+    <main class="homepage mt-8">
+      <div class="homepage-block bg-primary">
+        <h1 class="font-alt text-4xl sm:text-6xl">
+          Retouch images in seconds <br />
+          with <span class="highlight text-primary">incredible quality</span>
         </h1>
-        <p>Drag & drop an image above to get started.</p>
+        <p class="pt-5">↑ Drag & drop an image above to get started for free</p>
       </div>
-      <div class="faq-content" itemscope="" itemtype="https://schema.org/FAQPage">
-        <img src="cleanup-example.jpg" alt="Cleanup example" />
-        
-        <h2 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">How to remove people from a photo?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          <a href="https://cleanup.pictures">cleanup.pictures</a> lets you
-          remove people from a photo in a few seconds for free. You don't need
-          complex softwares such as Adobe Photoshop. With
-          <a href="https://cleanup.pictures">cleanup.pictures</a> you can
-          achieve professional results in a few clicks.
-        </p>
-        <p>
-          <b>Pro tip:</b> Select a bigger brush and don't hesitate to cover more
-          than the area you want to retouch (especially to cover shadows). It
-          will help the algorithm create the best results.
-        </p>
 
-        <h2 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">How to remove an unwanted object from a photo?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          <a href="https://cleanup.pictures">cleanup.pictures</a> brush is a spectacular tool to remove unwanted objects.
-The A.I. algorithm will reconstruct what was behind the object in just one click. Be sure that the whole thing is covered to remove it entirely.
-        </p>
+      <picture class="m-14 p-2">
+        <source
+          srcset="before-after.webp"
+          width="700"
+          height="731"
+          type="image/webp" />
+        <img
+          src="before-after.jpg"
+          width="700"
+          height="731"
+          alt="Cleanup example"
+      /></picture>
 
-        <h2 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">How to remove text or watermarks from an image?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          You can remove text and images in a few seconds with impressive
-          accuracy using
-          <a href="https://cleanup.pictures">cleanup.pictures</a>. As for
-          objects or people, simply load your image in the tool and draw over
-          the text or watermark that you'd like to remove. After a few seconds,
-          you'll see it completely gone.
-        </p>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          Pro tip: To get the best results, make sure that you overflow and draw
-          a slightly bigger area than what you actually want to remove.
-        </p>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          Important: Watermarks usually indicate that an image has restrictive
-          copyrights. Only remove watermarks on images for which you have an
-          explicit license.
-        </p>
+      <div id="usecases" class="homepage-block bg-gray-100">
+        <h1 class="font-alt text-4xl sm:text-6xl">Use-cases</h1>
 
-        <h2 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">What image resolutions can cleanup.pictures handle?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          You can import images of any size in Cleanup.pictures. Export will be
-          limited to 720px for the free version. There is no size limit for the Pro
-          version. We're continuously improving the quality of the images
-          exported by Cleanup.pictures.
-        </p>
+        <div class="justify-center mt-8">
+          <ul class="my-2 space-x-2">
+            <li class="usecase-bt" data-usecase="photo">Photographers</li>
+            <li class="usecase-bt" data-usecase="agency">Creative Agencies</li>
+            <li class="usecase-bt" data-usecase="realestate">Real Estate</li>
+            <li class="usecase-bt" data-usecase="ecomm">E-commerce</li>
+            <li class="usecase-bt" data-usecase="watermark">
+              Remove watermark
+            </li>
+            <li class="usecase-bt" data-usecase="api">Developers API</li>
+          </ul>
 
-        <h2 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">How much Cleanup.pictures cost?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          Cleanup.Picture is 100% free unless you need to process hi-resolution images.
-          The price is $5 per month or $48 per year for processing HD images of any size. (BUT ONLY $24 UNTIL FEB 15).
-          The trial allows testing the HD quality for free.
-          To ease the edition, you'll be able to zoom into an image.
-        </p>
-        
-        <h2 itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">How to remove blemish or wrinkles?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          You can remove blemishes or wrinkles from a photo using the CleanUp brush. Like
-          for other things to remove from a photo, just be sure you overflow the
-          brush over it.
-        </p>
+          <div class="mb-4" data-usecase="photo">
+            <div class="flex max-w-5xl space-x-4">
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/photo-a.webp" type="image/webp" />
+                  <img
+                    src="usecases/photo-a.jpg"
+                    alt="Photographer usecase before"
+                  />
+                </picture>
+              </div>
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/photo-b.webp" type="image/webp" />
+                  <img
+                    src="usecases/photo-b.jpg"
+                    alt="Photographer usecase after"
+                  />
+                </picture>
+              </div>
+            </div>
+            <p class="mt-4 rounded-3xl bg-primary p-4">
+              Photographers use Cleanup.pictures to remove time stamp from
+              pictures before printing them for their customers.<br />
+              With Cleanup.pictures, you can clean photographs, removing any
+              unwanted thing.
+            </p>
+          </div>
 
-        <h2>How to remove the background of an image?</h2>
-        <p itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-          The best way to remove the background of a photo online or using your
-          phone is using
-          <a
-            style="text-decoration: underline"
-            href="https://clipdrop.co?utm_source=cleanup_pictures"
-            >ClipDrop</a
-          >. It provides the best quality available today.
-        </p>
+          <div class="mb-4" data-usecase="agency">
+            <div class="flex max-w-5xl space-x-4">
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/agency-a.webp" type="image/webp" />
+                  <img
+                    src="usecases/agency-a.jpg"
+                    alt="Creative agency usecase before"
+                  />
+                </picture>
+              </div>
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/agency-b.webp" type="image/webp" />
+                  <img
+                    src="usecases/agency-b.jpg"
+                    alt="Creative agency usecase after"
+                  />
+                </picture>
+              </div>
+            </div>
+            <p class="mt-4 rounded-3xl bg-primary p-4">
+              Creatives use Cleanup to create perfect visuals in seconds.<br />
+              You can easily remix any existing photo to replace parts with your
+              own.<br />
+              Stay in the creative flow by using tools that are not on your way.
+            </p>
+          </div>
+
+          <div class="mb-4" data-usecase="realestate">
+            <div class="flex max-w-5xl space-x-4">
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/realestate-a.webp"
+                    type="image/webp"
+                  />
+                  <img
+                    src="usecases/realestate-a.jpg"
+                    alt="Real estate usecase before"
+                  />
+                </picture>
+              </div>
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/realestate-b.webp"
+                    type="image/webp"
+                  />
+                  <img
+                    src="usecases/realestate-b.jpg"
+                    alt="Real estate usecase after"
+                  />
+                </picture>
+              </div>
+            </div>
+            <p class="mt-4 rounded-3xl bg-primary p-4">
+              Real Estate agent use CleanUp.pictures to remove unwanted objects
+              from pictures.
+            </p>
+          </div>
+
+          <div class="mb-4" data-usecase="ecomm">
+            <div class="flex max-w-5xl space-x-4">
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/ecomm-a.webp" type="image/webp" />
+                  <img
+                    src="usecases/ecomm-a.jpg"
+                    alt="Ecommerce usecase before"
+                  />
+                </picture>
+              </div>
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/ecomm-b.webp" type="image/webp" />
+                  <img
+                    src="usecases/ecomm-b.jpg"
+                    alt="Ecommerce usecase after"
+                  />
+                </picture>
+              </div>
+            </div>
+            <p class="mt-4 rounded-3xl bg-primary p-4">
+              Make your products shine. Impress your audience, remove
+              distractions.
+            </p>
+          </div>
+
+          <div class="mb-4" data-usecase="watermark">
+            <div class="flex max-w-5xl space-x-4">
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/watermark-a.webp"
+                    type="image/webp"
+                  />
+                  <img src="usecases/watermark-a.jpg" alt="Watermark Usecase" />
+                </picture>
+              </div>
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/watermark-b.webp"
+                    type="image/webp"
+                  />
+                  <img src="usecases/watermark-b.jpg" alt="Watermark Usecase" />
+                </picture>
+              </div>
+            </div>
+            <p class="mt-4 rounded-3xl bg-primary p-4">
+              Cleanup.picture is also useful to remove any unwanted watermark,
+              date stamp or text.
+            </p>
+          </div>
+
+          <div class="mb-4" data-usecase="api">
+            <div class="flex max-w-5xl space-x-4">
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/api.webp" type="image/webp" />
+                  <img src="usecases/api.jpg" alt="API Usecase" />
+                </picture>
+              </div>
+            </div>
+            <p class="mt-4 rounded-3xl bg-primary p-4">
+              Do you want to integrate CleanUp technology in your product? Let
+              us know: Contact@cleanup.pictures
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="homepage-block">
+        <div class="space-y-12 sm:space-y-24">
+          <h1 class="font-alt text-4xl sm:text-6xl">
+            What <span class="highlight text-white">experts</span> say about
+            Cleanup
+          </h1>
+          <div
+            class="
+              flex flex-col-reverse
+              rounded-3xl
+              md:flex-row
+              text-left
+              max-w-7xl
+              justify-evenly
+              items-center
+            "
+          >
+            <div class="flex flex-col pt-8 md:pt-0">
+              <picture>
+                <source
+                  srcset="dawn-veltri.webp"
+                  height="180"
+                  width="180"
+                  type="image/webp"
+                />
+                <img
+                  src="dawn-veltri.jpg"
+                  height="180"
+                  width="180"
+                  alt="Dawn Veltri"
+                />
+              </picture>
+              <h2 class="m-0 pt-4 font-varent">Dawn Veltri</h2>
+              <p class="mt-0">Director of Marketing at Raek</p>
+            </div>
+            <div class="max-w-lg text-xl">
+              <p>
+                “I spent a significant amount of time last week trying to clean
+                up an image with similar programs and I kept getting weird
+                smears and lines. <br /><br />
+                I just edited the same photo with Cleanup.pictures and
+                <span class="bg-primary"
+                  >I was done in 30 secs without the smears and lines!</span
+                >”
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="homepage-block bg-primary">
+        <div>
+          <h1 class="font-alt text-4xl sm:text-6xl">
+            Powering the
+            <span class="highlight text-primary">best creatives</span>
+          </h1>
+          <div
+            class="
+              w-full
+              flex flex-col
+              sm:flex-row sm:justify-evenly sm:mt-20
+              items-center
+              mix-blend-multiply
+              space-y-8
+              sm:space-y-0
+            "
+          >
+            <a
+              href="https://www.aguerrero.photo"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="h-16"
+                height="64"
+                src="logos/logo-agp.png"
+                alt="AGP"
+              />
+            </a>
+            <a
+              href="https://www.hyundai.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="h-20"
+                height="80"
+                src="logos/logo-hyundai.svg"
+                alt="Hyundai"
+              />
+            </a>
+            <a
+              href="https://treze.es"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="h-16"
+                height="64"
+                src="logos/logo-treze.svg"
+                alt="Treze"
+              />
+            </a>
+            <a
+              href="https://www.wemuda.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="h-6"
+                height="24"
+                src="logos/logo-wemuda.png"
+                alt="Wemuda"
+              />
+            </a>
+            <a
+              href="https://zigzagfilms.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="h-16"
+                height="64"
+                src="logos/logo-zigzag.png"
+                alt="ZigZag"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div id="pricing" class="homepage-block">
+        <div class="space-y-12 w-full sm:w-auto">
+          <h1 class="font-alt text-4xl sm:text-6xl">Pricing</h1>
+          <div class="flex text-left max-w-7xl justify-evenly pricing">
+            <div class="flex flex-col items-center">
+              <p class="text-center mb-12 bg-gray-200 px-4 py-1 rounded-full">
+                Free
+              </p>
+              <p class="price font-varent">0</p>
+              <ul class="sm:list-disc">
+                <li>Unlimited images</li>
+                <li>Resolution limited to 720p</li>
+              </ul>
+            </div>
+            <div class="flex items-center">
+              <div class="sm:border-l border-black w-1 h-44"></div>
+            </div>
+            <div class="flex flex-col items-center">
+              <p class="text-center mb-12 bg-primary px-4 py-1 rounded-full">
+                Pro
+              </p>
+              <p class="price font-varent">5 <span>per month</span></p>
+              <ul class="sm:list-disc">
+                <li>Unlimited images</li>
+                <li>Unlimited resolution</li>
+                <li>Batch edit mode</li>
+                <li>Plugins integration</li>
+              </ul>
+            </div>
+          </div>
+          <div class="flex justify-center">
+            <div class="bg-black text-white px-5 py-2 rounded-full">
+              🤫 Pssst, Cleanup is also included in
+              <a
+                class="underline"
+                href="https://clipdrop.co?utm_campaign=cleanup_pictures"
+                target="_blank"
+                rel="noopener noreferrer"
+                >ClipDrop Pro</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="faq" class="homepage-block bg-gray-100">
+        <div
+          class="homepage-content"
+          itemscope
+          itemtype="https://schema.org/FAQPage"
+        >
+          <h1 class="font-alt text-4xl sm:text-6xl">FAQ</h1>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">
+              What image resolutions can cleanup.pictures handle?
+            </h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                You can import images of any size in Cleanup.pictures. Export
+                will be limited to 720px for the free version. There is
+                <span
+                  class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+                  >no size limit</span
+                >
+                for the Pro version. We're continuously improving the quality of
+                the images exported by Cleanup.pictures.
+              </span>
+            </p>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">
+              What happens to my images? Do you store them?
+            </h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                <span
+                  class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+                  >No, your images are deleted immediately</span
+                >
+                after they've been cleaned up. We don't store any data related
+                to your images in our servers.
+              </span>
+            </p>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">How much Cleanup.pictures cost?</h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                Cleanup.Picture is
+                <span
+                  class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+                  >free</span
+                >
+                unless you need better quality and process hi-resolution images.
+                The price is then
+                <span
+                  class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+                  >$5 per month</span
+                >
+                or
+                <span
+                  class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+                  >$48 per year</span
+                >
+                for processing images of any size. The trial allows testing the
+                HD quality for free. To ease the edition, you'll be able to zoom
+                into an image.
+              </span>
+            </p>
+            <div class="bg-black text-white px-5 py-2 rounded-full mt-4">
+              Until February 15th, Cleanup Pro is -50% off at $24 for a year ($2
+              per month)
+            </div>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">How to remove people from a photo?</h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                <a href="https://cleanup.pictures">cleanup.pictures</a> lets you
+                remove people from a photo in a few seconds for free. You don't
+                need complex softwares such as Adobe Photoshop. With
+                <a href="https://cleanup.pictures">cleanup.pictures</a> you can
+                achieve professional results in a few clicks.
+              </span>
+            </p>
+            <p>
+              <b>Pro tip:</b> Select a bigger brush and don't hesitate to cover
+              more than the area you want to retouch (especially to cover
+              shadows). It will help the algorithm create the best results.
+            </p>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">
+              How to remove an unwanted object from a photo?
+            </h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                <a href="https://cleanup.pictures">cleanup.pictures</a> brush is
+                a spectacular tool to remove unwanted objects. The A.I.
+                algorithm will reconstruct what was behind the object in just
+                one click. Be sure that the whole thing is covered to remove it
+                entirely.
+              </span>
+            </p>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">
+              How to remove text or watermarks from an image?
+            </h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                You can remove text and images in a few seconds with impressive
+                accuracy using
+                <a href="https://cleanup.pictures">cleanup.pictures</a>. As for
+                objects or people, simply load your image in the tool and draw
+                over the text or watermark that you'd like to remove. After a
+                few seconds, you'll see it completely gone.
+              </span>
+            </p>
+            <p>
+              Pro tip: To get the best results, make sure that you overflow and
+              draw a slightly bigger area than what you actually want to remove.
+            </p>
+            <p>
+              Important: Watermarks usually indicate that an image has
+              restrictive copyrights. Only remove watermarks on images for which
+              you have an explicit license.
+            </p>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">How to remove blemish or wrinkles?</h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                You can remove blemishes or wrinkles from a photo using the
+                CleanUp brush. Like for other things to remove from a photo,
+                just be sure you overflow the brush over it.
+              </span>
+            </p>
+          </div>
+
+          <div
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            <h2 itemprop="name">How to remove the background of an image?</h2>
+            <p
+              itemscope
+              itemprop="acceptedAnswer"
+              itemtype="https://schema.org/Answer"
+            >
+              <span itemprop="text">
+                The best way to remove the background of a photo online or using
+                your phone is using
+                <a
+                  style="text-decoration: underline"
+                  href="https://clipdrop.co?utm_campaign=cleanup_pictures"
+                  target="_blank"
+                  rel="noreferrer dofollow"
+                  >ClipDrop</a
+                >. It provides the best quality available today.
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
     </main>
 
-    <footer>
-      <p>
-        <Link href="https://cleanup.pictures">CleanUp.pictures</Link>&nbsp;is a web
-        application that lets you cleanup photos with a quick & simple
-        interface.
-      </p>
-      <p>©2022 Init ML</p>
+    <footer
+      class="
+        flex flex-col
+        space-y-8
+        items-center
+        bg-black
+        text-white text-center
+        p-4
+        pt-12
+      "
+    >
+      <a
+        href="https://clipdrop.co?utm_campaign=cleanup_pictures"
+        target="_blank"
+        rel="noreferrer dofollow"
+      >
+        <img src="logo-footer.svg" class="h-24" alt="Cleanup.pictures" />
+      </a>
 
-      <div class="flex justify-center w-full">
-        <a href="https://fixthephoto.com/free-apps-to-remove-unwanted-objects-from-photo.html" target="_blank" rel="dofollow">
-          <img src="fix.svg" width="128" height="128" alt="Fix" />
+      <div class="pt-8">
+        <p>
+          <a href="https://cleanup.pictures">CleanUp.pictures</a>&nbsp;is a web
+          application that lets you cleanup photos with a quick & simple
+          interface.
+        </p>
+        <p>©2022 Init ML</p>
+      </div>
+
+      <div class="flex justify-center items-center w-full space-x-8">
+        <a
+          href="https://www.producthunt.com/posts/cleanup-pictures?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-cleanup-pictures"
+          target="_blank"
+          rel="noreferrer"
+          ><img
+            src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=dark&period=weekly"
+            alt="CleanUp.Pictures - Remove objects and defects from your pictures - 100% free | Product Hunt"
+            style="width: 250px; height: 54px"
+            width="250"
+            height="54"
+        /></a>
+
+        <a
+          href="https://fixthephoto.com/free-apps-to-remove-unwanted-objects-from-photo.html"
+          target="_blank"
+          rel="noreferrer dofollow"
+        >
+          <img src="fix.svg" width="80" height="80" alt="Fix" />
         </a>
       </div>
-      
     </footer>
 
     <script>
@@ -166,5 +717,7 @@ The A.I. algorithm will reconstruct what was behind the object in just one click
         self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
       }
     </script>
+
+    <script src="home.js"></script>
   </body>
 </html>

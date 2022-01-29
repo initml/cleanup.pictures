@@ -2,6 +2,9 @@ module.exports = {
   mode: 'jit',
   theme: {
     extend: {
+      fontFamily: {
+        'varent': ['VarentGrotesk', 'sans-serif'],
+      },
       animation: {
         'pulse-fast': 'pulse 0.7s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },

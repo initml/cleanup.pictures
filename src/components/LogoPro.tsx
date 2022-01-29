@@ -13,7 +13,6 @@ export default function LogoPro(props: LogoProProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <rect width="687" height="157" fill="white" />
       <path
         d="M71.2906 94.0164L106.009 56.0166H152.3L108.113 120.405H62.874L71.2906 94.0164Z"
         fill="white"

@@ -15,6 +15,15 @@
 /* Your own custom utilities */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
 
+@font-face {
+  font-family: 'VarentGrotesk';
+  font-style: bold;
+  font-weight: 600;
+  font-display: swap;
+  src: url(varentgrotesk-bold.woff2) format('woff2');
+  /* unicode-range: U+1F00-1FFF; */
+}
+
 html,
 body {
   min-width: 100%;
@@ -26,7 +35,7 @@ body {
 
 main h1 {
   font-family: 'Inter', Helvetica, Arial, sans-serif;
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 800;
   margin-bottom: 1rem;
 }
@@ -38,22 +47,92 @@ main h2 {
   margin: 3rem 0 1rem;
 }
 
-.faq {
+.highlight {
+  @apply bg-black rounded-l-full rounded-r-full px-4 py-1 whitespace-nowrap;
+}
+
+.homepage-block {
+  @apply w-full py-12 sm:py-28 mt-4 px-2 text-center flex flex-col items-center;
+}
+
+.usecase-bt {
+  @apply inline-block px-5 py-2 rounded-l-full rounded-r-full mb-2 cursor-pointer hover:opacity-75 bg-black text-white;
+}
+.usecase-bt.active {
+  @apply bg-primary text-black;
+}
+
+.font-alt {
+  font-family: 'VarentGrotesk', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+}
+
+.homepage {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.pro .faq,
-.editor .faq,
+
+.editor .homepage,
 .editor footer {
   display: none;
 }
 
-.faq .faq-content {
+.homepage .homepage-content {
   max-width: 760px;
 }
 
-.alt-block {
+.pricing {
+  min-width: 52em;
+}
+.price {
+  font-size: 12rem;
+  position: relative;
+  text-align: center;
+}
+.price::before {
+  content: '$';
+  font-size: 0.3em;
+  position: absolute;
+  left: -0.8em;
+  top: -0.5em;
+}
+
+.price > span {
+  font-size: 0.08em;
+  font-family: 'Inter', Hevetica, Arial, sans-serif;
+  position: absolute;
+  right: -4em;
+  top: -0.3em;
+}
+
+@media screen and (max-width: 640px) {
+  .price {
+    font-size: 4rem;
+  }
+  .price > span {
+    font-size: 0.2em;
+    position: relative;
+    left: -1em;
+    /* position: absolute;
+    top: 5em; */
+  }
+  .price::before {
+    content: '$';
+    font-size: 0.3em;
+    position: relative;
+  }
+
+  .pricing {
+    min-width: 100%;
+  }
+
+  .pricing ul {
+    font-size: 0.8em;
+  }
+}
+
+/* .alt-block {
   width: 100%;
   padding: 5rem;
   text-align: center;
@@ -61,13 +140,13 @@ main h2 {
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
   margin-bottom: 2rem;
-}
+} */
 
 footer {
-  text-align: center;
+  /* text-align: center;
   padding: 2rem 0;
   margin-top: 4rem;
-  background-color: #fafafa;
+  background-color: #fafafa; */
   border-top: 1px solid #eaeaea;
 }
 

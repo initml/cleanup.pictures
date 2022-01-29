@@ -1,5 +1,8 @@
+import { XIcon } from '@heroicons/react/outline'
+import { useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { useUser } from './adapters/user'
+import Button from './components/Button'
 import FileSelect from './components/FileSelect'
 import Logo from './components/Logo'
 import LogoPro from './components/LogoPro'
@@ -22,24 +25,68 @@ export default function Homepage({
 }: HomepageProps) {
   const windowSize = useWindowSize()
   const user = useUser()
+  const [showBanner, setShowBanner] = useState(true)
   return (
     <>
-      <header className="relative z-10 flex px-5 pt-3 justify-between items-center sm:items-start">
-        <div>
-          {user?.isPro() ? (
-            <LogoPro className="w-60 h-14" />
-          ) : (
-            <Logo className="w-60 h-14" />
-          )}
+      {showBanner && !user?.isPro && (
+        <div className="hidden sm:block bg-black text-white p-5 text-center relative">
+          Looking for automatic background removal?{' '}
+          <a
+            className="underline"
+            href="https://clipdrop.co?utm_campaign=cleanup_pictures"
+            target="_blank"
+            rel="noreferrer dofollow"
+          >
+            Try ClipDrop!
+          </a>
+          <div className="absolute right-1 top-0 h-full flex items-center">
+            <Button
+              icon={<XIcon className="w-6 h-6" />}
+              onClick={() => setShowBanner(false)}
+            />
+          </div>
         </div>
-        <Menu onUpgrade={() => setShowUpgrade(true)} />
+      )}
+      <header
+        className={[
+          'fixed w-full bg-white bg-opacity-70',
+          // 'border-b-2 border-black',
+          'filter backdrop-blur-3xl z-10 flex px-5 pt-3 pb-3',
+          'justify-between items-center sm:items-start',
+        ].join(' ')}
+      >
+        <div>
+          <a href="/#" aria-label="Cleanup Logo">
+            {user?.isPro() ? (
+              <LogoPro className="w-60 h-14" />
+            ) : (
+              <Logo className="w-60 h-14" />
+            )}
+          </a>
+        </div>
+        <div className="flex items-center space-x-8">
+          <a
+            className="hidden sm:inline-block hover:underline"
+            href="#usecases"
+          >
+            Use cases
+          </a>
+          <a className="hidden sm:inline-block hover:underline" href="#pricing">
+            Pricing
+          </a>
+          <a className="hidden sm:inline-block hover:underline" href="#faq">
+            FAQ
+          </a>
+          <Menu onUpgrade={() => setShowUpgrade(true)} />
+        </div>
       </header>
 
       <main
         className={[
           'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
           // file ? 'items-center justify-center' : '', // center on mobile
-          'mt-10',
+          'sm:mt-10',
+          'pt-24',
           'items-center justify-center',
           'pb-10',
         ].join(' ')}
@@ -50,28 +97,33 @@ export default function Homepage({
             'space-y-5 sm:space-y-0 sm:space-x-6 p-5 pt-0 pb-10',
           ].join(' ')}
         >
-          <div className="max-w-lg flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
-            <h1 className="text-center sm:text-left text-xl sm:text-3xl">
-              Remove any object, people, text or defects from your pictures.
+          <div className="sm:max-w-lg lg:max-w-2xl flex flex-col items-center sm:items-start p-0 m-0 space-y-5">
+            <h1 className="text-center font-bold sm:text-left text-xl sm:text-3xl lg:text-5xl">
+              Remove any unwanted{' '}
+              <span className="bg-primary font-varent rounded-l-full rounded-r-full px-2">
+                object
+              </span>
+              ,{' '}
+              <span className="bg-primary font-varent rounded-l-full rounded-r-full px-2">
+                defect
+              </span>
+              ,{' '}
+              <span className="bg-primary font-varent rounded-l-full rounded-r-full px-2">
+                people
+              </span>{' '}
+              or{' '}
+              <span className="bg-primary font-varent rounded-l-full rounded-r-full px-2">
+                text
+              </span>{' '}
+              from your pictures{' '}
+              <span className="underline font-varent">in seconds</span>
             </h1>
             {/* <span className="text-gray-500">
         Stunning quality for free on images up to 1024px
       </span> */}
-
-            <a
-              className="hidden sm:block pointer-events-auto"
-              href="https://www.producthunt.com/posts/cleanup-pictures?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-cleanup-pictures"
-            >
-              <img
-                src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=316605&theme=light&period=weekly"
-                alt="CleanUp.pictures - Remove objects and defects from your pictures for free | Product Hunt"
-                width="210"
-                height="54"
-              />
-            </a>
           </div>
 
-          <div className="h-40 w-56 flex items-center rounded-md overflow-hidden">
+          <div className="w-60 sm:w-80 flex items-center rounded-xl overflow-hidden">
             <video
               // className="h-40 w-56 rounded-md object-cover"
               style={{ transform: 'scale(1.01, 1.01)' }}
@@ -80,13 +132,19 @@ export default function Homepage({
               loop
               playsInline
             >
-              <source src="demo_small.mp4" type="video/mp4" />
+              <source
+                src="https://firebasestorage.googleapis.com/v0/b/cleanup-pictures.appspot.com/o/demo_small.mp4?alt=media"
+                type="video/mp4"
+              />
               <track kind="captions" />
             </video>
           </div>
         </div>
 
-        <div className="h-20 sm:h-52 px-4 w-full" style={{ maxWidth: '800px' }}>
+        <div
+          className="h-20 sm:h-52 px-4 w-full my-8 sm:my-0"
+          style={{ maxWidth: '800px' }}
+        >
           <FileSelect
             onSelection={async f => {
               setOriginalFile(f)
@@ -97,11 +155,11 @@ export default function Homepage({
 
         <div
           className={[
-            'flex flex-col sm:flex-row items-center justify-center cursor-pointer',
+            'flex flex-col items-center justify-center cursor-pointer',
             'pt-4 sm:pt-10',
           ].join(' ')}
         >
-          <span className="text-gray-500">Or try with an example</span>
+          <span className="mb-4">↓ Try with an example</span>
           <div className="flex space-x-2 sm:space-x-4 px-4">
             {EXAMPLES.slice(0, windowSize.width > 650 ? undefined : 3).map(
               image => (
@@ -113,7 +171,9 @@ export default function Homepage({
                   tabIndex={-1}
                 >
                   <img
-                    className="rounded-md hover:opacity-75 w-20 h-20 object-cover"
+                    className="rounded-md hover:opacity-75 w-24 h-24 object-cover"
+                    width="96"
+                    height="96"
                     src={`exemples/${image}.thumb.jpeg`}
                     alt={image}
                   />
