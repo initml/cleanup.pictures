@@ -80,16 +80,18 @@
         <h1 class="font-alt text-4xl sm:text-6xl">Use-cases</h1>
 
         <div class="justify-center mt-8">
-          <div class="my-2 space-x-2">
-            <h3 class="usecase-bt bg-primary">Photographer</h3>
-            <h3 class="usecase-bt bg-black text-white">Digital Agency</h3>
-            <h3 class="usecase-bt bg-black text-white">Real Estate</h3>
-            <h3 class="usecase-bt bg-black text-white">E-commerce</h3>
-            <h3 class="usecase-bt bg-black text-white">Remove watermark</h3>
-            <h3 class="usecase-bt bg-black text-white">Developers</h3>
-          </div>
+          <ul class="my-2 space-x-2">
+            <li class="usecase-bt" data-usecase="photo">Photographers</li>
+            <li class="usecase-bt" data-usecase="agency">Digital Agencies</li>
+            <li class="usecase-bt" data-usecase="realestate">Real Estate</li>
+            <li class="usecase-bt" data-usecase="ecomm">E-commerce</li>
+            <li class="usecase-bt" data-usecase="watermark">
+              Remove watermark
+            </li>
+            <li class="usecase-bt" data-usecase="api">Developers API</li>
+          </ul>
 
-          <div class="mb-4">
+          <div class="mb-4" data-usecase="photo">
             <div class="flex max-w-5xl space-x-4">
               <div>
                 <img
@@ -114,7 +116,7 @@
             </p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" data-usecase="agency">
             <div class="flex max-w-5xl space-x-4">
               <div>
                 <img
@@ -139,7 +141,7 @@
             </p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" data-usecase="realestate">
             <div class="flex max-w-5xl space-x-4">
               <div>
                 <img
@@ -162,7 +164,7 @@
             </p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" data-usecase="ecomm">
             <div class="flex max-w-5xl space-x-4">
               <div>
                 <img
@@ -185,7 +187,7 @@
             </p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" data-usecase="watermark">
             <div class="flex max-w-5xl space-x-4">
               <div>
                 <img
@@ -208,7 +210,7 @@
             </p>
           </div>
 
-          <div class="mb-4">
+          <div class="mb-4" data-usecase="api">
             <div class="flex max-w-5xl space-x-4">
               <div>
                 <img
@@ -271,7 +273,7 @@
       </div>
 
       <div id="pricing" class="homepage-block">
-        <div class="space-y-24 w-full sm:w-auto">
+        <div class="space-y-12 w-full sm:w-auto">
           <h1 class="font-alt text-4xl sm:text-6xl">Pricing</h1>
           <div class="flex text-left max-w-7xl justify-evenly pricing">
             <div class="flex flex-col items-center">
@@ -300,6 +302,18 @@
               </ul>
             </div>
           </div>
+          <div class="flex justify-center">
+            <div class="bg-black text-white px-5 py-2 rounded-full">
+              🤫 Pssst, Cleanup is also included in
+              <a
+                class="underline"
+                href="https://clipdrop.co?utm_campaign=cleanup_pictures"
+                target="_blank"
+                rel="noopener noreferrer"
+                >ClipDrop Pro</a
+              >
+            </div>
+          </div>
         </div>
       </div>
 
@@ -310,6 +324,81 @@
           itemtype="https://schema.org/FAQPage"
         >
           <h1 class="font-alt text-4xl sm:text-6xl">FAQ</h1>
+
+          <h2
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            What image resolutions can cleanup.pictures handle?
+          </h2>
+          <p
+            itemscope
+            itemprop="acceptedAnswer"
+            itemtype="https://schema.org/Answer"
+          >
+            You can import images of any size in Cleanup.pictures. Export will
+            be limited to 720px for the free version. There is
+            <span class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+              >no size limit</span
+            >
+            for the Pro version. We're continuously improving the quality of the
+            images exported by Cleanup.pictures.
+          </p>
+
+          <h2
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            What happens to my images? Do you store them?
+          </h2>
+          <p
+            itemscope
+            itemprop="acceptedAnswer"
+            itemtype="https://schema.org/Answer"
+          >
+            <span class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+              >No, your images are deleted immediately</span
+            >
+            after they've been cleaned up. We don't store any data related to
+            your images in our servers.
+          </p>
+
+          <h2
+            itemscope
+            itemprop="mainEntity"
+            itemtype="https://schema.org/Question"
+          >
+            How much Cleanup.pictures cost?
+          </h2>
+          <p
+            itemscope
+            itemprop="acceptedAnswer"
+            itemtype="https://schema.org/Answer"
+          >
+            Cleanup.Picture is
+            <span class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+              >free</span
+            >
+            unless you need better quality and process hi-resolution images. The
+            price is then
+            <span class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+              >$5 per month</span
+            >
+            or
+            <span class="bg-primary px-2 py-1 rounded-full whitespace-nowrap"
+              >$48 per year</span
+            >
+            for processing images of any size. The trial allows testing the HD
+            quality for free. To ease the edition, you'll be able to zoom into
+            an image.
+          </p>
+          <div class="bg-black text-white px-5 py-2 rounded-full mt-4">
+            Until February 15th, Cleanup Pro is -50% off at $24 for a year ($2
+            per month)
+          </div>
+
           <h2
             itemscope
             itemprop="mainEntity"
@@ -387,43 +476,6 @@
             Important: Watermarks usually indicate that an image has restrictive
             copyrights. Only remove watermarks on images for which you have an
             explicit license.
-          </p>
-
-          <h2
-            itemscope
-            itemprop="mainEntity"
-            itemtype="https://schema.org/Question"
-          >
-            What image resolutions can cleanup.pictures handle?
-          </h2>
-          <p
-            itemscope
-            itemprop="acceptedAnswer"
-            itemtype="https://schema.org/Answer"
-          >
-            You can import images of any size in Cleanup.pictures. Export will
-            be limited to 720px for the free version. There is no size limit for
-            the Pro version. We're continuously improving the quality of the
-            images exported by Cleanup.pictures.
-          </p>
-
-          <h2
-            itemscope
-            itemprop="mainEntity"
-            itemtype="https://schema.org/Question"
-          >
-            How much Cleanup.pictures cost?
-          </h2>
-          <p
-            itemscope
-            itemprop="acceptedAnswer"
-            itemtype="https://schema.org/Answer"
-          >
-            Cleanup.Picture is 100% free unless you need to process
-            hi-resolution images. The price is $5 per month or $48 per year for
-            processing HD images of any size. (BUT ONLY $24 UNTIL FEB 15). The
-            trial allows testing the HD quality for free. To ease the edition,
-            you'll be able to zoom into an image.
           </p>
 
           <h2
@@ -519,5 +571,7 @@
         self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
       }
     </script>
+
+    <script src="home.js"></script>
   </body>
 </html>
