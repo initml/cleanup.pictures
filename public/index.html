@@ -69,12 +69,18 @@
         <p class="pt-5">↑ Drag & drop an image above to get started for free</p>
       </div>
 
-      <img
-        class="m-14 p-2"
-        src="before-after.jpg"
-        width="700"
-        alt="Cleanup example"
-      />
+      <picture class="m-14 p-2">
+        <source
+          srcset="before-after.webp"
+          width="700"
+          height="731"
+          type="image/webp" />
+        <img
+          src="before-after.jpg"
+          width="700"
+          height="731"
+          alt="Cleanup example"
+      /></picture>
 
       <div id="usecases" class="homepage-block bg-gray-100">
         <h1 class="font-alt text-4xl sm:text-6xl">Use-cases</h1>
@@ -93,19 +99,23 @@
 
           <div class="mb-4" data-usecase="photo">
             <div class="flex max-w-5xl space-x-4">
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/photo-a.jpg"
-                  alt="Usecase 1a"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/photo-a.webp" type="image/webp" />
+                  <img
+                    src="usecases/photo-a.jpg"
+                    alt="Photographer usecase before"
+                  />
+                </picture>
               </div>
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/photo-b.jpg"
-                  alt="Usecase 1b"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/photo-b.webp" type="image/webp" />
+                  <img
+                    src="usecases/photo-b.jpg"
+                    alt="Photographer usecase after"
+                  />
+                </picture>
               </div>
             </div>
             <p class="mt-4 rounded-3xl bg-primary p-4">
@@ -118,19 +128,23 @@
 
           <div class="mb-4" data-usecase="agency">
             <div class="flex max-w-5xl space-x-4">
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/agency-a.jpg"
-                  alt="Usecase 1a"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/agency-a.webp" type="image/webp" />
+                  <img
+                    src="usecases/agency-a.jpg"
+                    alt="Creative agency usecase before"
+                  />
+                </picture>
               </div>
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/agency-b.jpg"
-                  alt="Usecase 1b"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/agency-b.webp" type="image/webp" />
+                  <img
+                    src="usecases/agency-b.jpg"
+                    alt="Creative agency usecase after"
+                  />
+                </picture>
               </div>
             </div>
             <p class="mt-4 rounded-3xl bg-primary p-4">
@@ -143,19 +157,29 @@
 
           <div class="mb-4" data-usecase="realestate">
             <div class="flex max-w-5xl space-x-4">
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/realestate-a.jpg"
-                  alt="Usecase 1a"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/realestate-a.webp"
+                    type="image/webp"
+                  />
+                  <img
+                    src="usecases/realestate-a.jpg"
+                    alt="Real estate usecase before"
+                  />
+                </picture>
               </div>
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/realestate-b.jpg"
-                  alt="Usecase 1b"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/realestate-b.webp"
+                    type="image/webp"
+                  />
+                  <img
+                    src="usecases/realestate-b.jpg"
+                    alt="Real estate usecase after"
+                  />
+                </picture>
               </div>
             </div>
             <p class="mt-4 rounded-3xl bg-primary p-4">
@@ -166,19 +190,23 @@
 
           <div class="mb-4" data-usecase="ecomm">
             <div class="flex max-w-5xl space-x-4">
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/ecomm-a.jpg"
-                  alt="Usecase 1a"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/ecomm-a.webp" type="image/webp" />
+                  <img
+                    src="usecases/ecomm-a.jpg"
+                    alt="Ecommerce usecase before"
+                  />
+                </picture>
               </div>
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/ecomm-b.jpg"
-                  alt="Usecase 1b"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/ecomm-b.webp" type="image/webp" />
+                  <img
+                    src="usecases/ecomm-b.jpg"
+                    alt="Ecommerce usecase after"
+                  />
+                </picture>
               </div>
             </div>
             <p class="mt-4 rounded-3xl bg-primary p-4">
@@ -189,19 +217,23 @@
 
           <div class="mb-4" data-usecase="watermark">
             <div class="flex max-w-5xl space-x-4">
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/watermark-a.jpg"
-                  alt="Usecase 1a"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/watermark-a.webp"
+                    type="image/webp"
+                  />
+                  <img src="usecases/watermark-a.jpg" alt="Watermark Usecase" />
+                </picture>
               </div>
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/watermark-b.jpg"
-                  alt="Usecase 1b"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source
+                    srcset="usecases/watermark-b.webp"
+                    type="image/webp"
+                  />
+                  <img src="usecases/watermark-b.jpg" alt="Watermark Usecase" />
+                </picture>
               </div>
             </div>
             <p class="mt-4 rounded-3xl bg-primary p-4">
@@ -212,12 +244,11 @@
 
           <div class="mb-4" data-usecase="api">
             <div class="flex max-w-5xl space-x-4">
-              <div>
-                <img
-                  class="max-w-full rounded-3xl"
-                  src="usecases/api.jpg"
-                  alt="Usecase 1a"
-                />
+              <div class="max-w-full rounded-md overflow-hidden">
+                <picture>
+                  <source srcset="usecases/api.webp" type="image/webp" />
+                  <img src="usecases/api.jpg" alt="API Usecase" />
+                </picture>
               </div>
             </div>
             <p class="mt-4 rounded-3xl bg-primary p-4">
@@ -246,7 +277,20 @@
             "
           >
             <div class="flex flex-col pt-8 md:pt-0">
-              <img src="dawn-veltri.jpg" width="180" alt="Dawn Veltri" />
+              <picture>
+                <source
+                  srcset="dawn-veltri.webp"
+                  height="180"
+                  width="180"
+                  type="image/webp"
+                />
+                <img
+                  src="dawn-veltri.jpg"
+                  height="180"
+                  width="180"
+                  alt="Dawn Veltri"
+                />
+              </picture>
               <h2 class="m-0 pt-4 font-varent">Dawn Veltri</h2>
               <p class="mt-0">Director of Marketing at Raek</p>
             </div>
@@ -287,35 +331,60 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img class="h-16" src="logos/logo-agp.png" alt="AGP" />
+              <img
+                class="h-16"
+                height="64"
+                src="logos/logo-agp.png"
+                alt="AGP"
+              />
             </a>
             <a
               href="https://www.hyundai.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img class="h-20" src="logos/logo-hyundai.svg" alt="Hyundai" />
+              <img
+                class="h-20"
+                height="80"
+                src="logos/logo-hyundai.svg"
+                alt="Hyundai"
+              />
             </a>
             <a
               href="https://treze.es"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img class="h-16" src="logos/logo-treze.svg" alt="Treze" />
+              <img
+                class="h-16"
+                height="64"
+                src="logos/logo-treze.svg"
+                alt="Treze"
+              />
             </a>
             <a
               href="https://www.wemuda.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img class="h-6" src="logos/logo-wemuda.png" alt="Wemuda" />
+              <img
+                class="h-6"
+                height="24"
+                src="logos/logo-wemuda.png"
+                alt="Wemuda"
+              />
             </a>
             <a
               href="https://zigzagfilms.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img class="h-16" src="logos/logo-zigzag.png" alt="ZigZag" />
+              <img
+                class="h-16"
+                height="64"
+                src="logos/logo-zigzag.png"
+                alt="ZigZag"
+              />
             </a>
           </div>
         </div>
