@@ -56,7 +56,7 @@ export default function Homepage({
         ].join(' ')}
       >
         <div>
-          <a href="/#">
+          <a href="/#" aria-label="Cleanup Logo">
             {user?.isPro() ? (
               <LogoPro className="w-60 h-14" />
             ) : (
@@ -172,6 +172,8 @@ export default function Homepage({
                 >
                   <img
                     className="rounded-md hover:opacity-75 w-24 h-24 object-cover"
+                    width="96"
+                    height="96"
                     src={`exemples/${image}.thumb.jpeg`}
                     alt={image}
                   />

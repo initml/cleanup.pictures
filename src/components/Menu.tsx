@@ -60,7 +60,10 @@ export default function UserMenu(props: UserMenuProps) {
               </div>
             ) : (
               <div>
-                <Menu.Button className="flex items-center justify-center p-3 px-5 rounded-md hover:bg-primary">
+                <Menu.Button
+                  aria-label="Menu"
+                  className="flex items-center justify-center p-3 px-5 rounded-md hover:bg-primary"
+                >
                   <CogIcon className="w-6 h-6" />
                 </Menu.Button>
               </div>
