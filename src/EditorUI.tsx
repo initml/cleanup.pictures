@@ -262,9 +262,6 @@ export default function EditorUI({
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       currLine.size = brushSize
       const coords = canvas.getBoundingClientRect()
-      console.log(window.scrollY)
-      // console.log(ev)
-      // console.log(ev.touches[0].clientX, ev.touches[0].pageX)
       const px = (ev.touches[0].clientX - coords.x) / scale
       const py = (ev.touches[0].clientY - coords.y) / scale
       onPaint(px, py)
