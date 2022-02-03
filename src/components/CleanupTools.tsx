@@ -23,7 +23,7 @@ export default function CleanupTools({
   return (
     <div
       className={[
-        'flex items-center space-x-4 max-w-3xl',
+        'flex sm:items-center space-x-4 max-w-3xl',
         'bg-gray-200 bg-opacity-50 backdrop-blur-xl rounded-2xl',
         'p-2',
         'justify-evenly',

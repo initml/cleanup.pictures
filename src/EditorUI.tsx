@@ -422,7 +422,7 @@ export default function EditorUI({
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />
-        <div className="w-full sm:w-90">
+        <div className="flex w-full justify-center sm:justify-start sm:w-96">
           {tool === 'clean' && (
             <CleanupTools
               editor={editor}

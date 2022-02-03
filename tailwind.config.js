@@ -17,9 +17,6 @@ module.exports = {
           '50%': { opacity: 0.7 },
         },
       },
-      spacing: {
-        90: '22.5rem',
-      },
     },
   },
   variants: {},
