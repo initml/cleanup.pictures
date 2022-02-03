@@ -88,6 +88,12 @@ export function EditorProvider(props: any) {
   const user = useUser()
   const [useHD, setUseHD] = useState(user?.isPro() || false)
 
+  const [output] = useState(() => {
+    return document.createElement('canvas')
+  })
+  const [patch] = useState(() => {
+    return document.createElement('canvas')
+  })
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
   })
@@ -190,13 +196,15 @@ export function EditorProvider(props: any) {
       console.error(file, originalImage, context?.canvas)
       return
     }
-    const patch = document.createElement('canvas')
     patch.width = originalImage.width
     patch.height = originalImage.height
     const patchCtx = patch.getContext('2d')
     if (!patchCtx) {
       throw new Error('Could not get patch context')
     }
+
+    // Clear the canvas
+    patchCtx.clearRect(0, 0, patch.width, patch.height)
 
     // Draw the inpainted image masked by the mask
     patchCtx?.drawImage(
@@ -216,7 +224,6 @@ export function EditorProvider(props: any) {
     )
 
     // Draw the final output
-    const output = document.createElement('canvas')
     output.width = originalImage.width
     output.height = originalImage.height
     const outputCtx = output.getContext('2d')
@@ -226,7 +233,7 @@ export function EditorProvider(props: any) {
     outputCtx?.drawImage(originalImage, 0, 0)
     outputCtx?.drawImage(patch, 0, 0)
     return outputCtx?.canvas.toDataURL(file.type)
-  }, [context, file, maskCanvas, originalImage])
+  }, [context, file, maskCanvas, originalImage, output, patch])
 
   const download = useCallback(() => {
     if (!file || !context) {
