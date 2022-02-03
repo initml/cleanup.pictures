@@ -406,9 +406,9 @@ export default function EditorUI({
 
       <div
         className={[
-          'fixed w-full px-2 pb-2 sm:pb-0 flex',
-          ' flex-col sm:flex-row space-y-2 sm:space-y-0',
-          'justify-center items-end sm:items-center bottom-0',
+          'absolute w-full px-2 pb-2 sm:pb-0 flex',
+          'justify-center flex-col sm:flex-row space-y-2 sm:space-y-0',
+          'items-end sm:items-center bottom-0',
         ].join(' ')}
         style={{
           // Center the action bar in the white area available.
@@ -422,28 +422,30 @@ export default function EditorUI({
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />
-        {tool === 'clean' && (
-          <CleanupTools
-            editor={editor}
-            brushSize={brushSize}
-            setBrushSize={setBrushSize}
-            isLoading={isInpaintingLoading}
-            onCleanupClick={async () => {
-              setIsInpaintingLoading(true)
-              await render()
-              setIsInpaintingLoading(false)
-            }}
-          />
-        )}
-        {tool === 'zoom' && (
-          <ZoomTools
-            zoom={currScale || minScale}
-            minZoom={minScale}
-            setZoom={setZoom}
-            onResetClick={resetZoom}
-          />
-        )}
-        {tool === 'original' && <OriginalPreviewTools />}
+        <div className="w-full sm:w-90">
+          {tool === 'clean' && (
+            <CleanupTools
+              editor={editor}
+              brushSize={brushSize}
+              setBrushSize={setBrushSize}
+              isLoading={isInpaintingLoading}
+              onCleanupClick={async () => {
+                setIsInpaintingLoading(true)
+                await render()
+                setIsInpaintingLoading(false)
+              }}
+            />
+          )}
+          {tool === 'zoom' && (
+            <ZoomTools
+              zoom={currScale || minScale}
+              minZoom={minScale}
+              setZoom={setZoom}
+              onResetClick={resetZoom}
+            />
+          )}
+          {tool === 'original' && <OriginalPreviewTools />}
+        </div>
       </div>
     </>
   )
