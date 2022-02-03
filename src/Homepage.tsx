@@ -133,7 +133,7 @@ export default function Homepage({
               playsInline
             >
               <source
-                src="https://firebasestorage.googleapis.com/v0/b/cleanup-pictures.appspot.com/o/demo_small.mp4?alt=media"
+                src="https://storage.googleapis.com/cleanup-pictures.appspot.com/demo_small.mp4"
                 type="video/mp4"
               />
               <track kind="captions" />

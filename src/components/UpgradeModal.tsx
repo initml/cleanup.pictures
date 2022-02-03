@@ -74,7 +74,7 @@ export default function UpgradeModal(props: UpgradeModalProps) {
               playsInline
             >
               <source
-                src="https://firebasestorage.googleapis.com/v0/b/cleanup-pictures.appspot.com/o/demo_pro.mp4?alt=media"
+                src="https://storage.googleapis.com/cleanup-pictures.appspot.com/demo_pro.mp4"
                 type="video/mp4"
               />
               <track kind="captions" />
