@@ -33,14 +33,14 @@ export type Editor = {
   maskCanvas: HTMLCanvasElement
 
   edits: BatchEdit[]
-  addLine: () => void
+  addLine: (forceBatch?: boolean) => void
 
   context?: CanvasRenderingContext2D
   setContext: (ctx: CanvasRenderingContext2D) => void
 
   render: () => void
   draw: () => void
-  undo: () => void
+  undo: (forceBatch?: boolean) => void
   download: () => void
 }
 
@@ -125,32 +125,35 @@ export function EditorProvider(props: any) {
     }
   }, [file])
 
-  const undo = useCallback(() => {
-    const currentEdit = edits[edits.length - 1]
-    if (!currentEdit) {
-      throw new Error('no edit to undo')
-    }
-    if (!useHD) {
-      edits.pop()
-      edits[edits.length - 1].lines = [{ pts: [] }]
-      setEdits([...edits])
-    }
-    // If the current batch has more than one line, we just remove the last line
-    else if (currentEdit.lines.length > 1 || !useHD) {
-      currentEdit.lines.pop()
-      currentEdit.lines[currentEdit.lines.length - 1] = { pts: [] }
-      setEdits([...edits])
-    }
-    // Otherwise if the current batch has only one line and there are more than
-    // 1 batch, we remove the entire batch
-    else if (edits.length > 1) {
-      edits.pop()
-      setEdits([...edits])
-    } else {
-      // eslint-disable-next-line no-console
-      console.log('nothing to undo')
-    }
-  }, [edits, useHD])
+  const undo = useCallback(
+    (forceBatch = false) => {
+      const currentEdit = edits[edits.length - 1]
+      if (!currentEdit) {
+        throw new Error('no edit to undo')
+      }
+      if (!useHD && !forceBatch) {
+        edits.pop()
+        edits[edits.length - 1].lines = [{ pts: [] }]
+        setEdits([...edits])
+      }
+      // If the current batch has more than one line, we just remove the last line
+      else if (currentEdit.lines.length > 1 || !useHD) {
+        currentEdit.lines.pop()
+        currentEdit.lines[currentEdit.lines.length - 1] = { pts: [] }
+        setEdits([...edits])
+      }
+      // Otherwise if the current batch has only one line and there are more than
+      // 1 batch, we remove the entire batch
+      else if (edits.length > 1) {
+        edits.pop()
+        setEdits([...edits])
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('nothing to undo')
+      }
+    },
+    [edits, useHD]
+  )
 
   const draw = useCallback(() => {
     if (!context || !image) {
@@ -294,19 +297,22 @@ export function EditorProvider(props: any) {
     }
   }, [file, firebase, image, maskCanvas, edits, refreshCanvasMask])
 
-  const addLine = useCallback(() => {
-    // In SD we create a new batch for each line
-    if (!useHD) {
-      const newEdit = { lines: [{ pts: [] }] }
-      setEdits([...edits, newEdit])
-    }
-    // In HD we add the line to the current batch
-    else {
-      const currentEdit = edits[edits.length - 1]
-      currentEdit.lines.push({ pts: [] } as Line)
-      setEdits([...edits])
-    }
-  }, [edits, useHD])
+  const addLine = useCallback(
+    (forceBatch = false) => {
+      // In SD we create a new batch for each line
+      if (!useHD && !forceBatch) {
+        const newEdit = { lines: [{ pts: [] }] }
+        setEdits([...edits, newEdit])
+      }
+      // In HD we add the line to the current batch
+      else {
+        const currentEdit = edits[edits.length - 1]
+        currentEdit.lines.push({ pts: [] } as Line)
+        setEdits([...edits])
+      }
+    },
+    [edits, useHD]
+  )
 
   const editor: Editor = {
     useHD,

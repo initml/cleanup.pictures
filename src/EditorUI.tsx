@@ -40,6 +40,8 @@ export default function EditorUI({
   // Save the scale to a state to refresh when the user zooms in.
   const [currScale, setCurrScale] = useState<number>()
 
+  const isSmallScreen = windowSize.width < 640
+
   const editor = useEditor()
   const {
     image,
@@ -230,12 +232,12 @@ export default function EditorUI({
       }
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mouseup', onPointerUp)
-      if (!useHD) {
+      if (!useHD && !isSmallScreen) {
         setIsInpaintingLoading(true)
         await render()
         setIsInpaintingLoading(false)
       } else {
-        addLine()
+        addLine(true)
       }
     }
     window.addEventListener('mousemove', onMouseMove)
@@ -251,31 +253,35 @@ export default function EditorUI({
       })
       draw()
     }
-    const onPointerStart = (ev: TouchEvent) => {
+    const onTouchStart = (ev: TouchEvent) => {
+      ev.preventDefault()
+      ev.stopPropagation()
       if (!image.src) {
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       currLine.size = brushSize
-      canvas.addEventListener('mousemove', onMouseDrag)
-      window.addEventListener('mouseup', onPointerUp)
       const coords = canvas.getBoundingClientRect()
+      console.log(window.scrollY)
+      // console.log(ev)
+      // console.log(ev.touches[0].clientX, ev.touches[0].pageX)
       const px = (ev.touches[0].clientX - coords.x) / scale
       const py = (ev.touches[0].clientY - coords.y) / scale
       onPaint(px, py)
     }
-    canvas.addEventListener('touchstart', onPointerStart)
+    canvas.addEventListener('touchstart', onTouchStart)
     canvas.addEventListener('touchmove', onTouchMove)
     canvas.addEventListener('touchend', onPointerUp)
     canvas.onmouseenter = () => setShowBrush(true)
     canvas.onmouseleave = () => setShowBrush(false)
     canvas.onmousedown = onMouseDown
+    canvas.focus()
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onPointerUp)
-      canvas.removeEventListener('touchstart', onPointerStart)
+      canvas.removeEventListener('touchstart', onTouchStart)
       canvas.removeEventListener('touchmove', onTouchMove)
       canvas.removeEventListener('touchend', onPointerUp)
       canvas.onmouseenter = null
@@ -299,6 +305,9 @@ export default function EditorUI({
     // Add showBrush dependency to fix issue when moving the mouse while
     // pressing spacebar.
     showBrush,
+    // Add dependency on minScale to fix offset issue with the first touch event
+    // minScale,
+    isSmallScreen,
   ])
 
   // Current cursor
@@ -393,7 +402,7 @@ export default function EditorUI({
 
       {showBrush && tool === 'clean' && (
         <div
-          className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
+          className="hidden sm:block fixed z-50 rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
           style={{
             width: `${brushSize * scale}px`,
             height: `${brushSize * scale}px`,
@@ -408,7 +417,7 @@ export default function EditorUI({
         className={[
           'absolute w-full px-2 pb-2 sm:pb-0 flex',
           'justify-center flex-col sm:flex-row space-y-2 sm:space-y-0',
-          'items-end sm:items-center bottom-0',
+          'items-end sm:items-center bottom-0 pointer-events-none',
         ].join(' ')}
         style={{
           // Center the action bar in the white area available.
@@ -422,7 +431,7 @@ export default function EditorUI({
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />
-        <div className="flex w-full justify-center sm:justify-start sm:w-96">
+        <div className="flex w-full justify-center sm:justify-start sm:w-96 pointer-events-auto">
           {tool === 'clean' && (
             <CleanupTools
               editor={editor}
