@@ -125,8 +125,8 @@ export default function Homepage({
 
           <div className="w-60 sm:w-80 flex items-center rounded-xl overflow-hidden">
             <video
-              // className="h-40 w-56 rounded-md object-cover"
-              style={{ transform: 'scale(1.01, 1.01)' }}
+              className="w-60 h-48 sm:w-80 sm:h-72 bg-gray-100 rounded-xl overflow-hidden"
+              style={{ transform: 'scale(1.03, 1.03)' }}
               autoPlay
               muted
               loop
