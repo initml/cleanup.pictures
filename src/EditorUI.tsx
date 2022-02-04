@@ -26,8 +26,6 @@ export default function EditorUI({
   setShowOriginal,
   setShowSeparator,
 }: EditorUIProps) {
-  const [brushSize, setBrushSize] = useState(40)
-
   const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
   const [showBrush, setShowBrush] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
@@ -35,11 +33,11 @@ export default function EditorUI({
   const firebase = useFirebase()
   const [minScale, setMinScale] = useState<number>()
   const windowSize = useWindowSize()
+  const isSmallScreen = windowSize.width < 640
   const viewportRef = useRef<ReactZoomPanPinchRef | undefined | null>()
+  const [brushSize, setBrushSize] = useState(isSmallScreen ? 90 : 50)
   // Save the scale to a state to refresh when the user zooms in.
   const [currScale, setCurrScale] = useState<number>()
-
-  const isSmallScreen = windowSize.width < 640
 
   const editor = useEditor()
   const {
@@ -196,7 +194,7 @@ export default function EditorUI({
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
-      currLine.size = brushSize
+      currLine.size = brushSize / scale
       canvas.addEventListener('mousemove', onMouseDrag)
       canvas.addEventListener('mouseleave', onPointerUp)
       window.addEventListener('mouseup', onPointerUp)
@@ -391,10 +389,13 @@ export default function EditorUI({
 
       {showBrush && tool === 'clean' && (
         <div
-          className="hidden sm:block fixed z-50 rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
+          className={[
+            'hidden sm:block fixed z-50 rounded-full pointer-events-none',
+            'border border-primary bg-primary bg-opacity-80',
+          ].join(' ')}
           style={{
-            width: `${brushSize * scale}px`,
-            height: `${brushSize * scale}px`,
+            width: `${brushSize}px`,
+            height: `${brushSize}px`,
             left: `${x}px`,
             top: `${y}px`,
             transform: 'translate(-50%, -50%)',

@@ -67,7 +67,7 @@ export default function CleanupTools({
         <Slider
           label={<span>Brush</span>}
           min={10}
-          max={150}
+          max={200}
           value={brushSize}
           onChange={setBrushSize}
         />
