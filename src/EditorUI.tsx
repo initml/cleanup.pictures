@@ -209,6 +209,7 @@ export default function EditorUI({
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       currLine.size = brushSize
       canvas.addEventListener('mousemove', onMouseDrag)
+      canvas.addEventListener('mouseleave', onPointerUp)
       window.addEventListener('mouseup', onPointerUp)
       onPaint(ev.offsetX, ev.offsetY)
     }
@@ -231,6 +232,7 @@ export default function EditorUI({
         return
       }
       canvas.removeEventListener('mousemove', onMouseDrag)
+      canvas.removeEventListener('mouseleave', onPointerUp)
       window.removeEventListener('mouseup', onPointerUp)
       if (!useHD && !isSmallScreen) {
         setIsInpaintingLoading(true)
@@ -276,6 +278,7 @@ export default function EditorUI({
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
+      canvas.removeEventListener('mouseleave', onPointerUp)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onPointerUp)
       canvas.removeEventListener('touchstart', onTouchStart)

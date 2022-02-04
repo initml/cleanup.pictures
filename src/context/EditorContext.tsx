@@ -280,7 +280,7 @@ export function EditorProvider(props: any) {
       const newRender = new Image()
       await loadImage(newRender, res)
 
-      // Add the new render.
+      // Add the new render & new line.
       setEdits([...edits, { lines: [{ pts: [] }], render: newRender }])
 
       firebase?.logEvent('inpaint_processed', {
@@ -292,6 +292,11 @@ export function EditorProvider(props: any) {
       firebase?.logEvent('inpaint_failed', {
         error: e,
       })
+      // Add a new line. It prevents from adding a long straight line when
+      // the user draws again.
+      const currentEdit = edits[edits.length - 1]
+      currentEdit.lines.push({ pts: [] })
+      setEdits([...edits])
       // eslint-disable-next-line
       alert(e.message ? e.message : e.toString())
     }
