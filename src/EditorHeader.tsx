@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, DownloadIcon } from '@heroicons/react/outline'
+import { ArrowLeftIcon, DownloadIcon, EyeIcon } from '@heroicons/react/outline'
 import { useWindowSize } from 'react-use'
 import Button from './components/Button'
 import Menu from './components/Menu'
@@ -9,6 +9,8 @@ interface EditorHeaderProps {
   onBack: () => void
   useHD: boolean
   setUseHD: (useHD: boolean) => void
+  showOriginal: boolean
+  setShowOriginal: (showOriginal: boolean) => void
   setShowUpgrade: (showUpgrade: boolean) => void
 }
 
@@ -16,6 +18,8 @@ export default function EditorHeader({
   onBack,
   useHD,
   setUseHD,
+  showOriginal,
+  setShowOriginal,
   setShowUpgrade,
 }: EditorHeaderProps) {
   const windowSize = useWindowSize()
@@ -35,6 +39,13 @@ export default function EditorHeader({
 
       <div className="flex space-x-4">
         <div className="mr-4 flex items-center">
+          <Toggle
+            label={<EyeIcon className="w-6 h-6" />}
+            enabled={showOriginal}
+            setEnabled={setShowOriginal}
+          />
+        </div>
+        <div className="mr-4 pr-4 flex items-center">
           <Toggle label="HD" enabled={useHD} setEnabled={setUseHD} />
         </div>
         {editor.edits[editor.edits.length - 1].render ? (

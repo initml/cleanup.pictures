@@ -17,6 +17,9 @@ module.exports = {
           '50%': { opacity: 0.7 },
         },
       },
+      width: {
+        90: '22.5rem',
+      },
     },
   },
   variants: {},

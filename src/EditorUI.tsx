@@ -7,7 +7,6 @@ import {
 } from 'react-zoom-pan-pinch'
 import { useFirebase } from './adapters/firebase'
 import CleanupTools from './components/CleanupTools'
-import OriginalPreviewTools from './components/OriginalPreviewTools'
 import ZoomTools from './components/ZoomTools'
 import { useEditor } from './context/EditorContext'
 import EditorToolSelector, { EditorTool } from './EditorToolSelector'
@@ -104,14 +103,12 @@ export default function EditorUI({
 
   // Toggle original
   useEffect(() => {
-    if (tool === 'original') {
-      setShowOriginal(true)
+    if (showOriginal) {
       setShowSeparator(true)
     } else {
-      setShowOriginal(false)
       setTimeout(() => setShowSeparator(false), 300)
     }
-  }, [tool, setShowOriginal, setShowSeparator])
+  }, [showOriginal, setShowSeparator])
 
   // Toggle clean/zoom tool on spacebar.
   useKeyPressEvent(
@@ -132,27 +129,19 @@ export default function EditorUI({
   useKeyPressEvent('Escape', resetZoom)
 
   // Handle Tab
-  useKeyPressEvent(
-    'Tab',
-    ev => {
-      ev?.preventDefault()
-      ev?.stopPropagation()
-      setTool('original')
-    },
-    ev => {
-      ev?.preventDefault()
-      ev?.stopPropagation()
-      setTool('clean')
-    }
-  )
+  useKeyPressEvent('Tab', undefined, ev => {
+    ev?.preventDefault()
+    ev?.stopPropagation()
+    setShowOriginal(false)
+  })
 
   // Handle Cmd+Z
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
-      // Switch to original tool when we press tab
+      // Switch to original tool when we press tab. We dupli
       if (event.key === 'Tab') {
         event.preventDefault()
-        setTool('original')
+        setShowOriginal(true)
       }
       // Handle Cmdt+Z
       if (edits.length < 2 && !currentEdit.lines.length) {
@@ -168,7 +157,7 @@ export default function EditorUI({
     return () => {
       window.removeEventListener('keydown', handler)
     }
-  }, [edits, currentEdit, undo])
+  }, [edits, currentEdit, undo, setShowOriginal])
 
   // Draw once the image image is loaded
   useEffect(() => {
@@ -431,7 +420,7 @@ export default function EditorUI({
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />
-        <div className="flex w-full justify-center sm:justify-start sm:w-96 pointer-events-auto">
+        <div className="flex w-full justify-center sm:justify-start sm:w-90 pointer-events-auto">
           {tool === 'clean' && (
             <CleanupTools
               editor={editor}
@@ -453,7 +442,6 @@ export default function EditorUI({
               onResetClick={resetZoom}
             />
           )}
-          {tool === 'original' && <OriginalPreviewTools />}
         </div>
       </div>
     </>
