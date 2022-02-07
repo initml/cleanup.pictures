@@ -15,6 +15,7 @@ interface HomepageProps {
   onFileChange: (f: File) => void
   startWithDemoImage: (img: string) => void
   setShowUpgrade: (showUpgrade: boolean) => void
+  setShowSignin: (showSignin: boolean) => void
 }
 
 export default function Homepage({
@@ -22,6 +23,7 @@ export default function Homepage({
   onFileChange,
   startWithDemoImage,
   setShowUpgrade,
+  setShowSignin,
 }: HomepageProps) {
   const windowSize = useWindowSize()
   const user = useUser()
@@ -77,7 +79,10 @@ export default function Homepage({
           <a className="hidden sm:inline-block hover:underline" href="#faq">
             FAQ
           </a>
-          <Menu onUpgrade={() => setShowUpgrade(true)} />
+          <Menu
+            onUpgrade={() => setShowUpgrade(true)}
+            onSignin={() => setShowSignin(true)}
+          />
         </div>
       </header>
 

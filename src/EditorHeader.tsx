@@ -12,6 +12,7 @@ interface EditorHeaderProps {
   showOriginal: boolean
   setShowOriginal: (showOriginal: boolean) => void
   setShowUpgrade: (showUpgrade: boolean) => void
+  setShowSignin: (showSignin: boolean) => void
 }
 
 export default function EditorHeader({
@@ -21,6 +22,7 @@ export default function EditorHeader({
   showOriginal,
   setShowOriginal,
   setShowUpgrade,
+  setShowSignin,
 }: EditorHeaderProps) {
   const windowSize = useWindowSize()
   const editor = useEditor()
@@ -61,7 +63,10 @@ export default function EditorHeader({
         ) : (
           <></>
         )}
-        <Menu onUpgrade={() => setShowUpgrade(true)} />
+        <Menu
+          onUpgrade={() => setShowUpgrade(true)}
+          onSignin={() => setShowSignin(true)}
+        />
       </div>
     </header>
   )

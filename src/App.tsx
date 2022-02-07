@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useFirebase } from './adapters/firebase'
 import { useUser } from './adapters/user'
+import SignInModal from './components/SigninModal'
 import UpgradeModal from './components/UpgradeModal'
 import { useEditor } from './context/EditorContext'
 import EditorHeader from './EditorHeader'
@@ -16,6 +17,7 @@ function App() {
   const [showUpgrade, setShowUpgrade] = useState(
     upgradeFlowScreen !== null && typeof upgradeFlowScreen !== 'undefined'
   )
+  const [showSignin, setShowSignin] = useState(false)
 
   const [showOriginal, setShowOriginal] = useState(false)
   const [showSeparator, setShowSeparator] = useState(false)
@@ -108,6 +110,7 @@ function App() {
             setShowUpgrade={setShowUpgrade}
             showOriginal={showOriginal}
             setShowOriginal={setShowOriginal}
+            setShowSignin={setShowSignin}
           />
           <EditorUI
             showOriginal={showOriginal}
@@ -122,6 +125,7 @@ function App() {
           onFileChange={f => onFileChange(f, editor.useHD)}
           startWithDemoImage={startWithDemoImage}
           setShowUpgrade={setShowUpgrade}
+          setShowSignin={setShowSignin}
         />
       )}
 
@@ -132,6 +136,8 @@ function App() {
           isProUser={user?.isPro()}
         />
       )}
+
+      {showSignin && <SignInModal onClose={() => setShowSignin(false)} />}
     </div>
   )
 }
