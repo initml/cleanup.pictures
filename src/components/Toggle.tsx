@@ -1,7 +1,8 @@
 import { Switch } from '@headlessui/react'
+import { ReactNode } from 'react'
 
 interface ToggleProps {
-  label: string
+  label: string | ReactNode
   enabled: boolean
   setEnabled: (enabled: boolean) => void
 }

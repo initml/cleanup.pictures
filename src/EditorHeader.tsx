@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, DownloadIcon } from '@heroicons/react/outline'
+import { ArrowLeftIcon, DownloadIcon, EyeIcon } from '@heroicons/react/outline'
 import { useWindowSize } from 'react-use'
 import Button from './components/Button'
 import Menu from './components/Menu'
@@ -9,14 +9,20 @@ interface EditorHeaderProps {
   onBack: () => void
   useHD: boolean
   setUseHD: (useHD: boolean) => void
+  showOriginal: boolean
+  setShowOriginal: (showOriginal: boolean) => void
   setShowUpgrade: (showUpgrade: boolean) => void
+  setShowSignin: (showSignin: boolean) => void
 }
 
 export default function EditorHeader({
   onBack,
   useHD,
   setUseHD,
+  showOriginal,
+  setShowOriginal,
   setShowUpgrade,
+  setShowSignin,
 }: EditorHeaderProps) {
   const windowSize = useWindowSize()
   const editor = useEditor()
@@ -35,6 +41,13 @@ export default function EditorHeader({
 
       <div className="flex space-x-4">
         <div className="mr-4 flex items-center">
+          <Toggle
+            label={<EyeIcon className="w-6 h-6" />}
+            enabled={showOriginal}
+            setEnabled={setShowOriginal}
+          />
+        </div>
+        <div className="mr-4 pr-4 flex items-center">
           <Toggle label="HD" enabled={useHD} setEnabled={setUseHD} />
         </div>
         {editor.edits[editor.edits.length - 1].render ? (
@@ -50,7 +63,10 @@ export default function EditorHeader({
         ) : (
           <></>
         )}
-        <Menu onUpgrade={() => setShowUpgrade(true)} />
+        <Menu
+          onUpgrade={() => setShowUpgrade(true)}
+          onSignin={() => setShowSignin(true)}
+        />
       </div>
     </header>
   )

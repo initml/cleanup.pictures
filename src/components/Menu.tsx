@@ -42,10 +42,11 @@ function MenuItemButton(props: MenuItemButtonProps) {
 
 interface UserMenuProps {
   onUpgrade: () => void
+  onSignin: () => void
 }
 
 export default function UserMenu(props: UserMenuProps) {
-  const { onUpgrade } = props
+  const { onUpgrade, onSignin } = props
   const user = useUser()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -105,7 +106,7 @@ export default function UserMenu(props: UserMenuProps) {
                   <MenuItemButton
                     label="Sign in"
                     icon={<UserIcon className="w-6 h-6" />}
-                    onClick={() => user?.signInWithGoogle()}
+                    onClick={onSignin}
                   />
                 )}
                 <MenuItemButton

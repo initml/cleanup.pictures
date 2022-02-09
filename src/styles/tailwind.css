@@ -173,7 +173,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 
 .has-tooltip:hover .tooltip {
-  @apply delay-500 opacity-100 z-50;
+  @apply delay-200 opacity-100 z-50;
   transform: translate(calc(24px - 50%), -100px);
 }
 

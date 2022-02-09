@@ -7,7 +7,6 @@ import {
 } from 'react-zoom-pan-pinch'
 import { useFirebase } from './adapters/firebase'
 import CleanupTools from './components/CleanupTools'
-import OriginalPreviewTools from './components/OriginalPreviewTools'
 import ZoomTools from './components/ZoomTools'
 import { useEditor } from './context/EditorContext'
 import EditorToolSelector, { EditorTool } from './EditorToolSelector'
@@ -27,8 +26,6 @@ export default function EditorUI({
   setShowOriginal,
   setShowSeparator,
 }: EditorUIProps) {
-  const [brushSize, setBrushSize] = useState(40)
-
   const [{ x, y }, setCoords] = useState({ x: -1, y: -1 })
   const [showBrush, setShowBrush] = useState(false)
   const [isInpaintingLoading, setIsInpaintingLoading] = useState(false)
@@ -36,7 +33,9 @@ export default function EditorUI({
   const firebase = useFirebase()
   const [minScale, setMinScale] = useState<number>()
   const windowSize = useWindowSize()
+  const isSmallScreen = windowSize.width < 640
   const viewportRef = useRef<ReactZoomPanPinchRef | undefined | null>()
+  const [brushSize, setBrushSize] = useState(isSmallScreen ? 90 : 50)
   // Save the scale to a state to refresh when the user zooms in.
   const [currScale, setCurrScale] = useState<number>()
 
@@ -102,14 +101,12 @@ export default function EditorUI({
 
   // Toggle original
   useEffect(() => {
-    if (tool === 'original') {
-      setShowOriginal(true)
+    if (showOriginal) {
       setShowSeparator(true)
     } else {
-      setShowOriginal(false)
       setTimeout(() => setShowSeparator(false), 300)
     }
-  }, [tool, setShowOriginal, setShowSeparator])
+  }, [showOriginal, setShowSeparator])
 
   // Toggle clean/zoom tool on spacebar.
   useKeyPressEvent(
@@ -130,27 +127,19 @@ export default function EditorUI({
   useKeyPressEvent('Escape', resetZoom)
 
   // Handle Tab
-  useKeyPressEvent(
-    'Tab',
-    ev => {
-      ev?.preventDefault()
-      ev?.stopPropagation()
-      setTool('original')
-    },
-    ev => {
-      ev?.preventDefault()
-      ev?.stopPropagation()
-      setTool('clean')
-    }
-  )
+  useKeyPressEvent('Tab', undefined, ev => {
+    ev?.preventDefault()
+    ev?.stopPropagation()
+    setShowOriginal(false)
+  })
 
   // Handle Cmd+Z
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
-      // Switch to original tool when we press tab
+      // Switch to original tool when we press tab. We dupli
       if (event.key === 'Tab') {
         event.preventDefault()
-        setTool('original')
+        setShowOriginal(true)
       }
       // Handle Cmdt+Z
       if (edits.length < 2 && !currentEdit.lines.length) {
@@ -166,7 +155,7 @@ export default function EditorUI({
     return () => {
       window.removeEventListener('keydown', handler)
     }
-  }, [edits, currentEdit, undo])
+  }, [edits, currentEdit, undo, setShowOriginal])
 
   // Draw once the image image is loaded
   useEffect(() => {
@@ -205,8 +194,9 @@ export default function EditorUI({
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
-      currLine.size = brushSize
+      currLine.size = brushSize / scale
       canvas.addEventListener('mousemove', onMouseDrag)
+      canvas.addEventListener('mouseleave', onPointerUp)
       window.addEventListener('mouseup', onPointerUp)
       onPaint(ev.offsetX, ev.offsetY)
     }
@@ -229,13 +219,14 @@ export default function EditorUI({
         return
       }
       canvas.removeEventListener('mousemove', onMouseDrag)
+      canvas.removeEventListener('mouseleave', onPointerUp)
       window.removeEventListener('mouseup', onPointerUp)
-      if (!useHD) {
+      if (!useHD && !isSmallScreen) {
         setIsInpaintingLoading(true)
         await render()
         setIsInpaintingLoading(false)
       } else {
-        addLine()
+        addLine(true)
       }
     }
     window.addEventListener('mousemove', onMouseMove)
@@ -251,31 +242,33 @@ export default function EditorUI({
       })
       draw()
     }
-    const onPointerStart = (ev: TouchEvent) => {
+    const onTouchStart = (ev: TouchEvent) => {
+      ev.preventDefault()
+      ev.stopPropagation()
       if (!image.src) {
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
-      currLine.size = brushSize
-      canvas.addEventListener('mousemove', onMouseDrag)
-      window.addEventListener('mouseup', onPointerUp)
+      currLine.size = brushSize / scale
       const coords = canvas.getBoundingClientRect()
       const px = (ev.touches[0].clientX - coords.x) / scale
       const py = (ev.touches[0].clientY - coords.y) / scale
       onPaint(px, py)
     }
-    canvas.addEventListener('touchstart', onPointerStart)
+    canvas.addEventListener('touchstart', onTouchStart)
     canvas.addEventListener('touchmove', onTouchMove)
     canvas.addEventListener('touchend', onPointerUp)
     canvas.onmouseenter = () => setShowBrush(true)
     canvas.onmouseleave = () => setShowBrush(false)
     canvas.onmousedown = onMouseDown
+    canvas.focus()
 
     return () => {
       canvas.removeEventListener('mousemove', onMouseDrag)
+      canvas.removeEventListener('mouseleave', onPointerUp)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onPointerUp)
-      canvas.removeEventListener('touchstart', onPointerStart)
+      canvas.removeEventListener('touchstart', onTouchStart)
       canvas.removeEventListener('touchmove', onTouchMove)
       canvas.removeEventListener('touchend', onPointerUp)
       canvas.onmouseenter = null
@@ -299,6 +292,9 @@ export default function EditorUI({
     // Add showBrush dependency to fix issue when moving the mouse while
     // pressing spacebar.
     showBrush,
+    // Add dependency on minScale to fix offset issue with the first touch event
+    // minScale,
+    isSmallScreen,
   ])
 
   // Current cursor
@@ -393,10 +389,13 @@ export default function EditorUI({
 
       {showBrush && tool === 'clean' && (
         <div
-          className="hidden sm:block absolute rounded-full border border-primary bg-primary bg-opacity-80 pointer-events-none"
+          className={[
+            'hidden sm:block fixed z-50 rounded-full pointer-events-none',
+            'border border-primary bg-primary bg-opacity-80',
+          ].join(' ')}
           style={{
-            width: `${brushSize * scale}px`,
-            height: `${brushSize * scale}px`,
+            width: `${brushSize}px`,
+            height: `${brushSize}px`,
             left: `${x}px`,
             top: `${y}px`,
             transform: 'translate(-50%, -50%)',
@@ -406,9 +405,9 @@ export default function EditorUI({
 
       <div
         className={[
-          'fixed w-full px-2 pb-2 sm:pb-0 flex',
-          ' flex-col sm:flex-row space-y-2 sm:space-y-0',
-          'justify-center items-end sm:items-center bottom-0',
+          'absolute w-full px-2 pb-2 sm:pb-0 flex',
+          'justify-center flex-col sm:flex-row space-y-2 sm:space-y-0',
+          'items-end sm:items-center bottom-0 pointer-events-none',
         ].join(' ')}
         style={{
           // Center the action bar in the white area available.
@@ -422,28 +421,29 @@ export default function EditorUI({
         }}
       >
         <EditorToolSelector tool={tool} onChange={setTool} />
-        {tool === 'clean' && (
-          <CleanupTools
-            editor={editor}
-            brushSize={brushSize}
-            setBrushSize={setBrushSize}
-            isLoading={isInpaintingLoading}
-            onCleanupClick={async () => {
-              setIsInpaintingLoading(true)
-              await render()
-              setIsInpaintingLoading(false)
-            }}
-          />
-        )}
-        {tool === 'zoom' && (
-          <ZoomTools
-            zoom={currScale || minScale}
-            minZoom={minScale}
-            setZoom={setZoom}
-            onResetClick={resetZoom}
-          />
-        )}
-        {tool === 'original' && <OriginalPreviewTools />}
+        <div className="flex w-full justify-center sm:justify-start sm:w-90 pointer-events-auto">
+          {tool === 'clean' && (
+            <CleanupTools
+              editor={editor}
+              brushSize={brushSize}
+              setBrushSize={setBrushSize}
+              isLoading={isInpaintingLoading}
+              onCleanupClick={async () => {
+                setIsInpaintingLoading(true)
+                await render()
+                setIsInpaintingLoading(false)
+              }}
+            />
+          )}
+          {tool === 'zoom' && (
+            <ZoomTools
+              zoom={currScale || minScale}
+              minZoom={minScale}
+              setZoom={setZoom}
+              onResetClick={resetZoom}
+            />
+          )}
+        </div>
       </div>
     </>
   )

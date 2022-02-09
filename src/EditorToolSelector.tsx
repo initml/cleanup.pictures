@@ -1,4 +1,3 @@
-import { EyeIcon } from '@heroicons/react/outline'
 import Button from './components/Button'
 import { ZoomIcon, ErasorIcon } from './components/Icons'
 import Tooltip from './components/Tooltip'
@@ -40,15 +39,9 @@ export default function EditorToolSelector({
       className={[
         'flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:mx-4 sm:space-x-2',
         'bg-white bg-opacity-50 backdrop-blur-xl rounded-2xl',
-        'p-2 sm:py-2',
+        'p-2 sm:py-2 pointer-events-auto',
       ].join(' ')}
     >
-      <SelectorButton
-        icon={<EyeIcon className="w-6 h-6" />}
-        active={tool === 'original'}
-        onClick={() => onChange('original')}
-        tip="Hold Tab"
-      />
       <SelectorButton
         icon={<ErasorIcon />}
         active={tool === 'clean'}

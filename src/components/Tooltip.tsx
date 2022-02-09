@@ -5,7 +5,7 @@ type TooltipProps = {
 export default function Tooltip(props: TooltipProps) {
   const { children } = props
   return (
-    <div className="tooltip pointer-events-none relative mx-2">
+    <div className="tooltip pointer-events-none relative mx-2 hidden sm:block">
       <div
         className={[
           'text-black bg-gray-100 dark:bg-gray-800 dark:text-gray-300',

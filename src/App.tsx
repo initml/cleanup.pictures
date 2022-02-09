@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useFirebase } from './adapters/firebase'
 import { useUser } from './adapters/user'
+import SignInModal from './components/SigninModal'
 import UpgradeModal from './components/UpgradeModal'
 import { useEditor } from './context/EditorContext'
 import EditorHeader from './EditorHeader'
@@ -16,6 +17,7 @@ function App() {
   const [showUpgrade, setShowUpgrade] = useState(
     upgradeFlowScreen !== null && typeof upgradeFlowScreen !== 'undefined'
   )
+  const [showSignin, setShowSignin] = useState(false)
 
   const [showOriginal, setShowOriginal] = useState(false)
   const [showSeparator, setShowSeparator] = useState(false)
@@ -73,8 +75,8 @@ function App() {
   return (
     <div
       className={[
-        'app full-visible-h-safari min-h-full flex flex-col',
-        editor.file ? 'absolute w-full h-full overflow-hidden' : '',
+        'app min-h-full flex flex-col',
+        editor.file ? 'fixed w-full h-full overflow-hidden' : '',
       ].join(' ')}
     >
       {editor.file ? (
@@ -106,11 +108,14 @@ function App() {
               editor.setFile(undefined)
             }}
             setShowUpgrade={setShowUpgrade}
+            showOriginal={showOriginal}
+            setShowOriginal={setShowOriginal}
+            setShowSignin={setShowSignin}
           />
           <EditorUI
             showOriginal={showOriginal}
-            showSeparator={showSeparator}
             setShowOriginal={setShowOriginal}
+            showSeparator={showSeparator}
             setShowSeparator={setShowSeparator}
           />
         </>
@@ -120,6 +125,7 @@ function App() {
           onFileChange={f => onFileChange(f, editor.useHD)}
           startWithDemoImage={startWithDemoImage}
           setShowUpgrade={setShowUpgrade}
+          setShowSignin={setShowSignin}
         />
       )}
 
@@ -130,6 +136,8 @@ function App() {
           isProUser={user?.isPro()}
         />
       )}
+
+      {showSignin && <SignInModal onClose={() => setShowSignin(false)} />}
     </div>
   )
 }

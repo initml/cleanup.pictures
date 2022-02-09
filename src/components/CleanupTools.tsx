@@ -1,3 +1,4 @@
+import { useWindowSize } from 'react-use'
 import { Editor } from '../context/EditorContext'
 import Button from './Button'
 import Slider from './Slider'
@@ -20,10 +21,12 @@ export default function CleanupTools({
   const { undo, edits } = editor
   const currentEdit = edits[edits.length - 1]
   const canUndo = edits.length > 1 || currentEdit.lines.length > 1
+  const windowSize = useWindowSize()
+  const isSmallScreen = windowSize.width < 640
   return (
     <div
       className={[
-        'flex items-center space-x-4 max-w-3xl',
+        'flex sm:items-center space-x-4 max-w-3xl',
         'bg-gray-200 bg-opacity-50 backdrop-blur-xl rounded-2xl',
         'p-2',
         'justify-evenly',
@@ -46,7 +49,9 @@ export default function CleanupTools({
               />
             </svg>
           }
-          onClick={undo}
+          onClick={() => {
+            undo(isSmallScreen)
+          }}
         />
       ) : (
         <></>
@@ -62,18 +67,18 @@ export default function CleanupTools({
         <Slider
           label={<span>Brush</span>}
           min={10}
-          max={150}
+          max={200}
           value={brushSize}
           onChange={setBrushSize}
         />
       </div>
-      {editor.useHD ? (
+      {editor.useHD || isSmallScreen ? (
         <Button
           primary
           disabled={isLoading || currentEdit.lines.length <= 1}
           onClick={onCleanupClick}
         >
-          Clean HD
+          Clean{editor.useHD ? ' HD' : ''}
         </Button>
       ) : (
         <></>

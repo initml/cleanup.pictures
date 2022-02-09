@@ -15,6 +15,7 @@ interface HomepageProps {
   onFileChange: (f: File) => void
   startWithDemoImage: (img: string) => void
   setShowUpgrade: (showUpgrade: boolean) => void
+  setShowSignin: (showSignin: boolean) => void
 }
 
 export default function Homepage({
@@ -22,6 +23,7 @@ export default function Homepage({
   onFileChange,
   startWithDemoImage,
   setShowUpgrade,
+  setShowSignin,
 }: HomepageProps) {
   const windowSize = useWindowSize()
   const user = useUser()
@@ -77,7 +79,10 @@ export default function Homepage({
           <a className="hidden sm:inline-block hover:underline" href="#faq">
             FAQ
           </a>
-          <Menu onUpgrade={() => setShowUpgrade(true)} />
+          <Menu
+            onUpgrade={() => setShowUpgrade(true)}
+            onSignin={() => setShowSignin(true)}
+          />
         </div>
       </header>
 
@@ -125,15 +130,15 @@ export default function Homepage({
 
           <div className="w-60 sm:w-80 flex items-center rounded-xl overflow-hidden">
             <video
-              // className="h-40 w-56 rounded-md object-cover"
-              style={{ transform: 'scale(1.01, 1.01)' }}
+              className="w-60 h-48 sm:w-80 sm:h-64 bg-gray-100 rounded-xl overflow-hidden"
+              style={{ transform: 'scale(1.03, 1.03)' }}
               autoPlay
               muted
               loop
               playsInline
             >
               <source
-                src="https://firebasestorage.googleapis.com/v0/b/cleanup-pictures.appspot.com/o/demo_small.mp4?alt=media"
+                src="https://storage.googleapis.com/cleanup-pictures.appspot.com/demo_small.mp4"
                 type="video/mp4"
               />
               <track kind="captions" />
