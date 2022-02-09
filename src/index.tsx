@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import FirebaseProvider from './adapters/firebase'
 import UserProvider from './adapters/user'
 import App from './App'
+import { AlertProvider } from './components/Alert'
 import { EditorProvider } from './context/EditorContext'
 import './styles/index.css'
 
@@ -13,11 +14,13 @@ document.body.prepend(root)
 ReactDOM.render(
   <StrictMode>
     <FirebaseProvider>
-      <UserProvider>
-        <EditorProvider>
-          <App />
-        </EditorProvider>
-      </UserProvider>
+      <AlertProvider>
+        <UserProvider>
+          <EditorProvider>
+            <App />
+          </EditorProvider>
+        </UserProvider>
+      </AlertProvider>
     </FirebaseProvider>
   </StrictMode>,
   root
