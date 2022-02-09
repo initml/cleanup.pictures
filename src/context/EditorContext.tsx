@@ -175,6 +175,14 @@ export function EditorProvider(props: any) {
     draw()
   }, [edits, draw])
 
+  const getLastRender = useCallback(() => {
+    for (let i = edits.length - 1; i >= 0; i -= 1) {
+      if (edits[i].render) {
+        return edits[i].render
+      }
+    }
+  }, [edits])
+
   const refreshCanvasMask = useCallback(() => {
     if (!context?.canvas.width || !context?.canvas.height) {
       throw new Error('canvas has invalid size')
@@ -199,6 +207,14 @@ export function EditorProvider(props: any) {
       console.error(file, originalImage, context?.canvas)
       return
     }
+
+    // Make sure that the canvas doesn't have lines drawn on it.
+    const lastRender = getLastRender()
+    if (!lastRender) {
+      throw new Error('no last render')
+    }
+    context.drawImage(lastRender, 0, 0)
+
     patch.width = originalImage.width
     patch.height = originalImage.height
     const patchCtx = patch.getContext('2d')
@@ -207,6 +223,7 @@ export function EditorProvider(props: any) {
     }
 
     // Clear the canvas
+    patchCtx.globalCompositeOperation = 'source-over'
     patchCtx.clearRect(0, 0, patch.width, patch.height)
 
     // Draw the inpainted image masked by the mask
@@ -236,7 +253,7 @@ export function EditorProvider(props: any) {
     outputCtx?.drawImage(originalImage, 0, 0)
     outputCtx?.drawImage(patch, 0, 0)
     return outputCtx?.canvas.toDataURL(file.type)
-  }, [context, file, maskCanvas, originalImage, output, patch])
+  }, [context, file, maskCanvas, originalImage, output, patch, getLastRender])
 
   const download = useCallback(() => {
     if (!file || !context) {
