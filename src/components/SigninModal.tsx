@@ -1,5 +1,6 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useClickAway } from 'react-use'
+import { useUser } from '../adapters/user'
 import Modal from './Modal'
 import Signin from './Signin'
 
@@ -10,6 +11,14 @@ interface SignInModalProps {
 export default function SignInModal(props: SignInModalProps) {
   const { onClose } = props
   const upgradeModalRef = useRef(null)
+  const user = useUser()
+
+  // Close the signin popup when the user is signed in.
+  useEffect(() => {
+    if (user?.user) {
+      onClose()
+    }
+  }, [user, onClose])
 
   useClickAway(upgradeModalRef, () => {
     onClose()
