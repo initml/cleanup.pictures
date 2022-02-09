@@ -8,6 +8,7 @@ import {
 import { useFirebase } from '../adapters/firebase'
 import inpaint from '../adapters/inpainting'
 import { useUser } from '../adapters/user'
+import { useAlert } from '../components/Alert'
 import { downloadImage, loadImage, shareImage, useImage } from '../utils'
 
 const BRUSH_COLOR = 'rgba(189, 255, 1, 0.75)'
@@ -97,6 +98,8 @@ export function EditorProvider(props: any) {
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
   })
+
+  const alert = useAlert()
 
   const firebase = useFirebase()
 
@@ -314,10 +317,10 @@ export function EditorProvider(props: any) {
       const currentEdit = edits[edits.length - 1]
       currentEdit.lines.push({ pts: [] })
       setEdits([...edits])
-      // eslint-disable-next-line
+
       alert(e.message ? e.message : e.toString())
     }
-  }, [file, firebase, image, maskCanvas, edits, refreshCanvasMask])
+  }, [file, firebase, image, maskCanvas, edits, refreshCanvasMask, alert])
 
   const addLine = useCallback(
     (forceBatch = false) => {
