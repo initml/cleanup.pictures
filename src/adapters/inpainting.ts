@@ -10,7 +10,8 @@ import { dataURItoBlob } from '../utils'
 export default async function inpaint(
   imageFile: File,
   maskBase64: string,
-  appCheckToken: string
+  appCheckToken?: string,
+  authToken?: string
 ) {
   const fd = new FormData()
   fd.append('image_file', imageFile)
@@ -20,9 +21,16 @@ export default async function inpaint(
   if (!process.env.REACT_APP_INPAINTING_ENDPOINT) {
     throw new Error('missing env var REACT_APP_INPAINTING_ENDPOINT')
   }
+  const headers: Record<string, any> = {}
+  if (appCheckToken) {
+    headers['X-Firebase-AppCheck'] = appCheckToken
+  }
+  if (authToken) {
+    headers.Authorization = `Bearer ${authToken}`
+  }
   const res = await fetch(process.env.REACT_APP_INPAINTING_ENDPOINT, {
     method: 'POST',
-    headers: { 'X-Firebase-AppCheck': appCheckToken },
+    headers,
     body: fd,
   }).then(async r => {
     return r.blob()

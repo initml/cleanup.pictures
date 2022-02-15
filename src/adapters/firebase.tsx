@@ -1,12 +1,16 @@
+import {
+  Analytics,
+  getAnalytics,
+  logEvent as analyticsLogEvent,
+} from 'firebase/analytics'
 import { FirebaseApp, initializeApp } from 'firebase/app'
 import {
   AppCheck,
-  AppCheckTokenResult,
   getToken,
   initializeAppCheck,
   ReCaptchaV3Provider,
 } from 'firebase/app-check'
-import { Analytics, getAnalytics, logEvent } from 'firebase/analytics'
+import { getAuth, signInAnonymously } from 'firebase/auth'
 import {
   createContext,
   ReactNode,
@@ -33,7 +37,8 @@ interface Firebase {
   appCheck: AppCheck
   analytics: Analytics
   logEvent: (event: string, data?: any) => void
-  getAppCheckToken: () => Promise<AppCheckTokenResult>
+  getAppCheckToken: () => Promise<string | undefined>
+  getAuthToken: () => Promise<string | undefined>
 }
 
 const FirebaseContext = createContext<Firebase | undefined>(undefined)
@@ -65,18 +70,44 @@ export default function FirebaseProvider(props: Props) {
       isTokenAutoRefreshEnabled: true,
     })
 
+    const logEvent = (event: string, data?: any) => {
+      if (IS_DEV) {
+        // eslint-disable-next-line
+        console.log('Analytics Debug:', event, data)
+      }
+      analyticsLogEvent(analytics, event, data)
+    }
+
+    const getAppCheckToken = async () => {
+      try {
+        // Get a token from AppCheck.
+        const token = await getToken(appCheck, true)
+        return token.token
+      } catch (e) {
+        // Log failures AppCheck.
+        logEvent('app_check_failed', { error: e })
+      }
+    }
+
+    const getAuthToken = async () => {
+      // User the user ID token if signed in.
+      const auth = getAuth()
+      if (auth.currentUser) {
+        return auth.currentUser.getIdToken()
+      }
+      // Otherwise if the user is not signed in, we signed them in anonymously
+      // and return that anonymous user id token.
+      const user = await signInAnonymously(auth)
+      return user.user.getIdToken()
+    }
+
     setState({
       app,
       appCheck,
       analytics,
-      logEvent: (event: string, data?: any) => {
-        if (IS_DEV) {
-          // eslint-disable-next-line
-          console.log('Analytics Debug:', event, data)
-        }
-        logEvent(analytics, event, data)
-      },
-      getAppCheckToken: () => getToken(appCheck),
+      logEvent,
+      getAppCheckToken,
+      getAuthToken,
     })
   }, [])
 
