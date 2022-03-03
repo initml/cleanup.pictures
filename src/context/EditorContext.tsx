@@ -296,6 +296,7 @@ export function EditorProvider(props: any) {
       const res = await inpaint(
         file,
         maskCanvas.toDataURL(),
+        useHD,
         appCheckToken,
         authToken
       )
@@ -326,7 +327,16 @@ export function EditorProvider(props: any) {
 
       alert(e.message ? e.message : e.toString())
     }
-  }, [file, firebase, image, maskCanvas, edits, refreshCanvasMask, alert])
+  }, [
+    file,
+    firebase,
+    image,
+    maskCanvas,
+    edits,
+    refreshCanvasMask,
+    alert,
+    useHD,
+  ])
 
   const addLine = useCallback(
     (forceBatch = false) => {

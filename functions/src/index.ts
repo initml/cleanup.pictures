@@ -10,7 +10,8 @@ import * as FormData from 'form-data'
 // eslint-disable-next-line
 const firebaseAdmin = require('firebase-admin')
 
-const CLEANUP_ENDPOINT = functions.config().cleanup.endpoint_v2
+const CLEANUP_ENDPOINT = functions.config().cleanup.endpoint
+const CLEANUP_ENDPOINT_HD = functions.config().cleanup.endpoint_hd
 
 const app = express()
 app.use(cors({ origin: true }))
@@ -23,36 +24,74 @@ const fileParserMiddleware = fileParser({
 
 firebaseAdmin.initializeApp()
 
-const verifyAppCheckToken = async (appCheckToken: string | undefined) => {
-  if (!appCheckToken) {
-    functions.logger.info('no app check token')
-    return null
-  }
-  try {
-    return firebaseAdmin.appCheck().verifyToken(appCheckToken)
-  } catch (err) {
-    functions.logger.error('error verifying app check token')
-    return null
+const checkAuthToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authHeader = req.header('authorization')
+  if (authHeader?.startsWith('Bearer ')) {
+    // Read the ID Token from the Authorization header.
+    try {
+      const idToken = authHeader.split('Bearer ')[1]
+      const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken)
+      const user = await firebaseAdmin.auth().getUser(decodedIdToken.uid)
+      req.user = user
+      req.isPro = decodedIdToken.stripeRole === 'pro'
+      return next()
+    } catch (e) {
+      functions.logger.warn('error parsing auth token', e)
+      res.status(403)
+      return next('Unauthorized')
+    }
+  } else {
+    functions.logger.warn('no auth token')
+    res.status(403)
+    return next('Unauthorized')
   }
 }
+
 const appCheckVerification = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const appCheckClaims = await verifyAppCheckToken(
-    req.header('X-Firebase-AppCheck')
-  )
-  if (!appCheckClaims) {
+  const appCheckToken = req.header('X-Firebase-AppCheck')
+  if (!appCheckToken) {
+    functions.logger.warn('no app check token for', req.user.uid)
+    return next()
+  }
+
+  // Make sure that the app check token is valid.
+  try {
+    firebaseAdmin.appCheck().verifyToken(appCheckToken)
+    next()
+  } catch (err) {
+    functions.logger.warn('invalid app check token')
     res.status(401)
     return next('Unauthorized')
   }
-  next()
+}
+
+const checkHDAccess = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  req.useHD = req.header('X-HD') === 'true'
+  if (req.useHD && !req.isPro) {
+    functions.logger.warn('forbidden free access attempt on HD')
+    res.status(403)
+    return next('HD is forbidden for free users')
+  }
+  return next()
 }
 
 app.post(
   '/',
+  checkAuthToken,
   appCheckVerification,
+  checkHDAccess,
   fileParserMiddleware,
   async (request, response) => {
     const fd = new FormData()
@@ -69,8 +108,12 @@ app.post(
       filename: 'mask.png',
     })
 
+    if (request.useHD) {
+      fd.append('refiner', 'pyramid')
+    }
+    const endpoint = request.useHD ? CLEANUP_ENDPOINT_HD : CLEANUP_ENDPOINT
     try {
-      const result = await axios.post(CLEANUP_ENDPOINT, fd, {
+      const result = await axios.post(endpoint, fd, {
         headers: fd.getHeaders(),
         responseType: 'arraybuffer',
       })
@@ -84,5 +127,4 @@ app.post(
   }
 )
 
-const cleanup = functions.https.onRequest(app)
-exports.cleanup = cleanup
+exports.cleanup_v2 = functions.https.onRequest(app)
