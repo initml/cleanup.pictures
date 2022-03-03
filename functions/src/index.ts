@@ -41,7 +41,7 @@ const checkAuthToken = async (
     functions.logger.warn('error parsing auth token', e)
     res.status(403)
     return next('Unauthorized')
-  }```
+  }
 }
 
 const appCheckVerification = async (
