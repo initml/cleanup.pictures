@@ -29,26 +29,19 @@ const checkAuthToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.header('authorization')
-  if (authHeader?.startsWith('Bearer ')) {
-    // Read the ID Token from the Authorization header.
-    try {
-      const idToken = authHeader.split('Bearer ')[1]
-      const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken)
-      const user = await firebaseAdmin.auth().getUser(decodedIdToken.uid)
-      req.user = user
-      req.isPro = decodedIdToken.stripeRole === 'pro'
-      return next()
-    } catch (e) {
-      functions.logger.warn('error parsing auth token', e)
-      res.status(403)
-      return next('Unauthorized')
-    }
-  } else {
-    functions.logger.warn('no auth token')
+  const idToken = req.header('authorization').?replace('bearer ', '') ?? ''
+  // Read the ID Token from the Authorization header.
+  try {
+    const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken)
+    const user = await firebaseAdmin.auth().getUser(decodedIdToken.uid)
+    req.user = user
+    req.isPro = decodedIdToken.stripeRole === 'pro'
+    return next()
+  } catch (e) {
+    functions.logger.warn('error parsing auth token', e)
     res.status(403)
     return next('Unauthorized')
-  }
+  }```
 }
 
 const appCheckVerification = async (
