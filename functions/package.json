@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "express-multipart-file-parser": "^0.1.2",
     "firebase-admin": "^9.8.0",
-    "firebase-functions": "^3.14.1",
+    "firebase-functions": "^3.18.1",
     "form-data": "^4.0.0"
   },
   "devDependencies": {

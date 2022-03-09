@@ -291,8 +291,15 @@ export function EditorProvider(props: any) {
       }
       const start = Date.now()
       firebase?.logEvent('inpaint_start')
-      const { token } = await firebase.getAppCheckToken()
-      const res = await inpaint(file, maskCanvas.toDataURL(), token)
+      const appCheckToken = await firebase.getAppCheckToken()
+      const authToken = await firebase.getAuthToken()
+      const res = await inpaint(
+        file,
+        maskCanvas.toDataURL(),
+        useHD,
+        appCheckToken,
+        authToken
+      )
       if (!res) {
         throw new Error('empty response')
       }
@@ -320,7 +327,16 @@ export function EditorProvider(props: any) {
 
       alert(e.message ? e.message : e.toString())
     }
-  }, [file, firebase, image, maskCanvas, edits, refreshCanvasMask, alert])
+  }, [
+    file,
+    firebase,
+    image,
+    maskCanvas,
+    edits,
+    refreshCanvasMask,
+    alert,
+    useHD,
+  ])
 
   const addLine = useCallback(
     (forceBatch = false) => {
