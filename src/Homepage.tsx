@@ -138,7 +138,7 @@ export default function Homepage({
               playsInline
             >
               <source
-                src="https://storage.googleapis.com/cleanup-pictures.appspot.com/demo_small.mp4"
+                src="https://player.vimeo.com/external/688807871.sd.mp4?s=207cb750c6ee6fead1ca597c80142f92dea04b63&profile_id=164"
                 type="video/mp4"
               />
               <track kind="captions" />
