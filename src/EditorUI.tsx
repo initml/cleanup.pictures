@@ -196,7 +196,7 @@ export default function EditorUI({
     }
 
     const onMouseDown = (ev: MouseEvent) => {
-      if (!image.src) {
+      if (!image.src || showOriginal) {
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
@@ -251,7 +251,7 @@ export default function EditorUI({
     const onTouchStart = (ev: TouchEvent) => {
       ev.preventDefault()
       ev.stopPropagation()
-      if (!image.src) {
+      if (!image.src || showOriginal) {
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
@@ -301,10 +301,15 @@ export default function EditorUI({
     // Add dependency on minScale to fix offset issue with the first touch event
     // minScale,
     isSmallScreen,
+    // Prevent drawing when showing the original image
+    showOriginal,
   ])
 
   // Current cursor
   const getCursor = useCallback(() => {
+    if (showOriginal) {
+      return 'default'
+    }
     if (showBrush) {
       return 'none'
     }
@@ -312,7 +317,7 @@ export default function EditorUI({
       return 'grab'
     }
     return undefined
-  }, [showBrush, tool])
+  }, [showBrush, tool, showOriginal])
 
   if (!image || !scale || !minScale) {
     return <></>
@@ -393,7 +398,7 @@ export default function EditorUI({
         </TransformComponent>
       </TransformWrapper>
 
-      {showBrush && tool === 'clean' && (
+      {showBrush && tool === 'clean' && !showOriginal && (
         <div
           className={[
             'hidden sm:block fixed z-50 rounded-full pointer-events-none',
