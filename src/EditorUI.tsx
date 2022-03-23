@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useKeyPressEvent, useWindowSize } from 'react-use'
+import { useDebounce, useKeyPressEvent, useWindowSize } from 'react-use'
 import {
   ReactZoomPanPinchRef,
   TransformComponent,
@@ -58,19 +58,19 @@ export default function EditorUI({
   const scale = viewportRef.current?.state.scale || 1
 
   // Zoom reset
-  const resetZoom = useCallback(() => {
-    if (!minScale || !image || !windowSize) {
-      return
-    }
-    const viewport = viewportRef.current
-    if (!viewport) {
-      throw new Error('no viewport')
-    }
-    const offsetX = (windowSize.width - image.width * minScale) / 2
-    const offsetY = (windowSize.height - image.height * minScale) / 2
-    viewport.setTransform(offsetX, offsetY, minScale, 200, 'easeOutQuad')
-    setCurrScale(minScale)
-  }, [minScale, image, windowSize])
+  const resetZoom = useCallback(
+    (duration = 200) => {
+      if (!minScale || !image || !windowSize || !viewportRef.current) {
+        return
+      }
+      const viewport = viewportRef.current
+      const offsetX = (windowSize.width - image.width * minScale) / 2
+      const offsetY = (windowSize.height - image.height * minScale) / 2
+      viewport.setTransform(offsetX, offsetY, minScale, duration, 'easeOutQuad')
+      setCurrScale(minScale)
+    },
+    [minScale, image, windowSize]
+  )
 
   const setZoom = useCallback(
     (s: number) => {
@@ -125,6 +125,12 @@ export default function EditorUI({
 
   // Reset zoom on Escale
   useKeyPressEvent('Escape', resetZoom)
+
+  // Reset zoom on HD change
+  useEffect(() => resetZoom(0), [useHD, resetZoom])
+
+  // Reset zoom on window size change
+  useDebounce(resetZoom, 75, [windowSize])
 
   // Handle Tab
   useKeyPressEvent('Tab', undefined, ev => {
