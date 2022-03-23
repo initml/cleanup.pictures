@@ -29,7 +29,7 @@ const checkAuthToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const idToken = req.header('authorization').?replace('bearer ', '') ?? ''
+  const idToken = req.header('authorization')?.replace('bearer ', '') ?? ''
   // Read the ID Token from the Authorization header.
   try {
     const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken)
