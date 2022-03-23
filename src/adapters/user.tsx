@@ -48,7 +48,7 @@ export default function UserProvider(props: Props) {
     }
     const onAuthChangedCallback = async (firebaseUser: FirebaseUser | null) => {
       try {
-        if (!firebaseUser) {
+        if (!firebaseUser || firebaseUser.isAnonymous) {
           setUser(null)
           return
         }
