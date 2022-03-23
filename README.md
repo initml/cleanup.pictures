@@ -18,9 +18,17 @@ This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a 
 Then edit the [.env](.env) file (or add a new `.env.local` file) that matches your firebase & backend settings.
 
 To point the frontend to the local functions emulator, update your .env file with:
+
 ```
 REACT_APP_INPAINTING_ENDPOINT=http://localhost:5001/cleanup-pictures/us-central1/cleanup
 ```
+
+## In-painting API
+
+If you don't have access to GPUs and/or don't want to deploy the service on remote GPUs,
+we provide an API that can be used to run fast high resolution inpainting.
+
+The documentation is available here: https://initml-apis.web.app/docs/cleanup
 
 ## Development
 
