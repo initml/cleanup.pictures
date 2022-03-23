@@ -79,6 +79,9 @@ export default function Homepage({
           <a className="hidden sm:inline-block hover:underline" href="#faq">
             FAQ
           </a>
+          <a className="hidden sm:inline-block hover:underline" href="#api">
+            API
+          </a>
           <Menu
             onUpgrade={() => setShowUpgrade(true)}
             onSignin={() => setShowSignin(true)}
