@@ -9,6 +9,11 @@ import EditorUI from './EditorUI'
 import Homepage from './Homepage'
 import { resizeImageFile } from './utils'
 
+const urlParams = new URLSearchParams(window.location.search)
+
+const RESIZE_LD = 720
+const RESIZE_HD = parseInt(urlParams.get('hd_downscale') || '2048', 10)
+
 function App() {
   const editor = useEditor()
   const [upgradeFlowScreen, setUpgradeFlowScreen] = useState(
@@ -56,7 +61,7 @@ function App() {
       resized,
       originalWidth,
       originalHeight,
-    } = await resizeImageFile(f, hd ? 1920 : 720)
+    } = await resizeImageFile(f, hd ? RESIZE_HD : RESIZE_LD)
     firebase.logEvent('set_file', {
       resized,
       originalWidth,
