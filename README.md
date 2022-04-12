@@ -8,7 +8,7 @@ This is the code repository for [CleanUp.pictures](https://cleanup.pictures), a 
 
 - A frontend built with [React](https://reactjs.org/) / [Typescript](https://www.typescriptlang.org/) / [TailwindCSS](https://tailwindcss.com/)
 - A Nodejs Firebase function to proxy the fetch requests on a secure HTTPS endpoint with [AppCheck/reCAPTCHA v3](https://firebase.google.com/docs/app-check)
-- An inpainting service running [LaMa](https://github.com/saic-mdal/lama) on GPU. [Here](https://github.com/Sanster/lama-cleaner) is an example implementation by [@Sanster](https://github.com/Sanster) that you can run locally
+- An inpainting service. We use [a custom LaMa API](https://clipdrop.co/apis/docs/cleanup) that can handle high resolutions images without repeating patterns. You can also run the original LaMa model locally: [here](https://github.com/Sanster/lama-cleaner) is an example implementation by [@Sanster](https://github.com/Sanster)
 
 ## Setup
 
@@ -28,7 +28,7 @@ REACT_APP_INPAINTING_ENDPOINT=http://localhost:5001/cleanup-pictures/us-central1
 If you don't have access to GPUs and/or don't want to deploy the service on remote GPUs,
 we provide an API that can be used to run fast high resolution inpainting.
 
-The documentation is available here: https://initml-apis.web.app/docs/cleanup
+The documentation is available here: https://clipdrop.co/apis/docs/cleanup
 
 ## Development
 
