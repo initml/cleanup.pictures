@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fast-csv": "^4.3.6",
     "firebase-admin": "^10.0.1"
   }
 }

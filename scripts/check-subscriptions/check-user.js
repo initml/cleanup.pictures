@@ -14,14 +14,9 @@ if (userId.length != 28) {
   process.exit(1)
 }
 
-return admin
+admin
   .auth()
-  .setCustomUserClaims(userId, {
-    stripeRole: 'pro',
-  })
-  .then(() => {
-    console.log('Done!')
-  })
-  .catch(error => {
-    console.log(error)
+  .getUser(userId)
+  .then(user => {
+    console.log(user.customClaims)
   })
