@@ -331,9 +331,6 @@ export function EditorProvider(props: any) {
       currentEdit.lines.push({ pts: [] })
       setEdits([...edits])
 
-      console.log('inpainting failed')
-      console.log(error)
-
       alert(error.message ? error.message : error.toString())
     }
   }, [
