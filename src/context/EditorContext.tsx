@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react'
 import { useFirebase } from '../adapters/firebase'
-import inpaint from '../adapters/inpainting'
+import inpaint, { RefinerType } from '../adapters/inpainting'
 import { useUser } from '../adapters/user'
 import { useAlert } from '../components/Alert'
 import { downloadImage, loadImage, shareImage, useImage } from '../utils'
@@ -21,6 +21,9 @@ interface BatchEdit {
 export type Editor = {
   useHD: boolean
   setUseHD: (useHD: boolean) => void
+
+  refiner: RefinerType
+  setRefiner: (refiner: RefinerType) => void
 
   file?: File
   setFile: (file?: File) => void
@@ -88,6 +91,8 @@ export function EditorProvider(props: any) {
 
   const user = useUser()
   const [useHD, setUseHD] = useState(user?.isPro() || false)
+
+  const [refiner, setRefiner] = useState<RefinerType>('medium')
 
   const [output] = useState(() => {
     return document.createElement('canvas')
@@ -297,6 +302,7 @@ export function EditorProvider(props: any) {
         file,
         maskCanvas.toDataURL(),
         useHD,
+        refiner,
         appCheckToken,
         authToken
       )
@@ -315,9 +321,9 @@ export function EditorProvider(props: any) {
         width: image.naturalWidth,
         height: image.naturalHeight,
       })
-    } catch (e: any) {
+    } catch (error: any) {
       firebase?.logEvent('inpaint_failed', {
-        error: e,
+        error,
       })
       // Add a new line. It prevents from adding a long straight line when
       // the user draws again.
@@ -325,7 +331,10 @@ export function EditorProvider(props: any) {
       currentEdit.lines.push({ pts: [] })
       setEdits([...edits])
 
-      alert(e.message ? e.message : e.toString())
+      console.log('inpainting failed')
+      console.log(error)
+
+      alert(error.message ? error.message : error.toString())
     }
   }, [
     file,
@@ -336,6 +345,7 @@ export function EditorProvider(props: any) {
     refreshCanvasMask,
     alert,
     useHD,
+    refiner,
   ])
 
   const addLine = useCallback(
@@ -358,6 +368,9 @@ export function EditorProvider(props: any) {
   const editor: Editor = {
     useHD,
     setUseHD,
+
+    refiner,
+    setRefiner,
 
     file,
     setFile,
