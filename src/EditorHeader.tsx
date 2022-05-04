@@ -8,8 +8,8 @@ import Toggle from './components/Toggle'
 import { useEditor } from './context/EditorContext'
 
 const refiners = [
-  { id: 'medium', name: 'Default' },
-  { id: 'none', name: 'No refine' },
+  { id: 'medium', name: 'Advanced' },
+  { id: 'none', name: 'Basic' },
 ]
 
 interface EditorHeaderProps {
@@ -70,9 +70,9 @@ export default function EditorHeader({
                     HD Mode
                   </Listbox.Label>
                   <span className="inline-block w-full rounded-md">
-                    <Listbox.Button className="cursor-default relative w-full rounded-md border hover:border-gray-400 border-gray-300 bg-white pl-2 pr-7 py-1 text-left focus:outline-none  transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                    <Listbox.Button className="cursor-default relative w-full rounded-lg border hover:border-gray-400 border-gray-300 bg-white pl-3 pr-8 py-2 text-left focus:outline-none  transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                       <span className="block truncate">
-                        {refiner === 'medium' ? 'Default' : 'No refine'}
+                        {refiners.find(r => r.id === refiner)?.name}
                       </span>
                       <span className="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none">
                         <svg
