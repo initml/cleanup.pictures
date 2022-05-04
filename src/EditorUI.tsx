@@ -52,6 +52,7 @@ export default function EditorUI({
     setContext,
     maskCanvas,
     useHD,
+    refiner,
   } = editor
   const currentEdit = edits[edits.length - 1]
 
@@ -184,6 +185,16 @@ export default function EditorUI({
     }
     draw()
   }, [context?.canvas, draw, image, windowSize])
+
+  // Re-render when the refiner changes
+  useEffect(() => {
+    if (context) {
+      setIsInpaintingLoading(true)
+      render().finally(() => {
+        setIsInpaintingLoading(false)
+      })
+    }
+  }, [refiner]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle mouse interactions
   useEffect(() => {

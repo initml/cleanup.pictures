@@ -42,7 +42,7 @@ export type Editor = {
   context?: CanvasRenderingContext2D
   setContext: (ctx: CanvasRenderingContext2D) => void
 
-  render: () => void
+  render: () => Promise<void>
   draw: () => void
   undo: (forceBatch?: boolean) => void
   download: () => void
