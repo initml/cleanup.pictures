@@ -6,7 +6,7 @@ module.exports = {
         varent: ['VarentGrotesk', 'sans-serif'],
       },
       animation: {
-        'pulse-fast': 'pulse 0.7s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'slide-in-up': 'slide-in-up 0.25s cubic-bezier(.01,.77,.35,.98)',
       },
       colors: {
@@ -15,7 +15,7 @@ module.exports = {
       keyframes: {
         pulse: {
           '0%, 100%': { opacity: 0.8 },
-          '50%': { opacity: 0.7 },
+          '50%': { opacity: 0.75 },
         },
         'slide-in-up': {
           '0%': { opacity: 0, transform: 'translateY(-100px)' },

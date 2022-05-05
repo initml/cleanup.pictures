@@ -29,7 +29,7 @@ const checkAuthToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const idToken = req.header('authorization')?.replace('bearer ', '') ?? ''
+  const idToken = req.header('authorization')?.replace('Bearer ', '') ?? ''
   // Read the ID Token from the Authorization header.
   try {
     const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(idToken)
@@ -102,7 +102,11 @@ app.post(
     })
 
     if (request.useHD) {
-      fd.append('refiner', 'pyramid')
+      const refiner = request.header('X-REFINER')
+      if (refiner !== 'none') {
+        const refineMode = 'pyramid'
+        fd.append('refiner', refineMode)
+      }
     }
     const endpoint = request.useHD ? CLEANUP_ENDPOINT_HD : CLEANUP_ENDPOINT
     try {
