@@ -107,6 +107,8 @@ function App() {
                 setShowUpgrade(true)
               }
             }}
+            refiner={editor.refiner}
+            setRefiner={editor.setRefiner}
             onBack={() => {
               firebase?.logEvent('start_new')
               editor.setOriginalFile(undefined)

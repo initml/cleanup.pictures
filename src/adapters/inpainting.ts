@@ -1,5 +1,7 @@
 import { dataURItoBlob } from '../utils'
 
+export type RefinerType = 'none' | 'medium'
+
 /**
  * Run the inpainting remote service on an input file and mask.
  * @param imageFile The original image file. It's recommended to always use the original file here.
@@ -11,6 +13,7 @@ export default async function inpaint(
   imageFile: File,
   maskBase64: string,
   isHD: boolean,
+  refiner: RefinerType,
   appCheckToken?: string,
   authToken?: string
 ) {
@@ -18,6 +21,8 @@ export default async function inpaint(
   fd.append('image_file', imageFile)
   const mask = dataURItoBlob(maskBase64)
   fd.append('mask_file', mask)
+  fd.append('refiner', refiner)
+  fd.append('hd', isHD ? 'true' : 'false')
 
   if (!process.env.REACT_APP_INPAINTING_ENDPOINT) {
     throw new Error('missing env var REACT_APP_INPAINTING_ENDPOINT')
@@ -33,14 +38,19 @@ export default async function inpaint(
   }
   // Add the HD flag.
   headers['X-HD'] = isHD ? 'true' : 'false'
+
+  // Add the Refiner flag.
+  headers['X-REFINER'] = refiner
+
   // Make the request.
   const res = await fetch(process.env.REACT_APP_INPAINTING_ENDPOINT, {
     method: 'POST',
     headers,
     body: fd,
-  }).then(async r => {
-    return r.blob()
   })
-
-  return URL.createObjectURL(res)
+  if (!res.ok) {
+    throw new Error(res.statusText)
+  }
+  const blob = await res.blob()
+  return URL.createObjectURL(blob)
 }
