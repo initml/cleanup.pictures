@@ -30,64 +30,70 @@ export default function Homepage({
   const [showBanner, setShowBanner] = useState(true)
   return (
     <>
-      {showBanner && !user?.isPro && (
-        <div className="hidden sm:block bg-black text-white p-5 text-center relative">
-          Looking for automatic background removal?{' '}
-          <a
-            className="underline"
-            href="https://clipdrop.co?utm_campaign=cleanup_pictures"
-            target="_blank"
-            rel="noreferrer dofollow"
-          >
-            Try ClipDrop!
-          </a>
-          <div className="absolute right-1 top-0 h-full flex items-center">
-            <Button
-              icon={<XIcon className="w-6 h-6" />}
-              onClick={() => setShowBanner(false)}
+      <div className="fixed w-full z-10">
+        {showBanner && (
+          <div className="sm:block bg-black text-white p-5 text-center relative">
+            🚀 We&apos;re launching the most powerful background remover today
+            🚀
+            <a
+              className="underline pl-2"
+              href="https://www.producthunt.com/posts/clipdrop-remove-background"
+              target="_blank"
+              rel="noreferrer dofollow"
+            >
+              See the launch!
+            </a>
+            <div className="absolute right-1 top-0 h-full flex items-center">
+              <Button
+                icon={<XIcon className="w-6 h-6" />}
+                onClick={() => setShowBanner(false)}
+              />
+            </div>
+          </div>
+        )}
+        <header
+          className={[
+            'w-full bg-white bg-opacity-70',
+            // 'border-b-2 border-black',
+            'filter backdrop-blur-3xl z-10 flex px-5 pt-3 pb-3',
+            'justify-between items-center sm:items-start',
+          ].join(' ')}
+        >
+          <div>
+            <a href="/#" aria-label="Cleanup Logo">
+              {user?.isPro() ? (
+                <LogoPro className="w-60 h-14" />
+              ) : (
+                <Logo className="w-60 h-14" />
+              )}
+            </a>
+          </div>
+          <div className="flex items-center space-x-8">
+            <a
+              className="hidden sm:inline-block hover:underline"
+              href="#usecases"
+            >
+              Use cases
+            </a>
+            <a
+              className="hidden sm:inline-block hover:underline"
+              href="#pricing"
+            >
+              Pricing
+            </a>
+            <a className="hidden sm:inline-block hover:underline" href="#faq">
+              FAQ
+            </a>
+            <a className="hidden sm:inline-block hover:underline" href="#api">
+              API
+            </a>
+            <Menu
+              onUpgrade={() => setShowUpgrade(true)}
+              onSignin={() => setShowSignin(true)}
             />
           </div>
-        </div>
-      )}
-      <header
-        className={[
-          'fixed w-full bg-white bg-opacity-70',
-          // 'border-b-2 border-black',
-          'filter backdrop-blur-3xl z-10 flex px-5 pt-3 pb-3',
-          'justify-between items-center sm:items-start',
-        ].join(' ')}
-      >
-        <div>
-          <a href="/#" aria-label="Cleanup Logo">
-            {user?.isPro() ? (
-              <LogoPro className="w-60 h-14" />
-            ) : (
-              <Logo className="w-60 h-14" />
-            )}
-          </a>
-        </div>
-        <div className="flex items-center space-x-8">
-          <a
-            className="hidden sm:inline-block hover:underline"
-            href="#usecases"
-          >
-            Use cases
-          </a>
-          <a className="hidden sm:inline-block hover:underline" href="#pricing">
-            Pricing
-          </a>
-          <a className="hidden sm:inline-block hover:underline" href="#faq">
-            FAQ
-          </a>
-          <a className="hidden sm:inline-block hover:underline" href="#api">
-            API
-          </a>
-          <Menu
-            onUpgrade={() => setShowUpgrade(true)}
-            onSignin={() => setShowSignin(true)}
-          />
-        </div>
-      </header>
+        </header>
+      </div>
 
       <main
         className={[
