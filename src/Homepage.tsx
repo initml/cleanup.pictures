@@ -33,15 +33,14 @@ export default function Homepage({
       <div className="fixed w-full z-10">
         {showBanner && (
           <div className="sm:block bg-primary text-black p-10 text-center font-semibold text-lg relative">
-            🚀 We&apos;re launching the most powerful background remover today
-            🚀
+            🚀 We&apos;ve launched the most powerful background remover 🚀
             <a
               className="underline pl-2"
-              href="https://www.producthunt.com/posts/clipdrop-remove-background"
+              href="https://clipdrop.co/remove-background?utm_source=cleanup&utm_campaign=cleanup-banner"
               target="_blank"
               rel="noreferrer dofollow"
             >
-              See the launch!
+              Try free!
             </a>
             <div className="absolute right-1 top-0 h-full flex items-center">
               <Button
