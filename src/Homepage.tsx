@@ -32,7 +32,7 @@ export default function Homepage({
     <>
       <div className="fixed w-full z-10">
         {showBanner && (
-          <div className="sm:block bg-primary text-black p-10 text-center font-semibold text-lg relative">
+          <div className="hidden sm:block bg-primary text-black p-5 text-center font-semibold text-lg relative">
             🚀 We&apos;ve launched the most powerful background remover 🚀
             <a
               className="underline pl-2"
@@ -99,7 +99,7 @@ export default function Homepage({
           'flex flex-1 flex-col sm:items-center sm:justify-center overflow-hidden',
           // file ? 'items-center justify-center' : '', // center on mobile
           'sm:mt-10',
-          'pt-40',
+          'pt-24 sm:pt-40',
           'items-center justify-center',
           'pb-10',
         ].join(' ')}

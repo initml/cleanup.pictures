@@ -20,7 +20,7 @@ export default function Modal(props: ModalProps) {
   return (
     <div
       className={[
-        'absolute w-full h-full flex justify-center items-center',
+        'fixed top-0 left-0 w-full h-full flex justify-center items-center',
         'z-20',
         'bg-gray-300 bg-opacity-40 backdrop-filter backdrop-blur-md',
       ].join(' ')}
