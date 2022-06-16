@@ -32,7 +32,7 @@ export default function Homepage({
     <>
       <div className="fixed w-full z-10">
         {showBanner && (
-          <div className="hidden sm:block bg-primary text-black p-5 text-center font-semibold text-lg relative">
+          <div className="hidden sm:block bg-primary text-black p-5 sm:p-10 text-center font-semibold text-lg relative">
             ⚡️ We&apos;ve launched the easiest way to upscale images 2x and 4x
             with AI ⚡️
             <a
