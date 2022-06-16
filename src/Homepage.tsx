@@ -33,14 +33,15 @@ export default function Homepage({
       <div className="fixed w-full z-10">
         {showBanner && (
           <div className="hidden sm:block bg-primary text-black p-5 text-center font-semibold text-lg relative">
-            🚀 We&apos;ve launched the most powerful background remover 🚀
+            ⚡️ We&apos;ve launched the easiest way to upscale images 2x and 4x
+            with AI ⚡️
             <a
               className="underline pl-2"
-              href="https://clipdrop.co/remove-background?utm_source=cleanup&utm_campaign=cleanup-banner"
+              href="https://www.producthunt.com/posts/clipdrop-image-upscaler"
               target="_blank"
               rel="noreferrer dofollow"
             >
-              Try it for free
+              See on Product Hunt
             </a>
             <div className="absolute right-1 top-0 h-full flex items-center">
               <Button
