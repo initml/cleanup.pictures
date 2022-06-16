@@ -41,7 +41,7 @@ export default function Homepage({
               target="_blank"
               rel="noreferrer dofollow"
             >
-              See on Product Hunt
+              Try Image Upscaler
             </a>
             <div className="absolute right-1 top-0 h-full flex items-center">
               <Button
