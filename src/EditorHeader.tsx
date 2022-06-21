@@ -37,6 +37,7 @@ export default function EditorHeader({
 }: EditorHeaderProps) {
   const windowSize = useWindowSize()
   const editor = useEditor()
+  const showRefinerSelection = false
 
   return (
     <header
@@ -61,7 +62,7 @@ export default function EditorHeader({
         <div className="mr-4 pr-4 flex items-center">
           <Toggle label="HD" enabled={useHD} setEnabled={setUseHD} />
         </div>
-        {useHD && (
+        {useHD && showRefinerSelection && (
           <Listbox value={refiner} onChange={setRefiner}>
             {({ open }) => (
               <>
