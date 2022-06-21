@@ -10,8 +10,8 @@ import * as FormData from 'form-data'
 // eslint-disable-next-line
 const firebaseAdmin = require('firebase-admin')
 
-const CLEANUP_ENDPOINT = functions.config().cleanup.endpoint
-const CLEANUP_ENDPOINT_HD = functions.config().cleanup.endpoint_hd
+const CLEANUP_ENDPOINT = functions.config().cleanup.endpoint_internal
+const CLEANUP_ENDPOINT_KEY = functions.config().cleanup.endpoint_internal_key
 
 const app = express()
 app.use(cors({ origin: true }))
@@ -108,10 +108,12 @@ app.post(
         fd.append('refiner', refineMode)
       }
     }
-    const endpoint = request.useHD ? CLEANUP_ENDPOINT_HD : CLEANUP_ENDPOINT
     try {
-      const result = await axios.post(endpoint, fd, {
-        headers: fd.getHeaders(),
+      const result = await axios.post(CLEANUP_ENDPOINT, fd, {
+        headers: {
+          ...fd.getHeaders(),
+          'x-cleanup-pictures-key': CLEANUP_ENDPOINT_KEY,
+        },
         responseType: 'arraybuffer',
       })
       response.set('Content-Type', 'image/png')
@@ -124,4 +126,4 @@ app.post(
   }
 )
 
-exports.cleanup_v2 = functions.https.onRequest(app)
+exports.cleanup_proxy = functions.https.onRequest(app)
