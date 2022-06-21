@@ -12,7 +12,7 @@ import { resizeImageFile } from './utils'
 const urlParams = new URLSearchParams(window.location.search)
 
 const RESIZE_LD = 720
-const RESIZE_HD = parseInt(urlParams.get('hd_downscale') || '2048', 10)
+const RESIZE_HD = parseInt(urlParams.get('hd_downscale') || '1440', 10)
 
 function App() {
   const editor = useEditor()
