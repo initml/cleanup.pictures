@@ -27,21 +27,21 @@ export default function Homepage({
 }: HomepageProps) {
   const windowSize = useWindowSize()
   const user = useUser()
-  const [showBanner, setShowBanner] = useState(false)
+  const [showBanner, setShowBanner] = useState(true)
   return (
     <>
       <div className="fixed w-full z-10">
         {showBanner && (
-          <div className="hidden sm:block bg-primary text-black p-5 sm:p-10 text-center font-semibold text-lg relative">
+          <div className="hidden sm:block bg-primary text-black p-3 sm:p-5 text-center font-semibold text-lg relative">
             ⚡️ We&apos;ve launched the easiest way to upscale images 2x and 4x
             with AI ⚡️
             <a
               className="underline pl-2"
-              href="https://www.producthunt.com/posts/clipdrop-image-upscaler"
+              href="https://clipdrop.co/image-upscaler"
               target="_blank"
               rel="noreferrer dofollow"
             >
-              Try Image Upscaler
+              Try ClipDrop Image Upscaler
             </a>
             <div className="absolute right-1 top-0 h-full flex items-center">
               <Button
