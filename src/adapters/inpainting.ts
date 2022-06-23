@@ -24,8 +24,8 @@ export default async function inpaint(
   fd.append('refiner', refiner)
   fd.append('hd', isHD ? 'true' : 'false')
 
-  if (!process.env.REACT_APP_INPAINTING_ENDPOINT_INTERNAL) {
-    throw new Error('missing env var REACT_APP_INPAINTING_ENDPOINT_INTERNAL')
+  if (!process.env.REACT_APP_INPAINTING_ENDPOINT) {
+    throw new Error('missing env var REACT_APP_INPAINTING_ENDPOINT')
   }
   const headers: Record<string, any> = {}
   // Add the app check token.
@@ -43,7 +43,7 @@ export default async function inpaint(
   headers['X-REFINER'] = refiner
 
   // Make the request.
-  const res = await fetch(process.env.REACT_APP_INPAINTING_ENDPOINT_INTERNAL, {
+  const res = await fetch(process.env.REACT_APP_INPAINTING_ENDPOINT, {
     method: 'POST',
     headers,
     body: fd,
