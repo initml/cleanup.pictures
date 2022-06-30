@@ -91,7 +91,7 @@ function SigninLink() {
     return (
       <span className="inline-flex space-x-4">
         <CheckIcon className="text-green-500 w-6 h-6" />
-        <span>Sign-in link sent to {email}</span>
+        <span>Sign-in link sent to {email} (check your spams folder)</span>
       </span>
     )
   }
