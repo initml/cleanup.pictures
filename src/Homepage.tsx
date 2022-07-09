@@ -27,7 +27,7 @@ export default function Homepage({
 }: HomepageProps) {
   const windowSize = useWindowSize()
   const user = useUser()
-  const [showBanner, setShowBanner] = useState(true)
+  const [showBanner, setShowBanner] = useState(false)
   return (
     <>
       <div className="fixed w-full z-10">
