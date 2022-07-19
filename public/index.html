@@ -423,8 +423,8 @@
       <div id="pricing" class="homepage-block">
         <div class="space-y-12 w-full sm:w-auto">
           <h1 class="font-alt text-4xl sm:text-6xl">Pricing</h1>
-          <div class="flex text-left max-w-7xl justify-evenly pricing">
-            <div class="flex flex-col items-center">
+          <div class="flex text-left justify-evenly pricing">
+            <div class="flex flex-col items-center w-56">
               <p class="text-center mb-12 bg-gray-200 px-4 py-1 rounded-full">
                 Free
               </p>
@@ -434,10 +434,7 @@
                 <li>Resolution limited to 720p</li>
               </ul>
             </div>
-            <div class="flex items-center">
-              <div class="sm:border-l border-black w-1 h-44"></div>
-            </div>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center w-56">
               <p class="text-center mb-12 bg-primary px-4 py-1 rounded-full">
                 Pro
               </p>
@@ -447,11 +444,70 @@
                 <li>Unlimited resolution</li>
                 <li>High quality refiner</li>
               </ul>
+              <div class="flex justify-center mt-6">
+                <div
+                  id="cleanup-subscribe-button"
+                  class="
+                    bg-black
+                    text-white
+                    px-5
+                    py-2
+                    rounded-full
+                    hover:underline
+                    cursor-pointer
+                    mt-[75px]
+                  "
+                >
+                  Subscribe
+                </div>
+              </div>
             </div>
-            <div class="flex items-center">
-              <div class="sm:border-l border-black w-1 h-44"></div>
+            <div
+              class="
+                flex flex-col
+                items-center
+                w-64
+                bg-gray-200
+                px-1
+                py-3
+                mx-3
+                -mt-2
+                rounded-xl
+              "
+            >
+              <p class="text-center mb-12 bg-primary px-4 py-1 rounded-full">
+                ClipDrop Pro
+              </p>
+              <p class="price font-varent">5 <span>starting from</span></p>
+              <ul class="sm:list-disc">
+                <li>Cleanup pro</li>
+                <li>Image upscaler pro</li>
+                <li>Background removal pro</li>
+                <li>Web editor pro</li>
+                <li>ClipDrop iOS pro</li>
+                <li>ClipDrop Android pro</li>
+              </ul>
+              <div class="flex justify-center mt-6">
+                <a
+                  href="https://clipdrop.co/pricing?openSubscriptionModal=true&defaultPlan=month&cancelUrl=https://cleanup.pictures/&successUrl=https://cleanup.pictures/"
+                  rel="noopener noreferrer"
+                >
+                  <div
+                    class="
+                      bg-black
+                      text-white
+                      px-5
+                      py-2
+                      rounded-full
+                      hover:underline
+                    "
+                  >
+                    Subscribe
+                  </div>
+                </a>
+              </div>
             </div>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center w-56">
               <p class="text-center mb-12 bg-gray-200 px-4 py-1 rounded-full">
                 API
               </p>
@@ -464,18 +520,6 @@
                   >
                 </li>
               </ul>
-            </div>
-          </div>
-          <div class="flex justify-center">
-            <div class="bg-black text-white px-5 py-2 rounded-full">
-              🤫 Pssst, Cleanup is also included in
-              <a
-                class="underline"
-                href="https://clipdrop.co?utm_campaign=cleanup_pictures"
-                target="_blank"
-                rel="noopener noreferrer"
-                >ClipDrop Pro</a
-              >
             </div>
           </div>
         </div>
@@ -1021,5 +1065,13 @@
     </script>
 
     <script src="home.js"></script>
+    <script>
+      document
+        .getElementById('cleanup-subscribe-button')
+        .addEventListener('click', () => {
+          const event = new CustomEvent('@cleanup/display-upgrade-modal')
+          document.dispatchEvent(event)
+        })
+    </script>
   </body>
 </html>
