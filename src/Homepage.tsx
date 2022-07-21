@@ -27,21 +27,20 @@ export default function Homepage({
 }: HomepageProps) {
   const windowSize = useWindowSize()
   const user = useUser()
-  const [showBanner, setShowBanner] = useState(false)
+  const [showBanner, setShowBanner] = useState(true)
   return (
     <>
       <div className="fixed w-full z-10">
         {showBanner && (
           <div className="hidden sm:block bg-primary text-black p-3 sm:p-5 text-center font-semibold text-lg relative">
-            ⚡️ We&apos;ve launched the easiest way to upscale images 2x and 4x
-            with AI ⚡️
+            ⚡️ Today we&apos;re launching the ClipDrop Figma plugin ⚡️
             <a
               className="underline pl-2"
-              href="https://clipdrop.co/image-upscaler"
+              href="https://www.producthunt.com/posts/clipdrop-figma-plugin"
               target="_blank"
               rel="noreferrer dofollow"
             >
-              Try ClipDrop Image Upscaler
+              Try Cleanup inside Figma
             </a>
             <div className="absolute right-1 top-0 h-full flex items-center">
               <Button
