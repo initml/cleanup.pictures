@@ -32,7 +32,7 @@ export default function Homepage({
     <>
       <div className="fixed w-full z-10">
         {showBanner && (
-          <div className="hidden sm:block bg-primary text-black p-3 sm:p-5 text-center font-semibold text-lg relative">
+          <div className="hidden sm:block bg-primary text-black p-3 sm:p-7 text-center font-semibold text-lg relative">
             ⚡️ Today we&apos;re launching the ClipDrop Figma plugin ⚡️
             <a
               className="underline pl-2"
