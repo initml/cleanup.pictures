@@ -22,6 +22,14 @@ function App() {
   const [showUpgrade, setShowUpgrade] = useState(
     upgradeFlowScreen !== null && typeof upgradeFlowScreen !== 'undefined'
   )
+  useEffect(() => {
+    const listener = () => setShowUpgrade(true)
+
+    document.addEventListener('@cleanup/display-upgrade-modal', listener)
+    return () => {
+      document.removeEventListener('@cleanup/display-upgrade-modal', listener)
+    }
+  }, [])
   const [showSignin, setShowSignin] = useState(false)
 
   const [showOriginal, setShowOriginal] = useState(false)
