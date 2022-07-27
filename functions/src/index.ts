@@ -109,11 +109,15 @@ app.post(
       }
     }
     try {
+      const headers: Record<string, any> = {
+        ...fd.getHeaders(),
+        'x-cleanup-pictures-key': CLEANUP_ENDPOINT_KEY,
+      }
+      if (request.headers.authorization) {
+        headers.authorization = request.headers.authorization
+      }
       const result = await axios.post(CLEANUP_ENDPOINT, fd, {
-        headers: {
-          ...fd.getHeaders(),
-          'x-cleanup-pictures-key': CLEANUP_ENDPOINT_KEY,
-        },
+        headers,
         responseType: 'arraybuffer',
       })
       response.set('Content-Type', 'image/png')
