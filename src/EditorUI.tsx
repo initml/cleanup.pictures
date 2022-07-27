@@ -56,8 +56,6 @@ export default function EditorUI({
   } = editor
   const currentEdit = edits[edits.length - 1]
 
-  const scale = viewportRef.current?.state.scale || 1
-
   // Zoom reset
   const resetZoom = useCallback(
     (duration = 200) => {
@@ -198,7 +196,7 @@ export default function EditorUI({
 
   // Handle mouse interactions
   useEffect(() => {
-    if (!firebase || !image || !context || tool !== 'clean' || !scale) {
+    if (!firebase || !image || !context || tool !== 'clean') {
       return
     }
     const canvas = context?.canvas
@@ -211,6 +209,7 @@ export default function EditorUI({
         return
       }
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
+      const scale = viewportRef.current?.state.scale || 1
       currLine.size = brushSize / scale
       canvas.addEventListener('mousemove', onMouseDrag)
       canvas.addEventListener('mouseleave', onPointerUp)
@@ -253,6 +252,7 @@ export default function EditorUI({
       ev.stopPropagation()
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
       const coords = canvas.getBoundingClientRect()
+      const scale = viewportRef.current?.state.scale || 1
       currLine.pts.push({
         x: (ev.touches[0].clientX - coords.x) / scale,
         y: (ev.touches[0].clientY - coords.y) / scale,
@@ -265,11 +265,12 @@ export default function EditorUI({
       if (!image.src || showOriginal) {
         return
       }
+      const s = viewportRef.current?.state.scale || 1
       const currLine = currentEdit.lines[currentEdit.lines.length - 1]
-      currLine.size = brushSize / scale
+      currLine.size = brushSize / s
       const coords = canvas.getBoundingClientRect()
-      const px = (ev.touches[0].clientX - coords.x) / scale
-      const py = (ev.touches[0].clientY - coords.y) / scale
+      const px = (ev.touches[0].clientX - coords.x) / s
+      const py = (ev.touches[0].clientY - coords.y) / s
       onPaint(px, py)
     }
     canvas.addEventListener('touchstart', onTouchStart)
@@ -302,10 +303,10 @@ export default function EditorUI({
     image,
     currentEdit,
     firebase,
-    scale,
     render,
     useHD,
     tool,
+    viewportRef,
     // Add showBrush dependency to fix issue when moving the mouse while
     // pressing spacebar.
     showBrush,
@@ -330,9 +331,11 @@ export default function EditorUI({
     return undefined
   }, [showBrush, tool, showOriginal])
 
-  if (!image || !scale || !minScale) {
+  if (!image || !minScale) {
     return <></>
   }
+
+  const scale = viewportRef.current?.state.scale || 1
 
   return (
     <>
