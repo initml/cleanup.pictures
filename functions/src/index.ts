@@ -109,10 +109,12 @@ app.post(
       }
     }
     try {
+      const authorizationHeader = request.header('authorization') as string
       const result = await axios.post(CLEANUP_ENDPOINT, fd, {
         headers: {
           ...fd.getHeaders(),
           'x-cleanup-pictures-key': CLEANUP_ENDPOINT_KEY,
+          'Authorization': authorizationHeader
         },
         responseType: 'arraybuffer',
       })
