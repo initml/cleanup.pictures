@@ -335,8 +335,6 @@ export default function EditorUI({
     return <></>
   }
 
-  const scale = viewportRef.current?.state.scale || 1
-
   return (
     <>
       <TransformWrapper
@@ -440,7 +438,7 @@ export default function EditorUI({
             windowSize.width > 640
               ? `${Math.max(
                   TOOLBAR_SIZE / 2,
-                  (window.innerHeight - image.naturalHeight * scale) / 2
+                  (window.innerHeight - image.naturalHeight * currScale) / 2
                 )}px`
               : undefined,
         }}
