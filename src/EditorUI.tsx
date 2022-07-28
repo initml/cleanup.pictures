@@ -37,7 +37,7 @@ export default function EditorUI({
   const viewportRef = useRef<ReactZoomPanPinchRef | undefined | null>()
   const [brushSize, setBrushSize] = useState(isSmallScreen ? 90 : 50)
   // Save the scale to a state to refresh when the user zooms in.
-  const [currScale, setCurrScale] = useState<number>()
+  const [currScale, setCurrScale] = useState<number>(1)
 
   const editor = useEditor()
   const {
