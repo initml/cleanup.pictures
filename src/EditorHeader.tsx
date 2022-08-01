@@ -37,7 +37,7 @@ export default function EditorHeader({
 }: EditorHeaderProps) {
   const windowSize = useWindowSize()
   const editor = useEditor()
-  const showRefinerSelection = false
+  const showRefinerSelection = true
 
   return (
     <header
